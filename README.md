@@ -14,7 +14,21 @@ explainer-reel/
     └── editorial-tinta/  # papel claro, tipografía editorial, redes, mapas y personajes de bloques
 ```
 
-Cada look tiene `look.md` (paleta, tipografías, movimiento), `muestra.png`, un `kit/` para copiar al proyecto y un `ejemplo/` con el storyboard y el SPEC de un video real.
+Cada look tiene `look.md` (paleta, tipografías, movimiento), `muestra.png`, `video.png` (cuadros del video real), un `kit/` para copiar al proyecto y un `ejemplo/` con el storyboard y el SPEC de ese video.
+
+## Los looks, en videos reales
+
+### 1. retro-pixel
+
+Ventanas de sistema antiguo y objetos isométricos de píxeles. Del reel *¿Quiénes componen la clase alta en Chile?*
+
+![Cuadros del video hecho con el look retro-pixel](explainer-reel/looks/retro-pixel/video.png)
+
+### 2. editorial-tinta
+
+Papel claro, tipografía editorial, redes de datos, mapas y personajes de bloques. Del reel *¿Qué te preguntan cuando te preguntan tus apellidos?*
+
+![Cuadros del video hecho con el look editorial-tinta](explainer-reel/looks/editorial-tinta/video.png)
 
 ## Instalación
 
