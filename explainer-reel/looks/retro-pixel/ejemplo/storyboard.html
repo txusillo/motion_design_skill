@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Press Start 2P"; src: url("assets/fonts/PressStart2P-Regular.ttf"); }
+      @font-face { font-family: "VT323"; src: url("assets/fonts/VT323-Regular.ttf"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #101c33; }
+      #root { position: absolute; inset: 0; font-family: "Press Start 2P", monospace; color: #e6e4cf; -webkit-font-smoothing: none; }
+      .abs { position: absolute; }
+      canvas { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; image-rendering: pixelated; }
+      .esc { position: absolute; inset: 0; }
+      .panel { left: 130px; top: 176px; width: 820px; height: 254px; background: #0d1524; border: 4px solid #e6e4cf; box-shadow: 12px 12px 0 #060a13; }
+      .bar { position: absolute; left: 0; top: 0; right: 0; height: 60px; border-bottom: 4px solid #e6e4cf; display: flex; align-items: center; gap: 16px; padding: 0 12px; font-size: 28px; white-space: nowrap; }
+      .stripes { height: 40px; flex: 1; background: repeating-linear-gradient(0deg, #e6e4cf 0 4px, transparent 4px 10px); }
+      .num { position: absolute; left: 0; right: 0; top: 84px; text-align: center; font-size: 72px; line-height: 1; white-space: nowrap; }
+      .sub { position: absolute; left: 0; right: 0; top: 178px; text-align: center; font-family: "VT323", monospace; font-size: 52px; line-height: 1; letter-spacing: 0.08em; white-space: nowrap; }
+      .cap { left: 110px; top: 1400px; width: 860px; height: 190px; background: #070c18; border: 4px solid #e6e4cf; border-radius: 8px; padding: 0 32px; display: flex; align-items: center; font-family: "VT323", monospace; font-size: 64px; line-height: 76px; }
+      .cap div { width: 100%; text-wrap: balance; }
+      .cap b { font-weight: 400; background: #e6e4cf; color: #070c18; box-shadow: 6px 0 0 #e6e4cf, -6px 0 0 #e6e4cf; }
+      .tag { font-size: 28px; line-height: 36px; white-space: nowrap; }
+      .vt { font-family: "VT323", monospace; font-size: 40px; line-height: 44px; letter-spacing: 0.04em; }
+      .line { position: absolute; }
+      .big { position: relative; display: inline-block; }
+      .big::after { content: ""; position: absolute; left: 34%; top: -2px; width: 18%; height: 8px; background: currentColor; transform: skewX(-30deg); }
+      .num40 { font-size: 40px !important; top: 100px !important; }
+      #fx { position: absolute; inset: 0; z-index: 9; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0,0,0,.16) 0 2px, transparent 2px 4px), repeating-linear-gradient(90deg, rgba(0,0,0,.07) 0 1px, transparent 1px 4px); box-shadow: inset 0 0 220px rgba(0,0,0,.55); }
+      #w { left: 90px; top: 200px; width: 900px; height: 1132px; background: #0d1524; border: 4px solid #e6e4cf; box-shadow: 12px 12px 0 #060a13; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="33" data-width="1080" data-height="1920">
+      <div id="e1" class="esc clip" data-start="0" data-duration="1"></div>
+      <div id="e2" class="esc clip" data-start="1" data-duration="1"></div>
+      <div id="e3a" class="esc clip" data-start="2" data-duration="1"></div>
+      <div id="e3b" class="esc clip" data-start="3" data-duration="1"></div>
+      <div id="e3" class="esc clip" data-start="4" data-duration="1"></div>
+      <div id="e4" class="esc clip" data-start="5" data-duration="1"></div>
+      <div id="e5a" class="esc clip" data-start="6" data-duration="1"></div>
+      <div id="e5" class="esc clip" data-start="7" data-duration="1"></div>
+      <div id="e6a" class="esc clip" data-start="8" data-duration="1"></div>
+      <div id="e6" class="esc clip" data-start="9" data-duration="1"></div>
+      <div id="e7a" class="esc clip" data-start="10" data-duration="1"></div>
+      <div id="e7" class="esc clip" data-start="11" data-duration="1"></div>
+      <div id="e8" class="esc clip" data-start="12" data-duration="1"></div>
+      <div id="e9a" class="esc clip" data-start="13" data-duration="1"></div>
+      <div id="e9" class="esc clip" data-start="14" data-duration="1"></div>
+      <div id="e10" class="esc clip" data-start="15" data-duration="1"></div>
+      <div id="e10a" class="esc clip" data-start="16" data-duration="1"></div>
+      <div id="e2a" class="esc clip" data-start="17" data-duration="1"></div>
+      <div id="e2b" class="esc clip" data-start="18" data-duration="1"></div>
+      <div id="e2c" class="esc clip" data-start="19" data-duration="1"></div>
+      <div id="e11a" class="esc clip" data-start="20" data-duration="1"></div>
+      <div id="e11b" class="esc clip" data-start="21" data-duration="1"></div>
+      <div id="e12a" class="esc clip" data-start="22" data-duration="1"></div>
+      <div id="e12b" class="esc clip" data-start="23" data-duration="1"></div>
+      <div id="e13a" class="esc clip" data-start="24" data-duration="1"></div>
+      <div id="e13b" class="esc clip" data-start="25" data-duration="1"></div>
+      <div id="e14a" class="esc clip" data-start="26" data-duration="1"></div>
+      <div id="e14b" class="esc clip" data-start="27" data-duration="1"></div>
+      <div id="e15" class="esc clip" data-start="28" data-duration="1"></div>
+      <div id="e16a" class="esc clip" data-start="29" data-duration="1"></div>
+      <div id="e16b" class="esc clip" data-start="30" data-duration="1"></div>
+      <div id="e17a" class="esc clip" data-start="31" data-duration="1"></div>
+      <div id="e17b" class="esc clip" data-start="32" data-duration="1"></div>
+      <div id="fx"></div>
+    </div>
+    <script>
+      var seed = 2026;
+      function rand() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
+      var INK = [214, 214, 196], ALERT = [232, 82, 127], GOLD = [220, 194, 102], BILL = [214, 136, 74];
+      var STEEL = [[44, 63, 92], [70, 96, 138]], DIM = [[32, 45, 68], [40, 56, 84]];
+      var INK2 = [170, 174, 160], INK3 = [128, 136, 130];
+
+      // Cifras del guion, de la base a la cima; cada cubo son 20.000 personas
+      var STRATA = [20000, 62000, 4425000, 4120000, 1491000, 989000, 4591667, 3105000, 1004000, 470380];
+      var acc = 0;
+      var CUM = STRATA.map(function (n) { acc += n; return Math.round(acc / 20000); });
+      var CUBES = CUM[CUM.length - 1];
+      var N = 6, A = 12, B = 6, C = 13, OX = 270, OY = 684;
+      var cells = [];
+      for (var gx = 0; gx < N; gx++) for (var gy = 0; gy < N; gy++) cells.push({ gx: gx, gy: gy });
+      cells.sort(function (p, q) { return p.gx + p.gy - (q.gx + q.gy) || q.gx - p.gx; });
+      var cubes = [];
+      for (var layer = 0; cubes.length < CUBES; layer++) {
+        var left = CUBES - cubes.length;
+        (left < cells.length ? cells.slice(cells.length - left) : cells).forEach(function (cell) {
+          cubes.push({ gx: cell.gx, gy: cell.gy, layer: layer, idx: cubes.length });
+        });
+      }
+      cubes.forEach(function (c) { var s = 0; while (c.idx >= CUM[s]) s++; c.s = s; });
+      var order = cubes.slice().sort(function (p, q) { return p.layer - q.layer || q.gx + q.gy - (p.gx + p.gy); });
+
+      function css(c, k) { return "rgb(" + Math.round(c[0] * k) + "," + Math.round(c[1] * k) + "," + Math.round(c[2] * k) + ")"; }
+      function poly(x, pts, fill) {
+        x.beginPath(); x.moveTo(pts[0], pts[1]);
+        for (var i = 2; i < pts.length; i += 2) x.lineTo(pts[i], pts[i + 1]);
+        x.closePath(); x.fillStyle = fill; x.fill();
+        x.strokeStyle = "#0a1120"; x.lineWidth = 0.5; x.stroke();
+      }
+      // Caja isometrica: (px, py) es la esquina frontal inferior
+      function box(x, px, py, ar, al, h, c) {
+        var br = ar / 2, bl = al / 2;
+        poly(x, [px - al, py - bl - h, px, py - h, px, py, px - al, py - bl], css(c, 0.8));
+        poly(x, [px, py - h, px + ar, py - br - h, px + ar, py - br, px, py], css(c, 0.56));
+        poly(x, [px, py - h, px + ar, py - br - h, px + ar - al, py - br - bl - h, px - al, py - bl - h], css(c, 1));
+      }
+      function tower(x, color) {
+        order.forEach(function (cube) {
+          var c = color(cube);
+          box(x, OX + (cube.gx - cube.gy) * A, OY - (cube.gx + cube.gy) * B - cube.layer * C, A, A, C, c);
+        });
+      }
+      function dots(x) {
+        for (var gy2 = -13; gy2 <= 13; gy2++) for (var gx2 = -7; gx2 <= 7; gx2++) {
+          var dx = gx2 * 40, dy = gy2 * 40, r = Math.sqrt(dx * dx + dy * dy);
+          var w = Math.sin((r / 280 - 0.4) * Math.PI * 2);
+          x.fillStyle = "rgba(128,170,230," + (0.36 + 0.16 * w) + ")";
+          x.fillRect(Math.round(270 + dx), Math.round(480 + dy), 2, 2);
+        }
+      }
+      function person(x, px, py, shirt, hair, noFolder) {
+        var a = 9, h = 11;
+        box(x, px, py, a, a, h, [40, 48, 70]);
+        box(x, px, py - h, a, a, h, [40, 48, 70]);
+        box(x, px, py - 2 * h, a, a, h, shirt);
+        box(x, px, py - 3 * h, a, a, h, shirt);
+        box(x, px, py - 4 * h, a, a, h, [224, 186, 150]);
+        box(x, px, py - 5 * h, a, a, 3, hair);
+        // Ojos mirando al frente, carpeta en la mano
+        x.fillStyle = "#1a1c2c";
+        x.fillRect(px - 7, py - 4 * h - 7, 2, 2);
+        x.fillRect(px - 3, py - 4 * h - 5, 2, 2);
+        if (!noFolder) box(x, px - 4, py - 2 * h + 2, 7, 2, 9, [230, 228, 207]);
+      }
+      // Nino: mas bajo, con mochila
+      function kid(x, px, py, shirt, hair) {
+        var a = 7, h = 8;
+        box(x, px + 6, py - 16, 3, 5, 12, [190, 90, 90]);
+        box(x, px, py, a, a, h, [40, 48, 70]);
+        box(x, px, py - h, a, a, h, shirt);
+        box(x, px, py - 2 * h, a, a, h, shirt);
+        box(x, px, py - 3 * h, a, a, h, [224, 186, 150]);
+        box(x, px, py - 4 * h, a, a, 3, hair);
+        x.fillStyle = "#1a1c2c";
+        x.fillRect(px - 5, py - 3 * h - 5, 2, 2);
+        x.fillRect(px - 2, py - 3 * h - 4, 2, 2);
+      }
+      // Persona mayor: pelo blanco y baston
+      function elder(x, px, py, shirt) {
+        var a = 9, h = 10;
+        box(x, px - 10, py + 4, 1.5, 1.5, 34, [120, 84, 54]);
+        box(x, px, py, a, a, h, [52, 56, 74]);
+        box(x, px, py - h, a, a, h, [52, 56, 74]);
+        box(x, px, py - 2 * h, a, a, h, shirt);
+        box(x, px, py - 3 * h, a, a, h, shirt);
+        box(x, px, py - 4 * h, a, a, h, [224, 186, 150]);
+        box(x, px, py - 5 * h, a, a, 3, [226, 226, 222]);
+        x.fillStyle = "#1a1c2c";
+        x.fillRect(px - 7, py - 4 * h - 6, 2, 2);
+        x.fillRect(px - 3, py - 4 * h - 4, 2, 2);
+      }
+      // Cuidadora empujando una silla de ruedas
+      function caregiver(x, px, py) {
+        person(x, px + 22, py - 11, [120, 170, 170], [58, 38, 30], true);
+        box(x, px, py, 11, 11, 4, [30, 34, 48]);
+        box(x, px + 6, py - 4, 3, 11, 13, [70, 78, 100]);
+        box(x, px, py - 4, 11, 11, 3, [70, 78, 100]);
+        box(x, px, py - 7, 9, 9, 10, [170, 150, 170]);
+        box(x, px, py - 17, 9, 9, 9, [224, 186, 150]);
+        box(x, px, py - 26, 9, 9, 3, [226, 226, 222]);
+        // Ruedas de la silla
+        x.fillStyle = "#10141f";
+        x.beginPath(); x.arc(px - 5, py - 3, 6, 0, Math.PI * 2); x.fill();
+        x.fillStyle = "#8a93a8";
+        x.fillRect(px - 6, py - 4, 2, 2);
+        x.fillStyle = "#10141f";
+        x.beginPath(); x.arc(px + 6, py - 2, 4, 0, Math.PI * 2); x.fill();
+      }
+      // De cada 100: una multitud de 10 x 10; se encienden desde el frente
+      function crowd(x, ox, oy, lit, color) {
+        var list = [];
+        for (var i = 0; i < 10; i++) for (var j = 0; j < 10; j++) list.push({ i: i, j: j });
+        list.sort(function (p, q) { return p.i + p.j - (q.i + q.j) || q.i - p.i; });
+        list.forEach(function (c, n) { c.on = n < lit; });
+        list.slice().reverse().forEach(function (c) {
+          var px = ox + (c.i - c.j) * 8, py = oy - (c.i + c.j) * 4;
+          box(x, px, py, 4, 4, 5, c.on ? [52, 58, 78] : [30, 38, 56]);
+          box(x, px, py - 5, 4, 4, 6, c.on ? color : [44, 56, 80]);
+          box(x, px, py - 11, 4, 4, 4, c.on ? [224, 186, 150] : [58, 68, 92]);
+        });
+      }
+      function exec(x, px, py) {
+        person(x, px, py, [46, 54, 84], [24, 24, 30], true);
+        x.fillStyle = "#e8527f";
+        x.fillRect(px - 3, py - 34, 3, 12);
+        box(x, px + 12, py - 2, 8, 3, 9, [120, 84, 54]);
+      }
+      function professional(x, px, py) {
+        person(x, px, py, [190, 196, 190], [58, 38, 30], true);
+        box(x, px + 12, py - 2, 8, 3, 9, [120, 84, 54]);
+      }
+      function tent(x, px, py) {
+        box(x, px - 28, py + 12, 58, 34, 2, [150, 120, 86]);
+        var c = [76, 104, 150];
+        poly(x, [px - 30, py - 6, px - 2, py + 8, px + 8, py - 30, px - 18, py - 42], css(c, 0.8));
+        poly(x, [px - 2, py + 8, px + 30, py - 8, px + 36, py - 44, px + 8, py - 30], css(c, 0.56));
+        poly(x, [px - 18, py - 42, px + 8, py - 30, px + 36, py - 44, px + 10, py - 56], css(c, 1));
+        poly(x, [px - 12, py + 3 - 4, px - 2, py + 8, px + 2, py - 12, px - 8, py - 18], "#10141f");
+        person(x, px - 40, py + 2, [150, 92, 96], [58, 38, 30], true);
+      }
+      // Zoom sobre la torre: acerca la altura cy al centro del encuadre
+      function zoomed(id, color, scale, cy, target, after) {
+        var bg = document.createElement("canvas"); bg.width = 540; bg.height = 960;
+        document.getElementById(id).appendChild(bg);
+        dots(bg.getContext("2d"));
+        var c = document.createElement("canvas"); c.width = 540; c.height = 960;
+        c.style.transformOrigin = "540px " + cy + "px";
+        c.style.transform = "translateY(" + (target - cy) + "px) scale(" + scale + ")";
+        document.getElementById(id).appendChild(c);
+        tower(c.getContext("2d"), color);
+        if (after) after(c.getContext("2d"));
+      }
+      function vtLabel(id, l, t, w, txt, col) {
+        html(id, '<div class="abs vt" style="left:' + l + "px;top:" + t + "px;width:" + w + "px;text-align:center;font-size:44px;line-height:48px;color:" + col + '">' + txt + "</div>");
+      }
+      function pile(x, cx, base, count) {
+        for (var i = 0; i < count; i++) {
+          var jx = Math.round((rand() - 0.5) * 3);
+          box(x, cx + jx, base - i * 3, 44, 22, 3, i % 2 ? BILL : [190, 116, 62]);
+        }
+        // Marca de valor sobre el billete de arriba
+        var topY = base - count * 3;
+        x.fillStyle = "#f4dcae";
+        x.fillRect(cx + 7, topY - 17, 8, 4);
+        x.fillRect(cx - 5, topY - 11, 8, 4);
+      }
+      function layerY(l) { return 1296 - l * 26; }
+      function layerOf(idx) { return idx / 36; }
+      function html(id, s) { document.getElementById(id).insertAdjacentHTML("beforeend", s); }
+      function canvasFor(id) {
+        var c = document.createElement("canvas"); c.width = 540; c.height = 960;
+        document.getElementById(id).appendChild(c);
+        var x = c.getContext("2d"); dots(x); return x;
+      }
+      function panel(id, title, num, sub, col) {
+        html(id, '<div class="abs panel"><div class="bar"><div class="stripes" style="flex:none;width:20px"></div>' + title + '<div class="stripes"></div></div><div class="num" style="color:' + col + '">' + num + '</div><div class="sub">' + sub + "</div></div>");
+      }
+      function cap(id, before, word, after) {
+        html(id, '<div class="abs cap"><div>' + (before ? before + " " : "") + "<b>" + word + "</b>" + (after ? " " + after : "") + "</div></div>");
+      }
+      function apex(id) {
+        html(id, '<div class="abs" style="left:534px;top:476px;width:12px;height:12px;background:#e8527f"></div>' +
+          '<div class="abs tag" style="left:610px;top:452px;color:#dcc266">CLASE<br>ALTA?</div>');
+      }
+      function rect(id, l, t, w, h, c) { html(id, '<div class="line" style="left:' + l + "px;top:" + t + "px;width:" + w + "px;height:" + h + "px;background:" + c + '"></div>'); }
+      // Llave a la derecha de la torre, de la capa a a la b, con linea hasta el panel
+      function brace(id, a, b, c) {
+        var y1 = layerY(b), y2 = layerY(a), mid = Math.round((y1 + y2) / 2);
+        rect(id, 700, y1, 22, 4, c); rect(id, 700, y2, 22, 4, c); rect(id, 722, y1, 4, y2 - y1 + 4, c);
+        rect(id, 726, mid, 68, 4, c); rect(id, 790, 430, 4, mid - 426, c);
+      }
+      function base(s) { return STEEL[s % 2]; }
+      function dim(s) { return DIM[s % 2]; }
+
+      // 1. Ventana
+      (function () {
+        var x = canvasFor("e1");
+        html("e1", '<div id="w" class="abs"><div class="bar" style="height:72px"><div class="stripes" style="flex:none;width:20px"></div>CHILE.SYS &mdash; 2026<div class="stripes"></div></div>' +
+          '<svg class="abs" style="left:32px;top:112px;width:96px;height:88px" viewBox="0 0 24 22" shape-rendering="crispEdges"><path d="M12 1 L23 21 H1 Z" fill="none" stroke="#e8527f" stroke-width="2"/><rect x="11" y="8" width="2" height="7" fill="#e8527f"/><rect x="11" y="16" width="2" height="2" fill="#e8527f"/></svg>' +
+          '<div class="abs" style="left:152px;top:104px;font-size:64px;line-height:1">CLASE ALTA</div>' +
+          '<div class="abs vt" style="left:154px;top:172px;color:#a3a795;letter-spacing:.14em">POBLACI&Oacute;N DE CHILE</div>' +
+          '<div class="abs" style="left:32px;top:248px;font-size:40px;line-height:1;color:#dcc266">PERSONAS: ???</div>' +
+          '<div class="abs vt" style="left:32px;right:32px;top:316px;height:64px;background:#2c3f5c;border:4px solid #e6e4cf;display:flex;align-items:center;justify-content:space-between;padding:0 18px"><span>BUSCANDO</span><span>43%</span></div>' +
+          '<canvas id="sea" width="69" height="57" style="left:32px;top:408px;width:828px;height:684px"></canvas>' +
+          '<div class="abs" style="left:620px;top:690px;width:84px;height:84px;background:#0d1524"></div><div class="abs" style="left:656px;top:726px;width:12px;height:12px;background:#e8527f"></div></div>');
+        var s = document.getElementById("sea").getContext("2d");
+        var sh = [[27,42,66],[34,51,79],[44,63,92],[54,76,110],[70,96,138]];
+        for (var yy = 0; yy < 57; yy++) for (var xx = 0; xx < 69; xx++) { s.fillStyle = css(sh[Math.floor(rand() * rand() * 5)], 1); s.fillRect(xx, yy, 1, 1); }
+        cap("e1", "&iquest;Qui&eacute;nes componen la", "clase", "alta en Chile?");
+      })();
+
+      // 2. Torre completa: un cubo abierto muestra la escala
+      (function () {
+        var x = canvasFor("e2");
+        tower(x, function (c) { return c.gx === 0 && c.gy === 5 && c.layer === 10 ? GOLD : base(c.s); });
+        box(x, 92, 668, 34, 34, 32, GOLD);
+        crowd(x, 92, 622, 100, [120, 140, 170]);
+        panel("e2", "ESCALA", "1 CUBO", "= 20.000 PERSONAS", "#dcc266"); apex("e2");
+        rect("e2", 186, 1036, 210, 4, "#dcc266"); rect("e2", 186, 1036, 4, 44, "#dcc266");
+        cap("e2", "Cada cubo representa a", "20.000", "personas.");
+      })();
+
+      // 3. Sin hogar, en tres tiempos: torre, zoom al cubo, vuelta
+      function sinHogar(id, lit) {
+        tower(canvasFor(id), function (c) { return c.s === 0 && lit ? ALERT : dim(c.s); });
+      }
+      sinHogar("e3a", false);
+      apex("e3a");
+      cap("e3a", "En la", "base,");
+
+      (function () {
+        var bg = document.createElement("canvas"); bg.width = 540; bg.height = 960;
+        document.getElementById("e3b").appendChild(bg);
+        dots(bg.getContext("2d"));
+        var c = document.createElement("canvas"); c.width = 540; c.height = 960;
+        c.style.transformOrigin = "540px 1342px";
+        c.style.transform = "translateY(-200px) scale(3.5)";
+        document.getElementById("e3b").appendChild(c);
+        tower(c.getContext("2d"), function (cu) { return cu.s === 0 ? ALERT : dim(cu.s); });
+        panel("e3b", "BASE &middot; 1 CUBO", "1 CUBO", "= 20.000 PERSONAS", "#e8527f");
+        cap("e3b", "un solo", "cubo:");
+      })();
+
+      (function () {
+        var x = canvasFor("e3");
+        tower(x, function (c) { return c.s === 0 ? ALERT : dim(c.s); });
+        tent(x, 110, 640);
+      })();
+      panel("e3", "BASE &middot; 1 CUBO", "20.175", "PERSONAS SIN HOGAR", "#e8527f"); apex("e3");
+      rect("e3", 566, 1343, 228, 4, "#e8527f"); rect("e3", 790, 430, 4, 917, "#e8527f");
+      cap("e3", "los que viven sin", "hogar.");
+
+      // 4. La mitad: los grupos son personajes, no etiquetas
+      (function () {
+        var col = [ALERT, INK, INK, INK2, INK3];
+        var x = canvasFor("e4");
+        tower(x, function (c) { return c.s <= 4 ? col[c.s] : dim(c.s); });
+        function plate(px, py, n) { for (var i = 0; i < n; i++) box(x, px + i * 22, py - i * 11, 22, 22, 2, [36, 50, 76]); }
+        // Cuidadores
+        plate(40, 488, 3);
+        caregiver(x, 62, 468);
+        // Mayores
+        plate(40, 576, 3);
+        elder(x, 96, 544, [150, 120, 130]);
+        elder(x, 62, 561, [110, 124, 150]);
+        // Menores
+        plate(40, 668, 3);
+        kid(x, 110, 629, [90, 150, 200], [50, 34, 26]);
+        kid(x, 84, 642, [220, 180, 90], [24, 24, 30]);
+        kid(x, 58, 655, [200, 110, 120], [96, 74, 44]);
+        panel("e4", "MITAD DE CHILE", "50%", "DE LA POBLACI&Oacute;N", "#e6e4cf"); apex("e4");
+        var half = layerOf(CUM[4]);
+        rect("e4", 396, layerY(half), 620, 4, "#dcc266");
+        html("e4", '<div class="abs tag" style="left:730px;top:' + (layerY(half) - 44) + 'px;color:#dcc266">MITAD</div>');
+        // Cada grupo se conecta con su franja
+        [[930, layerOf(CUM[3]), layerOf(CUM[4])], [1110, layerOf(CUM[2]), layerOf(CUM[3])], [1290, layerOf(CUM[1]), layerOf(CUM[2])]].forEach(function (r) {
+          var y = Math.round((layerY(r[1]) + layerY(r[2])) / 2);
+          rect("e4", 240, r[0], 126, 4, "#e6e4cf");
+          rect("e4", 366, Math.min(y, r[0]), 4, Math.abs(y - r[0]) + 4, "#e6e4cf");
+          rect("e4", 366, y, 30, 4, "#e6e4cf");
+        });
+        cap("e4", "menores de edad, adultos mayores y", "cuidadores.");
+      })();
+
+      var DONE = [62, 70, 84];
+      function up(s, col) { return function (c) { return c.s === s ? col : c.s < s ? DONE : dim(c.s); }; }
+
+      // 5. Desocupados: zoom a la franja, vuelta y aparece la fila
+      zoomed("e5a", up(5, GOLD), 3.2, 905, 900);
+      panel("e5a", "SIN TRABAJO &middot; 49 CUBOS", "CASI 1.000.000", "NO ENCUENTRA TRABAJO", "#dcc266");
+      document.querySelector("#e5a .num").style.fontSize = "56px"; document.querySelector("#e5a .num").style.top = "92px";
+      cap("e5a", "Casi un", "mill&oacute;n");
+      (function () {
+        var x = canvasFor("e5");
+        tower(x, up(5, GOLD));
+        for (var i = 0; i < 5; i++) box(x, 34 + i * 28, 672 - i * 14, 28, 28, 2, [36, 50, 76]);
+        var shirts = [[86, 110, 150], GOLD, [120, 96, 110], [96, 124, 112]];
+        var hairs = [[40, 30, 26], [24, 24, 30], [96, 74, 44], [30, 26, 28]];
+        for (var p = 3; p >= 0; p--) person(x, 46 + p * 28, 658 - p * 14, shirts[p], hairs[p]);
+        panel("e5", "SIN TRABAJO &middot; 49 CUBOS", "CASI 1.000.000", "NO ENCUENTRA TRABAJO", "#dcc266"); apex("e5");
+        document.querySelector("#e5 .num").style.fontSize = "56px"; document.querySelector("#e5 .num").style.top = "92px";
+        var mid = Math.round((layerY(layerOf(CUM[4])) + layerY(layerOf(CUM[5]))) / 2);
+        rect("e5", 340, mid, 56, 4, "#dcc266"); rect("e5", 340, mid, 4, 1000 - mid, "#dcc266");
+        html("e5", '<div class="abs tag" style="left:56px;top:1000px;padding:8px 12px;background:#0d1524;border:4px solid #dcc266;color:#dcc266">SIN VACANTES</div>');
+        cap("e5", "Casi un mill&oacute;n no encuentra", "trabajo.");
+      })();
+
+      // 6 y 7. Zoom a la franja, vuelta y crece la pila
+      zoomed("e6a", up(6, BILL), 2.4, 813, 900);
+      panel("e6a", "INGRESO &middot; 230 CUBOS", "4.600.000", "PERSONAS", "#d8884a");
+      cap("e6a", "4.600.000", "personas");
+      zoomed("e7a", up(7, BILL), 3, 673, 900);
+      panel("e7a", "INGRESO &middot; 155 CUBOS", "3.100.000", "PERSONAS", "#d8884a");
+      cap("e7a", "", "3.100.000,");
+      function tramo(id, s, cubesTxt, personas, valor, bills, capB, capW) {
+        var x = canvasFor(id);
+        tower(x, up(s, BILL));
+        pile(x, 100, 672, bills);
+        var top = 1344 - bills * 6 - 28;
+        panel(id, "INGRESO &middot; " + cubesTxt + " CUBOS", personas, "PERSONAS", "#d8884a"); apex(id);
+        brace(id, layerOf(CUM[s - 1]), layerOf(CUM[s]), "#d8884a");
+        html(id, '<div class="abs" style="left:44px;width:320px;top:' + (top - 214) + 'px;text-align:center"><div style="font-size:' + (valor.length > 8 ? 32 : 40) + 'px;line-height:48px;color:#d8884a">$' + valor + '</div><div class="vt">AL MES</div><div class="vt" style="font-size:32px;color:#a3a795">' + bills + " BILLETES DE $20.000</div></div>");
+        cap(id, capB, capW);
+      }
+      tramo("e6", 6, "230", "4.600.000", "680.000", 34, "4.600.000 personas ganan hasta 680.000 pesos al", "mes.");
+      tramo("e7", 7, "155", "3.100.000", "1.500.000", 75, "3.100.000, hasta", "1.500.000.");
+
+      // 8. 93 de cada 100
+      (function () {
+        var x = canvasFor("e8");
+        tower(x, function (c) { return c.s <= 7 ? INK : dim(c.s); });
+        crowd(x, 100, 668, 93, INK);
+        panel("e8", "HASTA $1.500.000 AL MES", "93%", "DE LOS CHILENOS", "#e6e4cf"); apex("e8");
+        brace("e8", 0, layerOf(CUM[7]), "#e6e4cf");
+        vtLabel("e8", 40, 1100, 320, "93 DE CADA 100", "#e6e4cf");
+        cap("e8", "El 93% de los chilenos no gana m&aacute;s de 1.500.000 al", "mes.");
+      })();
+
+      // 9. Zoom a la franja delgada, vuelta con tres pilas y una profesional
+      zoomed("e9a", up(8, GOLD), 4.5, 598, 900);
+      panel("e9a", "INGRESO &middot; 50 CUBOS", "1.000.000", "HASTA $3.000.000 AL MES", "#dcc266");
+      cap("e9a", "1.000.000 de", "personas");
+      (function () {
+        var x = canvasFor("e9");
+        tower(x, up(8, GOLD));
+        pile(x, 112, 642, 50); pile(x, 64, 658, 50); pile(x, 150, 668, 50);
+        professional(x, 34, 670);
+        panel("e9", "INGRESO &middot; 50 CUBOS", "1.000.000", "HASTA $3.000.000 AL MES", "#dcc266"); apex("e9");
+        brace("e9", layerOf(CUM[7]), layerOf(CUM[8]), "#dcc266");
+        html("e9", '<div class="abs" style="left:30px;width:340px;top:800px;text-align:center"><div style="font-size:32px;line-height:48px;color:#dcc266">$3.000.000</div><div class="vt" style="font-size:32px;color:#a3a795">150 BILLETES DE $20.000</div></div>');
+        cap("e9", "1.000.000 de personas gana hasta", "3.000.000.");
+      })();
+
+      // 10. 4 de cada 100; despues zoom a la cima, encuadre para la lupa
+      (function () {
+        var x = canvasFor("e10");
+        tower(x, function (c) { return c.s === 9 ? ALERT : DONE; });
+        crowd(x, 100, 668, 4, ALERT);
+        for (var i = 0; i < 2; i++) box(x, 74 + i * 22, 536 - i * 11, 22, 22, 2, [36, 50, 76]);
+        exec(x, 96, 522);
+        panel("e10", "$3.000.000 O M&Aacute;S", "4%", "DE LOS TRABAJADORES", "#e8527f"); apex("e10");
+        brace("e10", layerOf(CUM[8]), layerOf(CUM[9]), "#e8527f");
+        vtLabel("e10", 40, 1100, 320, "4 DE CADA 100", "#e8527f");
+        cap("e10", "Y solo un 4% de los", "trabajadores");
+      })();
+      zoomed("e10a", function (c) { return c.s === 9 ? ALERT : DONE; }, 3.5, 540, 900);
+      panel("e10a", "$3.000.000 O M&Aacute;S", "4%", "DE LOS TRABAJADORES", "#e8527f");
+      cap("e10a", "gana 3.000.000 o", "m&aacute;s.");
+
+      // Transicion 1 a 2: el mar era la cara de un cubo
+      var SEA = [[27,42,66],[34,51,79],[44,63,92],[54,76,110],[70,96,138]];
+      (function () {
+        var x = canvasFor("e2a");
+        for (var yy = 0; yy < 160; yy++) for (var xx = 0; xx < 90; xx++) {
+          x.fillStyle = css(SEA[Math.floor(rand() * rand() * 5)], 1);
+          x.fillRect(xx * 6, yy * 6, 6, 6);
+        }
+        html("e2a", '<div class="abs" style="left:678px;top:612px;width:84px;height:84px;background:#0d1524"></div><div class="abs" style="left:714px;top:648px;width:12px;height:12px;background:#e8527f"></div>');
+        cap("e2a", "", "Esta");
+      })();
+      (function () {
+        var bg = document.createElement("canvas"); bg.width = 540; bg.height = 960;
+        document.getElementById("e2b").appendChild(bg); dots(bg.getContext("2d"));
+        var c = document.createElement("canvas"); c.width = 540; c.height = 960;
+        c.style.transformOrigin = "480px 1065px";
+        c.style.transform = "translate(60px,-305px) scale(6)";
+        document.getElementById("e2b").appendChild(c);
+        tower(c.getContext("2d"), function (cu) { return base(cu.s); });
+        var f = document.createElement("canvas"); f.width = 1080; f.height = 1920;
+        f.style.imageRendering = "auto";
+        document.getElementById("e2b").appendChild(f);
+        var x = f.getContext("2d");
+        // La cara izquierda del cubo, con los mismos pixeles del mar
+        x.setTransform(144 / 24, 72 / 24, 0, 156 / 26, 540 - 72, 760 - 114);
+        for (var v = 0; v < 26; v++) for (var u = 0; u < 24; u++) {
+          x.fillStyle = css(SEA[Math.floor(rand() * rand() * 5)], 1);
+          x.fillRect(u, v, 1.04, 1.04);
+        }
+        x.setTransform(1, 0, 0, 1, 0, 0);
+        html("e2b", '<div class="abs" style="left:610px;top:420px;width:12px;height:12px;background:#e8527f"></div>');
+        cap("e2b", "Esta", "torre");
+      })();
+      (function () {
+        tower(canvasFor("e2c"), function (c) { return base(c.s); });
+        apex("e2c");
+        var g = "linear-gradient(#e6e4cf,#e6e4cf)";
+        html("e2c", '<div class="abs" style="left:440px;top:1025px;width:80px;height:80px;background:' +
+          g + ' 0 0/20px 4px no-repeat,' + g + ' 0 0/4px 20px no-repeat,' + g + ' 100% 0/20px 4px no-repeat,' + g + ' 100% 0/4px 20px no-repeat,' +
+          g + ' 0 100%/20px 4px no-repeat,' + g + ' 0 100%/4px 20px no-repeat,' + g + ' 100% 100%/20px 4px no-repeat,' + g + ' 100% 100%/4px 20px no-repeat"></div>');
+        cap("e2c", "Esta torre es todo", "Chile.");
+      })();
+
+      // ---------- Escenas 11 a 17 ----------
+      var LAND = ["000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000011111111000000000001111111111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000010111111111110011111111111111111111111110000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000", "000000000000000000000000000000000000011000011101111100001111111111111111111111110000000000000000111110000000000000000000000000000000000000111100000000000000000000000000000000000000", "000000000000000000000000000000110000000000100111110000111111111111111111111111111000000000000000001000000000000000000000000000000000000000000110000000000000000000000000000000000000", "000000000000000000000000000000000011100010101111110000000000011111111111111111110000000000000000000000000000000000000011000000000000011111111111110000000000000111011000000000000000", "000000000000000000000000000011101000100010110111101100000000001111111111111111100000000000000000000000000000000000001100000000000011111111111111111111101100000000000000000000000000", "100000000001100000000000000010011111110000110011111111000000000011111111111110100000000000000000000000110000000000000100000111011111111111111111111111111110111111111100100000000001", "000000001111111111111011111111100111001001011101100011110000000011111111111110000000000000000000000111111111000000000000111011011111111111111111111111111111111111111111111111011111", "111000001111111111111111111111111111111111111111100001111100000111111111100000000000000000000000011111111111111010111111111111011111111111111111111111111111111111111111111111111111", "001100011111111111111111111111111111111111111101000111111000000011111100000000011110000000000000111110011110101111111111111111111111111111111111111111111111111111111111111111111111", "000000001111111111111111111111111111111111111000000000110100000001111000000000000000000000000011111001111111111111111111111111111111111111111111111111111111111111111111111111111111", "000000011111110111111111111111111111111111100000000111100000000000111000000000000000000000000111111001111111111111111111111111111111111111111111111111111111111111111111001011110000", "000000000111100000000111111111111111111111100000000111100100000000000000000000000000000000000111111000111111111111111111111111111111111111111111111111111111111110000010001000000000", "000000000001000000000001111111111111111111111000000011111110000000000000000000000000000110000010110001111111111111111111111111111111111111111111111111111111111000000000111100000000", "000000001000000000000000011111111111111111111111100111111111100000000000000000000000001110000010000011111111111111111111111111111111111111111111111111111111110000000000111000000000", "000000000000000000000000011111111111111111111111100111111111110000000000000000000000011011001111111111111111111111111111111111111111111111111111111111111111111111000000100000000000", "000000000000000000000000001111111111111111111111111111111111110000000000000000000000000011011111111111111111111111111111111111111111111111111111111111111111111101000000000000000000", "000000000000000000000000000101111111111111111111111111110100011000000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111111101000000000000000000", "000000000000000000000000000011111111111111111111111111111100000100000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111111001000000000000000000", "000000000000000000000000000011111111111111111111111111110110000000000000000000000000000001111111011111111001011111001111111111111111111111111111111111111111110000000000000000000000", "000000000000000000000000000011111111111111111111111111100000000000000000000000000000011111110001100111110000001111001111111111111111111111111111111111111111100011000000000000000000", "000000000000000000000000000011111111111111111111111111000000000000000000000000000000001111000010011011110111111111100111111111111111111111111111111111111110000010000000000000000000", "000000000000000000000000000011111111111111111111111100000000000000000000000000000000011111000000001011011111111111100111111111111111111111111111111110000100000010000000000000000000", "000000000000000000000000000001111111111111111111111100000000000000000000000000000000000110000111010000001111111111100111111111111111111111111111111111100110001100000000000000000000", "000000000000000000000000000000111111111111111111111100000000000000000000000000000000000111111110000000100010111111111111111111111111111111111111111111000100111100000000000000000000", "000000000000000000000000000000011111111111111111110000000000000000000000000000000000001111111111000000000000111111111111111111111111111111111111111111000001100000000000000000000000", "000000000000000000000000000000001111111111111111100000000000000000000000000000000000011111111111111011110111111111111111111111111111111111111111111111100000000000000000000000000000", "000000000000000000000000000000000011111111000000010000000000000000000000000000000000011111111111111111111111111111011111111111111111111111111111111111100000000000000000000000000000", "000000000000000000000000000000000101111110000000010000000000000000000000000000000001111111111111111111111110111111100111111111111111111111111111111111000000000000000000000000000000", "000000000000000000000000000000000010111110000000000000000000000000000000000000000001111111111111111111111110011111110100000111111111111111111111111111000000000000000000000000000000", "000000000000000000000000000000000000011110000000110000000000000000000000000000000011111111111111111111111111011111111111000001111111111111111111111100100000000000000000000000000000", "000000000000000000000000000000000000011110000110000100000000000000000000000000000111111111111111111111111111101111111110000001111111110011111111000000000000000000000000000000000000", "000000000000000000000000000000000000001111001100000000100000000000000000000000000011111111111111111111111111100111111110000000111111000001111110100000000000000000000000000000000000", "000000000000000000000000000000000000000011111100000000000000000000000000000000000011111111111111111111111111100111111000000000011110000001111111000000100000000000000000000000000000", "000000000000000000000000000000000000000000001111000000000000000000000000000000000111111111111111111111111111110111100000000000011100000000011111000000100000000000000000000000000000", "000000000000000000000000000000000000000000000011000000000000000000000000000000000011111111111111111111111111111010000000000000011100000000011111100000100000000000000000000000000000", "000000000000000000000000000000000000000000000001000011110000000000000000000000000011111111111111111111111111111100110000000000001100000000010011000000001000000000000000000000000000", "000000000000000000000000000000000000000000000000101011111111000000000000000000000001111111111111111111111111111111100000000000001010000000010010000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000000111111111100000000000000000000000111111111111111111111111111111100000000000000010000000000000000000001000000000000000000000000000", "000000000000000000000000000000000000000000000000000111111111111100000000000000000000011010000111111111111111111111000000000000000000000000101100000110000000000000000000000000000000", "000000000000000000000000000000000000000000000000000111111111111110000000000000000000000000000001111111111111111110000000000000000000000000010100001110000000000000000000000000000000", "000000000000000000000000000000000000000000000000001111111111111110000000000000000000000000000001111111111111111100000000000000000000000000011000011110100000000000000000000000000000", "000000000000000000000000000000000000000000000000001111111111111111100000000000000000000000000011111111111111111000000000000000000000000000001100011110000001100000000000000000000000", "000000000000000000000000000000000000000000000000001111111111111111111100000000000000000000000001111111111111110000000000000000000000000000000110011101100010101110000000000000000000", "000000000000000000000000000000000000000000000000011111111111111111111111000000000000000000000000111111111111110000000000000000000000000000000010000000010000000111100000000000000000", "000000000000000000000000000000000000000000000000001111111111111111111111100000000000000000000000111111111111110000000000000000000000000000000001110000000000000111110000100000000000", "000000000000000000000000000000000000000000000000000111111111111111111111000000000000000000000000111111111111110000000000000000000000000000000000000010001000000011010000001000000000", "000000000000000000000000000000000000000000000000000111111111111111111110000000000000000000000000011111111111110000000000000000000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000000011111111111111111110000000000000000000000000111111111111110000100000000000000000000000000000000000000001110001000000000000000000", "000000000000000000000000000000000000000000000000000011111111111111111110000000000000000000000000111111111111110000100000000000000000000000000000000000001111110001100000000001000000", "000000000000000000000000000000000000000000000000000000111111111111111100000000000000000000000000111111111111100011100000000000000000000000000000000000011111111001100000000000000000", "000000000000000000000000000000000000000000000000000000011111111111111100000000000000000000000000111111111111000011100000000000000000000000000000000000011111111111100000000000000000", "000000000000000000000000000000000000000000000000000000011111111111111100000000000000000000000000011111111111000011000000000000000000000000000000000011111111111111111000000010000000", "000000000000000000000000000000000000000000000000000000011111111111110000000000000000000000000000011111111111000011000000000000000000000000000000000111111111111111111000000000000000", "000000000000000000000000000000000000000000000000000000011111111111000000000000000000000000000000011111111110000010000000000000000000000000000000000111111111111111111100000000000000", "000000000000000000000000000000000000000000000000000000011111111111000000000000000000000000000000001111111100000000000000000000000000000000000000000111111111111111111110000000000000", "000000000000000000000000000000000000000000000000000000111111111110000000000000000000000000000000001111111100000000000000000000000000000000000000000111111111111111111110000000000000", "000000000000000000000000000000000000000000000000000000111111111110000000000000000000000000000000000111111000000000000000000000000000000000000000000011111111111111111110000000000000", "000000000000000000000000000000000000000000000000000000111111111100000000000000000000000000000000000111110000000000000000000000000000000000000000000011110000011111111100000000000000", "000000000000000000000000000000000000000000000000000000111111100000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000111111000000000001000", "000000000000000000000000000000000000000000000000000001111111110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011111000000000000100", "000000000000000000000000000000000000000000000000000001111110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000110", "000000000000000000000000000000000000000000000000000001111010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000110000000000001100", "000000000000000000000000000000000000000000000000000000111100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000011000", "000000000000000000000000000000000000000000000000000001111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000110000", "000000000000000000000000000000000000000000000000000001111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000000011110000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000000011100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000000001110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000000000110000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000000000001100000000000000000000000000000000000000000000000000000000011110000000000000001000001111111110011111111111100000000000000000", "000000000000000000000000000000000000000000000000000000001100000000000000000000000000000000000000000000000001001111111111111110000111111111111111111111111111111111111111000000000000", "000000000000000000000000000000000000000000000000000000111110000000000000000000000000000000011111111111111111111111111111111100111111111111111111111111111111111111111111111111000000", "000000000000000000000000000000000000001110000100000000001111000000000000000000000001111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111100000", "000000000000000000001111111111111111010011111111111111111100000000000000000000000111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110000000", "000000000000000111111111111111111111111111111111111000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111100000000", "000000000100111111111111111111111111111111111111111000000000000001110000111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111100000000", "000000000000000011111111111111111111111111111111111111100000000010000000111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110000000000", "000000000000011111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110000000", "000000000111111111000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"];
+      var CHILE = [[[-68.634,-52.636],[-68.633,-54.87],[-67.562,-54.87],[-66.96,-54.897],[-67.291,-55.301],[-68.149,-55.612],[-68.64,-55.58],[-69.232,-55.499],[-69.958,-55.198],[-71.006,-55.054],[-72.264,-54.495],[-73.285,-53.958],[-74.663,-52.837],[-73.838,-53.047],[-72.434,-53.715],[-71.108,-54.074],[-70.592,-53.616],[-70.267,-52.931],[-69.346,-52.518],[-68.634,-52.636]],[[-68.22,-21.494],[-67.828,-22.873],[-67.107,-22.736],[-66.985,-22.986],[-67.328,-24.025],[-68.418,-24.519],[-68.386,-26.185],[-68.595,-26.507],[-68.296,-26.899],[-69.001,-27.521],[-69.656,-28.459],[-70.014,-29.368],[-69.919,-30.336],[-70.535,-31.365],[-70.074,-33.091],[-69.815,-33.274],[-69.817,-34.194],[-70.388,-35.17],[-70.365,-36.005],[-71.122,-36.658],[-71.119,-37.577],[-70.815,-38.553],[-71.414,-38.916],[-71.681,-39.808],[-71.916,-40.832],[-71.747,-42.051],[-72.149,-42.255],[-71.915,-43.409],[-71.464,-43.788],[-71.794,-44.207],[-71.33,-44.408],[-71.223,-44.784],[-71.659,-44.974],[-71.552,-45.561],[-71.917,-46.885],[-72.447,-47.739],[-72.331,-48.244],[-72.648,-48.879],[-73.415,-49.318],[-73.328,-50.379],[-72.976,-50.741],[-72.31,-50.677],[-72.329,-51.426],[-71.915,-52.009],[-69.498,-52.143],[-68.572,-52.299],[-69.461,-52.292],[-69.943,-52.538],[-70.845,-52.899],[-71.006,-53.833],[-71.43,-53.856],[-72.558,-53.531],[-73.703,-52.835],[-73.703,-52.835],[-74.947,-52.263],[-75.26,-51.629],[-74.977,-51.043],[-75.48,-50.378],[-75.608,-48.674],[-75.183,-47.712],[-74.127,-46.939],[-75.644,-46.648],[-74.692,-45.764],[-74.352,-44.103],[-73.24,-44.455],[-72.718,-42.383],[-73.389,-42.118],[-73.701,-43.366],[-74.332,-43.225],[-74.018,-41.795],[-73.677,-39.942],[-73.218,-39.259],[-73.506,-38.283],[-73.588,-37.156],[-73.167,-37.124],[-72.553,-35.509],[-71.862,-33.909],[-71.438,-32.419],[-71.669,-30.921],[-71.37,-30.096],[-71.49,-28.861],[-70.905,-27.64],[-70.725,-25.706],[-70.404,-23.629],[-70.091,-21.393],[-70.164,-19.756],[-70.373,-18.348],[-69.858,-18.093],[-69.59,-17.58],[-69.1,-18.26],[-68.967,-18.982],[-68.442,-19.405],[-68.757,-20.373],[-68.22,-21.494]]];
+
+      function sPerson(x, px, py, k, shirt, hair) {
+        var a = 9 * k, h = 11 * k, legs = [66, 80, 108];
+        box(x, px, py, a, a, h, legs);
+        box(x, px, py - h, a, a, h, legs);
+        box(x, px, py - 2 * h, a, a, h, shirt);
+        box(x, px, py - 3 * h, a, a, h, shirt);
+        box(x, px, py - 4 * h, a, a, h, [224, 186, 150]);
+        box(x, px, py - 5 * h, a, a, 3 * k, hair);
+        x.fillStyle = "#1a1c2c";
+        x.fillRect(px - 7 * k, py - 4 * h - 6 * k, 2 * k, 2 * k);
+        x.fillRect(px - 3 * k, py - 4 * h - 4 * k, 2 * k, 2 * k);
+      }
+      function family(x, px, py) {
+        for (var i = 0; i < 2; i++) box(x, px - 6 + i * 22, py + 2 - i * 11, 22, 22, 3, ALERT);
+        person(x, px + 22, py - 14, [46, 54, 84], [24, 24, 30], true);
+        person(x, px, py - 3, [120, 60, 70], [80, 50, 30], true);
+        kid(x, px + 22, py + 2, [200, 190, 150], [50, 34, 26]);
+      }
+      function hospital(x, px, py, k) {
+        var H = [214, 214, 196];
+        box(x, px, py, 36 * k, 26 * k, 34 * k, H);
+        box(x, px + 38 * k, py - 14 * k, 14 * k, 18 * k, 18 * k, [176, 180, 166]);
+        // Ventanas y cruz
+        x.fillStyle = "#2c3f5c";
+        for (var r = 0; r < 3; r++) for (var c = 0; c < 4; c++) {
+          x.fillRect(px - 22 * k + c * 6 * k, py - 26 * k - 13 * k * 0 + r * 9 * k + (c * 3 * k) - 8 * k, 3 * k, 5 * k);
+        }
+        x.fillStyle = "#e8527f";
+        x.fillRect(px + 9 * k, py - 48 * k, 12 * k, 4 * k);
+        x.fillRect(px + 13 * k, py - 52 * k, 4 * k, 12 * k);
+      }
+      function ruler(id, l, top, h, marks) {
+        rect(id, l, top, 56, h, "#dcc266");
+        marks.forEach(function (m) {
+          rect(id, l + 56 - m.w, top + m.y, m.w, 4, "#0d1524");
+        });
+      }
+      function chileMap(x) {
+        x.fillStyle = "#6b86ad";
+        CHILE.forEach(function (ring) {
+          x.beginPath();
+          ring.forEach(function (c, i) {
+            var px = 270 + (c[0] + 71) * 9.4, py = 240 + (-17.5 - c[1]) * 11.8;
+            if (i === 0) x.moveTo(px, py); else x.lineTo(px, py);
+          });
+          x.closePath(); x.fill();
+        });
+      }
+      function pointInChile(lon, lat) {
+        return CHILE.some(function (r) {
+          var c = false;
+          for (var i = 0, j = r.length - 1; i < r.length; j = i++) {
+            if ((r[i][1] > lat) !== (r[j][1] > lat) && lon < ((r[j][0] - r[i][0]) * (lat - r[i][1])) / (r[j][1] - r[i][1]) + r[i][0]) c = !c;
+          }
+          return c;
+        });
+      }
+      var D2R = Math.PI / 180;
+      function globe(x, cx, cy, R, lat0, lon0) {
+        var s0 = Math.sin(lat0 * D2R), c0 = Math.cos(lat0 * D2R);
+        for (var yy = -R; yy <= R; yy += 2) for (var xx = -R; xx <= R; xx += 2) {
+          var rr = xx * xx + yy * yy;
+          if (rr > R * R) continue;
+          var X = xx / R, Y = -yy / R, Z = Math.sqrt(1 - X * X - Y * Y);
+          var lat = Math.asin(Y * c0 + Z * s0) / D2R;
+          var lon = lon0 + Math.atan2(X, Z * c0 - Y * s0) / D2R;
+          if (lon > 180) lon -= 360; if (lon < -180) lon += 360;
+          var row = LAND[Math.min(89, Math.floor((90 - lat) / 2))];
+          var land = row && row[Math.min(179, Math.floor((lon + 180) / 2))] === "1";
+          var shade = 0.55 + 0.45 * Z;
+          var col = [24, 42, 74];
+          if (land) col = pointInChile(lon, lat) ? GOLD : [86, 112, 150];
+          x.fillStyle = css(col, shade);
+          x.fillRect(cx + xx, cy + yy, 2, 2);
+        }
+      }
+      // Linea sobre el Ecuador. lonA a lonB en grados; solo la cara visible
+      function equator(x, cx, cy, R, lat0, lon0, lonA, lonB, latL, col, w) {
+        var s0 = Math.sin(lat0 * D2R), c0 = Math.cos(lat0 * D2R);
+        x.fillStyle = col;
+        for (var lo = lonA; lo <= lonB; lo += 0.5) {
+          var la = latL * D2R, dl = (lo - lon0) * D2R;
+          var Xp = Math.cos(la) * Math.sin(dl);
+          var Yp = c0 * Math.sin(la) - s0 * Math.cos(la) * Math.cos(dl);
+          var Zp = s0 * Math.sin(la) + c0 * Math.cos(la) * Math.cos(dl);
+          if (Zp > 0) x.fillRect(Math.round(cx + Xp * R), Math.round(cy - Yp * R), w, w);
+        }
+      }
+      function source(id, txt) {
+        html(id, '<div class="abs vt" style="left:110px;width:860px;top:1604px;text-align:center;font-size:32px;color:#a3a795">' + txt + "</div>");
+      }
+      var ALL_DONE = function () { return [62, 70, 84]; };
+      // La clase alta: un solo cubo mas chico sobre la cima
+      function topCube(x) { box(x, 270, 244, 5, 5, 5, ALERT); }
+
+      // 11a. La regla cambia
+      zoomed("e11a", ALL_DONE, 3.5, 540, 900, topCube);
+      panel("e11a", "CAMBIA LA REGLA", "PATRIMONIO", "YA NO SE MIDE EN SUELDOS", "#e8527f");
+      cap("e11a", "Pero la verdadera clase alta no vive de un", "sueldo.");
+
+      // 11b. Lupa: unos pocos clanes
+      (function () {
+        zoomed("e11b", ALL_DONE, 3.5, 540, 900, topCube);
+        var c = document.createElement("canvas"); c.width = 540; c.height = 960;
+        document.getElementById("e11b").appendChild(c);
+        var x = c.getContext("2d");
+        var cx = 270, cy = 350, r = 128;
+        x.save(); x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.clip();
+        x.fillStyle = "#0d1524"; x.fillRect(cx - r, cy - r, 2 * r, 2 * r);
+        family(x, 270, 312); family(x, 200, 378); family(x, 322, 388);
+        x.restore();
+        x.strokeStyle = "#e6e4cf"; x.lineWidth = 5;
+        x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.stroke();
+        x.lineWidth = 10; x.beginPath(); x.moveTo(cx + 92, cy + 92); x.lineTo(cx + 140, cy + 140); x.stroke();
+        panel("e11b", "LA CIMA", "UNOS POCOS", "CLANES FAMILIARES", "#e8527f");
+        cap("e11b", "Son unos pocos clanes", "familiares.");
+      })();
+
+      // 12a. La regla, de cerca
+      (function () {
+        var x = canvasFor("e12a");
+        box(x, 270, 560, 86, 44, 3, [80, 120, 180]);
+        x.fillStyle = "#e6e4cf"; x.fillRect(268, 512, 6, 6); x.fillRect(240, 526, 12, 3);
+        panel("e12a", "NUEVA REGLA", "1 MM", "= $1.000", "#dcc266");
+        rect("e12a", 60, 760, 960, 120, "#dcc266");
+        for (var t = 0; t <= 8; t++) rect("e12a", 100 + t * 110, 760, 6, t % 4 === 0 ? 80 : 44, "#0d1524");
+        rect("e12a", 430, 880, 6, 90, "#e6e4cf"); rect("e12a", 540, 880, 6, 90, "#e6e4cf");
+        rect("e12a", 430, 966, 116, 4, "#e6e4cf");
+        html("e12a", '<div class="abs tag" style="left:390px;width:200px;top:980px;text-align:center">1 MM</div>');
+        cap("e12a", "Si mil pesos fueran un", "mil&iacute;metro,");
+      })();
+
+      // 12b. Un sueldo, un metro y medio
+      (function () {
+        var x = canvasFor("e12b");
+        sPerson(x, 330, 680, 5.2, [86, 110, 150], [40, 30, 26]);
+        panel("e12b", "SUELDO", "$1.500.000", "= 1,5 METROS", "#dcc266");
+        var marks = []; for (var i = 0; i <= 15; i++) marks.push({ y: 20 + i * 48, w: i % 5 === 0 ? 44 : 22 });
+        ruler("e12b", 170, 610, 750, marks);
+        rect("e12b", 226, 630, 500, 4, "#dcc266");
+        html("e12b", '<div class="abs tag" style="left:50px;top:560px;color:#dcc266">1,5 M</div>');
+        cap("e12b", "un sueldo de 1.500.000 medir&iacute;a un metro y", "medio.");
+      })();
+
+      // 13a. Con la misma regla, sale de la pantalla
+      (function () {
+        var x = canvasFor("e13a");
+        sPerson(x, 400, 672, 1, [86, 110, 150], [40, 30, 26]);
+        rect("e13a", 512, 0, 56, 1368, "#dcc266");
+        for (var i = 0; i < 26; i++) rect("e13a", 540, i * 54, 28, 4, "#0d1524");
+        panel("e13a", "JULIO PONCE LEROU", "$3.800.000.000.000", "DE PESOS", "#dcc266");
+        document.querySelector("#e13a .num").classList.add("num40");
+        source("e13a", "FORBES 2026 &middot; D&Oacute;LAR $981");
+        cap("e13a", "3,8 millones de millones de", "pesos:");
+      })();
+
+      // 13b. Sobre el mapa de Chile
+      (function () {
+        var x = canvasFor("e13b");
+        chileMap(x);
+        x.fillStyle = "#dcc266";
+        var ax = 270 + 0.67 * 9.4, ay = 240 + 0.98 * 11.8, by = 240 + 35.66 * 11.8, bx = 270 + 0.09 * 9.4;
+        for (var i = 0; i <= 100; i++) x.fillRect(ax + (bx - ax) * i / 100 - 2, ay + (by - ay) * i / 100, 4, 4);
+        panel("e13b", "JULIO PONCE LEROU", "3.800 KM", "CON LA MISMA REGLA", "#dcc266");
+        html("e13b", '<div class="abs tag" style="left:640px;top:486px">ARICA</div><div class="abs tag" style="left:640px;top:1300px">PUNTA<br>ARENAS</div>' +
+          '<div class="abs" style="left:640px;top:860px;font-size:40px;color:#dcc266">3.800 KM</div>');
+        source("e13b", "FORBES 2026 &middot; D&Oacute;LAR $981");
+        cap("e13b", "3.800 kil&oacute;metros, de Arica a Punta", "Arenas.");
+      })();
+
+      // 14a y 14b. Chile queda chico en el globo
+      (function () {
+        var x = canvasFor("e14a");
+        globe(x, 270, 450, 190, -22, -66);
+        panel("e14a", "CLAN LUKSIC", "$52.000.000.000.000", "CASI &middot; DE PESOS", "#dcc266");
+        document.querySelector("#e14a .num").classList.add("num40");
+        source("e14a", "FORBES 2026 &middot; D&Oacute;LAR $981");
+        cap("e14a", "", "52 millones de millones:");
+      })();
+      (function () {
+        var x = canvasFor("e14b");
+        globe(x, 270, 450, 190, -22, -66);
+        equator(x, 270, 450, 190, -22, -66, -160, 28, 0, "#e8527f", 4);
+        equator(x, 270, 450, 190, -22, -66, -70, -10, 6, "#f4dcae", 4);
+        panel("e14b", "CLAN LUKSIC", "52.000 KM", "M&Aacute;S DE 1 VUELTA", "#e8527f");
+        document.querySelector("#e14b .sub").style.fontFamily = '"VT323", monospace';
+        html("e14b", '<div class="abs vt" style="left:90px;width:900px;top:1306px;text-align:center;font-size:44px;color:#e6e4cf">ECUADOR: 40.075 KM</div>');
+        source("e14b", "FORBES 2026 &middot; D&Oacute;LAR $981");
+        cap("e14b", "casi 52.000 kil&oacute;metros, m&aacute;s de una vuelta a la", "Tierra.");
+      })();
+
+      // 15. Ventana de transaccion: la plata sale del Estado
+      (function () {
+        var x = canvasFor("e15");
+        html("e15", '<div id="w15" class="abs" style="left:90px;top:200px;width:900px;height:1132px;background:#0d1524;border:4px solid #e6e4cf;box-shadow:12px 12px 0 #060a13"><div class="bar" style="height:72px"><div class="stripes" style="flex:none;width:20px"></div>ESTADO.SYS &mdash; 2026<div class="stripes"></div></div>' +
+          '<div class="abs" style="left:32px;top:104px;font-size:40px;line-height:1;color:#dcc266">REBAJA DE IMPUESTOS</div>' +
+          '<div class="abs" style="left:32px;top:176px;font-size:40px;line-height:1;color:#e8527f">-$3.000.000.000.000</div>' +
+          '<div class="abs vt" style="left:32px;top:232px;color:#a3a795;font-size:44px">POR A&Ntilde;O &middot; ESTIMACI&Oacute;N DIPRES, ABRIL 2026</div>' +
+          '<canvas id="c15" width="540" height="960" style="left:-94px;top:-204px;transform-origin:540px 1200px;transform:translateY(-10px) scale(1.5)"></canvas></div>');
+        var c = document.getElementById("c15").getContext("2d");
+        // Edificio del Estado y billetes saliendo
+        box(c, 210, 640, 76, 50, 66, [150, 156, 150]);
+        box(c, 210, 574, 84, 56, 7, [190, 194, 180]);
+        c.fillStyle = "#2c3f5c";
+        for (var i = 0; i < 5; i++) c.fillRect(158 + i * 11, 574 + i * 4, 5, 40);
+        box(c, 214, 566, 1.5, 1.5, 30, [80, 80, 90]);
+        c.fillStyle = "#3b6fb5"; c.fillRect(216, 536, 10, 6);
+        c.fillStyle = "#e6e4cf"; c.fillRect(216, 542, 20, 4);
+        c.fillStyle = "#e8527f"; c.fillRect(216, 546, 20, 4);
+        var pts = [[300, 590], [326, 560], [352, 536], [376, 505], [398, 480], [418, 452], [340, 610], [372, 582], [404, 548], [290, 620], [426, 516]];
+        pts.forEach(function (p, n) { box(c, p[0], p[1], 22, 11, 2, n % 2 ? BILL : [190, 116, 62]); });
+        cap("e15", "unos 3 millones de millones al", "a&ntilde;o.");
+      })();
+
+      // 16a y 16b. Hospitales
+      (function () {
+        var x = canvasFor("e16a");
+        hospital(x, 250, 650, 3.4);
+        panel("e16a", "CON ESA PLATA", "1 HOSPITAL", "P&Uacute;BLICO, NUEVO", "#e6e4cf");
+        cap("e16a", "Alcanzar&iacute;a para cerca de una", "docena");
+      })();
+      (function () {
+        var x = canvasFor("e16b");
+        var items = [];
+        for (var r = 0; r < 4; r++) for (var c = 0; c < 3; c++) items.push({ r: r, c: c });
+        items.sort(function (p, q) { return q.r + q.c - (p.r + p.c); });
+        items.forEach(function (i) { hospital(x, 280 + (i.c - i.r) * 66, 660 - (i.r + i.c) * 33, 0.82); });
+        panel("e16b", "AL A&Ntilde;O", "CERCA DE 12", "HOSPITALES P&Uacute;BLICOS NUEVOS", "#e6e4cf");
+        source("e16b", "C&Aacute;LCULO CON HOSPITAL DE LA SERENA, US$258-271 M");
+        cap("e16b", "de hospitales p&uacute;blicos", "nuevos.");
+      })();
+
+      // 17a y 17b. Vuelta a la torre
+      (function () {
+        var x = canvasFor("e17a");
+        tower(x, function (c) { return base(c.s); });
+        topCube(x);
+        sPerson(x, 110, 672, 1.5, [190, 196, 190], [58, 38, 30]);
+        panel("e17a", "CLASE MEDIA O ALTA", '&iquest;Y T<span class="big">U</span>?', "&iquest;D&Oacute;NDE TE VES EN LA TORRE?", "#dcc266"); apex("e17a");
+        cap("e17a", "&iquest;Y t&uacute;, a&uacute;n crees que eres clase media o", "alta?");
+      })();
+      (function () {
+        var x = canvasFor("e17b");
+        tower(x, function (c) { return base(c.s); });
+        topCube(x);
+        panel("e17b", "COMENTARIOS", '&iquest;Y T<span class="big">U</span>?', "TE LEO", "#dcc266"); apex("e17b");
+        html("e17b", '<div class="abs" style="left:90px;top:1110px;width:900px;height:230px;background:#0d1524;border:4px solid #e6e4cf;box-shadow:12px 12px 0 #060a13"><div class="bar"><div class="stripes" style="flex:none;width:20px"></div>COMENTARIO<div class="stripes"></div></div><div class="abs" style="left:32px;top:96px;font-size:40px;line-height:1">&gt;<span style="display:inline-block;width:28px;height:44px;margin-left:16px;background:#e6e4cf;vertical-align:-6px"></span></div></div>');
+        cap("e17b", "Te leo en los", "comentarios.");
+      })();
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

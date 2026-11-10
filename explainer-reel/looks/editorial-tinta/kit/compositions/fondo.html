@@ -1,0 +1,15 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; background: #eceae4; }
+    #fd-grid { position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(22,33,62,0.09) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(22,33,62,0.09) 1.5px, transparent 1.5px);
+      background-size: 180px 180px; background-position: 0 40px; }
+  </style>
+  <div id="root" data-composition-id="fondo" data-width="1080" data-height="1920">
+    <div id="fd-grid"></div>
+  </div>
+  <script>
+    window.__timelines = window.__timelines || {};
+    window.__timelines["fondo"] = gsap.timeline({ paused: true });
+  </script>
+</template>

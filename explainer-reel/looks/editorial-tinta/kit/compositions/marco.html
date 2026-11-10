@@ -1,0 +1,72 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; color: #16213e; }
+    .mc-crop { position: absolute; width: 34px; height: 34px; border: 0 solid #16213e; }
+    .mc-mono { font-family: "Space Mono", monospace; font-size: 30px; letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap; line-height: 50px; }
+    #mc-hud { position: absolute; top: 196px; left: 48px; right: 48px; height: 50px; }
+    #mc-tc { position: absolute; right: 0; top: 0; }
+    #mc-foot { position: absolute; top: 1420px; left: 48px; right: 48px; }
+    #mc-row { position: relative; height: 44px; }
+    .mc-sec { position: absolute; left: 0; top: 0; opacity: 0; }
+    .mc-sec b { font-weight: 700; }
+    .mc-right { position: absolute; right: 0; top: 0; opacity: 0; }
+    #mc-ruler { position: relative; height: 40px; margin-top: 18px; border-bottom: 3px solid #16213e; }
+    #mc-ruler i { position: absolute; bottom: -3px; width: 3px; height: 26px; background: #16213e; }
+    #mc-bar { position: absolute; left: 0; bottom: -6px; height: 9px; width: 100%; background: #2e5bff; }
+  </style>
+  <div id="root" data-composition-id="marco" data-width="1080" data-height="1920">
+    <div class="mc-crop" style="left:24px;top:150px;border-left-width:3px;border-top-width:3px"></div>
+    <div class="mc-crop" style="right:24px;top:150px;border-right-width:3px;border-top-width:3px"></div>
+    <div class="mc-crop" style="left:24px;top:1500px;border-left-width:3px;border-bottom-width:3px"></div>
+    <div class="mc-crop" style="right:24px;top:1500px;border-right-width:3px;border-bottom-width:3px"></div>
+    <div id="mc-hud"><div class="mc-mono">Apellidos · Santiago ’12</div><div id="mc-tc" class="mc-mono">00:00:00:00</div></div>
+    <div id="mc-foot">
+      <div id="mc-row">
+        <div id="mc-sec0" class="mc-mono mc-sec"><b>01/07</b> La pregunta</div>
+        <div id="mc-sec1" class="mc-mono mc-sec"><b>02/07</b> El estudio</div>
+        <div id="mc-sec2" class="mc-mono mc-sec"><b>03/07</b> Nueve grupos</div>
+        <div id="mc-sec3" class="mc-mono mc-sec"><b>04/07</b> Entre ellos</div>
+        <div id="mc-sec4" class="mc-mono mc-sec"><b>05/07</b> El nororiente</div>
+        <div id="mc-sec5" class="mc-mono mc-sec"><b>06/07</b> El Congreso</div>
+        <div id="mc-sec6" class="mc-mono mc-sec"><b>07/07</b> Tu apellido</div>
+        <div id="mc-r0" class="mc-mono mc-right">● Padrón 2012</div>
+        <div id="mc-r1" class="mc-mono mc-right">● BCN · Fig. 4</div>
+        <div id="mc-r2" class="mc-mono mc-right">● Tu apellido</div>
+      </div>
+      <div id="mc-ruler"><i style="left:0%"></i><i style="left:14.2857%"></i><i style="left:28.5714%"></i><i style="left:42.8571%"></i><i style="left:57.1429%"></i><i style="left:71.4286%"></i><i style="left:85.7143%"></i><i style="left:100%"></i><b id="mc-bar"></b></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var DUR = 82.0;          // duración del tramo; ajustar al ir agregando tramos
+      var TOTAL = 82.0;
+      var SEC = [0, 6.6, 17.7, 28.5, 36.8, 54.8, 67.4];   // inicio de cada sección
+      var RIGHT = [0, 54.8, 67.4];                         // inicio de cada texto derecho
+      var tl = gsap.timeline({ paused: true });
+      function tc(t) {
+        var s = Math.floor(t + 1e-6), f = Math.min(29, Math.floor((t - s) * 30 + 1e-6));
+        return "00:00:" + String(s).padStart(2, "0") + ":" + String(f).padStart(2, "0");
+      }
+      var clock = { t: 0 };
+      var tcEl = document.getElementById("mc-tc");
+      tl.fromTo(clock, { t: 0 }, { t: DUR, duration: DUR, ease: "none", onUpdate: function () { tcEl.textContent = tc(clock.t); } }, 0);
+      gsap.set("#mc-bar", { transformOrigin: "0% 50%" });
+      tl.fromTo("#mc-bar", { scaleX: 0 }, { scaleX: DUR / TOTAL, duration: DUR, ease: "none" }, 0);
+      function swap(ids, starts) {
+        ids.forEach(function (id, i) {
+          var el = "#" + id;
+          if (i === 0) tl.set(el, { opacity: 1, filter: "blur(0px)" }, 0); else tl.set(el, { opacity: 0, filter: "blur(6px)" }, 0);
+          if (i > 0) {
+            var t = starts[i];
+            tl.fromTo("#" + ids[i - 1], { opacity: 1, filter: "blur(0px)" }, { opacity: 0, filter: "blur(6px)", duration: 0.13, ease: "none" }, t - 0.13);
+            tl.fromTo(el, { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "none" }, t);
+          }
+        });
+      }
+      swap(["mc-sec0", "mc-sec1", "mc-sec2", "mc-sec3", "mc-sec4", "mc-sec5", "mc-sec6"], SEC);
+      swap(["mc-r0", "mc-r1", "mc-r2"], RIGHT);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["marco"] = tl;
+    })();
+  </script>
+</template>

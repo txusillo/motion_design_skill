@@ -1,0 +1,77 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: #5f7ca8;
+    }
+    #fd-dots {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+    }
+  </style>
+  <div id="root" data-composition-id="fondo" data-width="1080" data-height="1920">
+    <canvas id="fd-dots" width="1080" height="1920" data-layout-ignore></canvas>
+  </div>
+  <script>
+    (function () {
+      var DURATION = 77; // Cambiar al largo del video
+      var W = 1080;
+      var H = 1920;
+      var GAP = 80;
+      var DOT = 4;
+      var CX = W / 2;
+      var CY = H / 2;
+      var WAVELENGTH = 560;
+      var PERIOD = 6;
+      var PUSH = 6;
+      var ctx = document.getElementById("fd-dots").getContext("2d");
+      var TAU = Math.PI * 2;
+
+      // Puntos en las intersecciones de una grilla centrada en el medio de la pantalla
+      var dots = [];
+      for (var gy = -13; gy <= 13; gy++) {
+        for (var gx = -7; gx <= 7; gx++) {
+          var dx = gx * GAP;
+          var dy = gy * GAP;
+          var r = Math.sqrt(dx * dx + dy * dy);
+          dots.push({ x: CX + dx, y: CY + dy, r: r, ux: r ? dx / r : 0, uy: r ? dy / r : 0 });
+        }
+      }
+
+      // Onda que sale del centro: empuja cada punto hacia afuera y lo ilumina al pasar
+      function draw(t) {
+        ctx.clearRect(0, 0, W, H);
+        dots.forEach(function (d) {
+          var wave = Math.sin((d.r / WAVELENGTH - t / PERIOD) * TAU);
+          var x = Math.round(d.x + d.ux * PUSH * wave);
+          var y = Math.round(d.y + d.uy * PUSH * wave);
+          ctx.fillStyle = "rgba(205, 225, 250, " + (0.36 + 0.16 * wave).toFixed(3) + ")";
+          ctx.fillRect(x - DOT / 2, y - DOT / 2, DOT, DOT);
+        });
+      }
+
+      draw(0);
+      var clock = { t: 0 };
+      var tl = gsap.timeline({ paused: true });
+      tl.fromTo(
+        clock,
+        { t: 0 },
+        {
+          t: DURATION,
+          duration: DURATION,
+          ease: "none",
+          onUpdate: function () {
+            draw(clock.t);
+          },
+        },
+        0,
+      );
+      window.__timelines = window.__timelines || {};
+      window.__timelines["fondo"] = tl;
+    })();
+  </script>
+</template>
