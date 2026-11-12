@@ -1,0 +1,220 @@
+<template>
+  <style>
+    @font-face { font-family: "Barlow Condensed"; font-weight: 600; src: url("assets/fonts/BarlowCondensed-SemiBold.ttf"); }
+    @font-face { font-family: "Barlow Condensed"; font-weight: 700; src: url("assets/fonts/BarlowCondensed-Bold.ttf"); }
+    @font-face { font-family: "Barlow Condensed"; font-weight: 800; src: url("assets/fonts/BarlowCondensed-ExtraBold.ttf"); }
+    #root { position: absolute; inset: 0; }
+    #ef-safe { position: absolute; inset: 0; transform: translateY(77px) scale(0.88); transform-origin: 540px 883px; }
+    #ef-svg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+  </style>
+  <div id="root" data-composition-id="efecto" data-width="1080" data-height="1920">
+    <div id="ef-safe"><svg id="ef-svg" viewBox="0 0 1080 1920"></svg></div>
+  </div>
+  <script src="assets/dibujo.js"></script>
+  <script>
+    (function () {
+      GLID = "ef-gl";
+      var T0 = 52.25;                      // la composicion arranca en 52,25 s; el codigo usa tiempos absolutos
+      var L = function (t) { return +(t - T0).toFixed(4); };
+      var X = function (w) { return 140 + w / 43 * 840; };
+
+      // ============ estado final de la escena 13 (identico al de decision) ============
+      var s13 =
+        '<g id="ef-s13">' + truck(540, 330, 0.62, false) +
+        T(110, 600, "GASOLINA 93", { s: 46, w: 800 }) + T(970, 600, "+$372", { a: "end", s: 46, w: 800, c: AMBER }) +
+        '<rect x="110" y="620" width="444" height="70" rx="8" fill="' + AMBER + '"/>' + T(574, 670, "+32%", { s: 44, w: 800, c: AMBER }) +
+        T(110, 800, "DIÉSEL", { s: 46, w: 800 }) + T(970, 800, "+$580", { a: "end", s: 46, w: 800, c: ORANGE }) +
+        '<rect x="110" y="820" width="760" height="70" rx="8" fill="' + ORANGE + '"/>' + T(890, 870, "+62%", { s: 44, w: 800, c: ORANGE }) +
+        T(110, 962, "ALZA DEL 26·03·2026 · ENAP", { mono: true, s: 26, c: MUTED }) + '</g>';
+
+      // ============ 14: la escalera ============
+      var s14 =
+        '<g id="ef-s14">' +
+          '<defs><clipPath id="ef-cpS"><rect id="ef-cprS" x="90" y="380" width="50" height="700"/></clipPath></defs>' +
+          stairs({ id: "ef-s", clipId: "ef-cpS" }) +
+          '<g id="ef-sub">' + T(140, 400, "PARA SUBIR $372", { mono: true, s: 26, c: MUTED }) + '</g>' +
+          '<g id="ef-nota14">' + T(140, 1106, "~$26 CADA 3 SEMANAS · CÁLCULO PROPIO", { mono: true, s: 26, c: MUTED }) + '</g>' +
+        '</g>';
+
+      // ============ 15: familia, luna, calendario apagado ============
+      var cells = "";
+      for (var q = 0; q < 20; q++) cells += '<rect x="' + (30 + (q % 5) * 76) + '" y="' + (86 + Math.floor(q / 5) * 76) + '" width="60" height="60" rx="8" fill="#2a2d31"/>';
+      var s15 =
+        '<g id="ef-s15">' +
+          '<g id="ef-moon"><circle cx="300" cy="420" r="44" fill="' + INK + '"/><circle cx="322" cy="404" r="40" fill="' + BG + '"/></g>' +
+          '<g id="ef-f1">' + person(250, 920, 1.5, "#4b6b8a", "#c8936a", "#2a201a") + '</g>' +
+          '<g id="ef-f2">' + person(400, 935, 1.425, ORANGE, "#eac6a2", "#5b3b24", { long: true }) + '</g>' +
+          '<g id="ef-f3">' + person(527.5, 980, 0.93, AMBER, "#946043", "#1a1a1a") + '</g>' +
+          '<g id="ef-pan15"><g transform="translate(560 420)"><rect width="420" height="420" rx="22" fill="' + PANEL + '" stroke="' + ORANGE + '" stroke-width="4"/>' + T(30, 56, "SEMANAS PARA AJUSTAR", { mono: true, s: 26, c: MUTED }) + cells + '</g></g>' +
+          '<g id="ef-cero"><g transform="translate(560 420)">' + T(210, 270, "0", { a: "middle", s: 200, w: 800, c: ORANGE }) + '</g></g>' +
+        '</g>';
+
+      // ============ 16: el camion ============
+      var s16 =
+        '<g id="ef-s16">' +
+          '<path id="ef-road" d="M0 1130 L1080 1130" fill="none" stroke="' + INK + '" stroke-width="6"/>' +
+          '<line x1="0" x2="1080" y1="1164" y2="1164" stroke="#3a3c40" stroke-width="8" stroke-dasharray="50 40"/>' +
+          '<g id="ef-truck">' + truck(110, 560, 1.4) + '</g>' +
+          [["PAN", 190], ["LECHE", 380], ["FRUTA", 570]].map(function (a, i) { return '<g id="ef-tg' + i + '"><g transform="translate(' + (a[1] + 40) + ' 420)"><path d="M0 0 L120 0 L140 40 L120 80 L0 80 Z" fill="' + ORANGE + '"/>' + T(60, 54, "↑", { a: "middle", s: 56, w: 800, c: BG }) + '</g></g>'; }).join("") +
+        '</g>';
+
+      // ============ 17: IPC ============
+      var DX0 = 230, DDX = 359.1, DW = 90, DH = 140, DT = 17, DY = 410;
+      var s17 =
+        '<g id="ef-s17">' +
+          '<g id="ef-ipc"><rect x="110" y="330" width="860" height="250" rx="22" fill="' + PANEL + '" stroke="' + LINE + '" stroke-width="3"/>' +
+            T(150, 385, "IPC · ABRIL 2026 · VARIACIÓN MENSUAL", { mono: true, s: 26, c: MUTED }) +
+            T(150, 530, "+", { s: 110, w: 800, c: AMBER, extra: 'filter="url(#' + GLID + ')"' }) +
+            '<g filter="url(#' + GLID + ')"><g id="ef-d0">' + seg7("0", DX0, DY, DW, DH, DT, AMBER) + '</g>' + seg7(",", 338.7, DY, DW, DH, DT, AMBER) + '<g id="ef-d1">' + seg7("0", DDX, DY, DW, DH, DT, AMBER) + '</g></g>' +
+          '</g>' +
+          '<g id="ef-pct">' + T(570, 530, "%", { s: 110, w: 800, c: AMBER }) + '</g>' +
+          '<g id="ef-mar">' + T(150, 690, "MAR", { mono: true, s: 26, c: MUTED }) + '</g>' +
+          '<rect id="ef-bmar" x="250" y="660" width="0" height="44" rx="6" fill="' + MUTED + '"/>' +
+          '<g id="ef-tmar">' + T(770, 694, "1,0%", { s: 40, w: 800, c: MUTED }) + '</g>' +
+          '<g id="ef-abr">' + T(150, 780, "ABR", { mono: true, s: 26, c: AMBER }) + '</g>' +
+          '<rect id="ef-babr" x="250" y="750" width="0" height="44" rx="6" fill="' + AMBER + '"/>' +
+          '<g id="ef-tabr">' + T(920, 784, "1,3%", { s: 40, w: 800, c: AMBER }) + '</g>' +
+          '<g id="ef-nota17">' + T(150, 880, "MAYOR ALZA MENSUAL DESDE JULIO 2022 · INE", { mono: true, s: 26, c: MUTED }) + '</g>' +
+        '</g>';
+
+      // ============ 18: velocimetro ============
+      var GC = [540, 960], GR = 360, ga = function (x) { return Math.PI * (1 - x / 6); };
+      var GP = function (x, r) { r = r || GR; return [GC[0] + r * Math.cos(ga(x)), GC[1] - r * Math.sin(ga(x))]; };
+      var arc = function (id, x0, x1, col, w, extra) { var A = GP(x0), B = GP(x1); return '<path ' + (id ? 'id="' + id + '" ' : '') + 'd="M' + A[0] + ' ' + A[1] + ' A' + GR + ' ' + GR + ' 0 0 1 ' + B[0] + ' ' + B[1] + '" fill="none" stroke="' + col + '" stroke-width="' + w + '" ' + (extra || "") + '/>'; };
+      var ticks18 = ""; for (var xt = 0; xt <= 6; xt++) { var tp = GP(xt, GR + 70); ticks18 += T(tp[0], tp[1] + 10, xt + "%", { a: "middle", mono: true, s: 26, c: MUTED }); }
+      var N0 = GP(2.8, GR - 40), M0 = GP(2.8, GR - 70);
+      var s18 =
+        '<g id="ef-s18">' +
+          '<g id="ef-gauge">' + arc("", 0, 6, "#3d4248", 60) + ticks18 + '</g>' +
+          arc("ef-garc", 2, 4, TEAL, 60, 'pathLength="1" stroke-dasharray="1 2" stroke-dashoffset="1"') +
+          '<g id="ef-meta">' + T(540, 470, "META BANCO CENTRAL: 3% ± 1", { a: "middle", mono: true, s: 26, c: TEAL }) + '</g>' +
+          '<g id="ef-mark"><line x1="' + GC[0] + '" y1="' + GC[1] + '" x2="' + M0[0] + '" y2="' + M0[1] + '" stroke="' + MUTED + '" stroke-width="8" stroke-dasharray="10 10"/></g>' +
+          '<g id="ef-needle"><line x1="' + GC[0] + '" y1="' + GC[1] + '" x2="' + N0[0] + '" y2="' + N0[1] + '" stroke="' + ORANGE + '" stroke-width="14" stroke-linecap="round"/><circle cx="' + GC[0] + '" cy="' + GC[1] + '" r="24" fill="' + ORANGE + '"/></g>' +
+          '<g id="ef-v28">' + T(478, 1050, "2,8%", { a: "end", s: 84, w: 800, c: INK }) + '</g>' +
+          '<g id="ef-v40">' + T(540, 1048, "→", { a: "middle", s: 84, w: 800, c: INK }) + T(598, 1050, "4,0%", { s: 84, w: 800, c: INK }) + '</g>' +
+          '<g id="ef-n18">' + T(540, 1104, "INFLACIÓN EN 12 MESES · MARZO → ABRIL 2026 · INE", { a: "middle", mono: true, s: 26, c: MUTED }) + '</g>' +
+        '</g>';
+
+      // ============ 19: zoom al pie del muro ============
+      var s19 =
+        '<g id="ef-s19">' +
+          '<defs><clipPath id="ef-cp19"><rect x="0" y="300" width="1080" height="880"/></clipPath></defs>' +
+          '<g clip-path="url(#ef-cp19)"><g id="ef-st2in"><g id="ef-st2z">' +
+            stairs({ id: "ef-t" }) + T(140, 400, "PARA SUBIR $372", { mono: true, s: 26, c: MUTED }) + T(140, 1106, "~$26 CADA 3 SEMANAS · CÁLCULO PROPIO", { mono: true, s: 26, c: MUTED }) +
+          '</g></g></g>' +
+          '<g id="ef-g1">' + person(270, 1010, 1.15, "#4b6b8a", "#c8936a", "#2a201a") + person(385, 1021.5, 1.0925, ORANGE, "#eac6a2", "#5b3b24", { long: true }) + person(482.75, 1056, 0.713, AMBER, "#946043", "#1a1a1a") + '</g>' +
+          '<g id="ef-g2">' + truck(520, 940, 0.42) + '</g>' +
+          '<g id="ef-g3"><g transform="translate(820 930)"><rect width="170" height="130" fill="#454a52" stroke="' + INK + '" stroke-width="5"/><path d="M-14 0 L85 -60 L184 0 Z" fill="' + ORANGE + '"/>' + T(85, 80, "TIENDA", { a: "middle", mono: true, s: 26, c: INK }) + '</g></g>' +
+        '</g>';
+
+      var svg = document.getElementById("ef-svg");
+      svg.innerHTML = glowDefs() + s13 + s14 + s15 + s16 + s17 + s18 + s19;
+
+      // ============================================ linea de tiempo ============================================
+      var tl = gsap.timeline({ paused: true });
+      function at(sel, ox, oy) { gsap.set(sel, { svgOrigin: ox + " " + oy }); }
+      function pop(sel, t, ox, oy) {
+        at(sel, ox, oy);
+        tl.fromTo(sel, { scale: 0 }, { scale: 1, duration: 0.3, ease: "back.out(1.4)" }, L(t));
+        tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, L(t));
+      }
+      function out(sel, t, ox, oy, d, ez) {
+        at(sel, ox, oy);
+        tl.to(sel, { scale: 0, duration: d || 0.18, ease: ez || "power2.in" }, L(t));
+        tl.to(sel, { opacity: 0, duration: 0.05, ease: "none" }, L(t) + (d || 0.18) - 0.05);
+      }
+      function leave(sel, t, d) {
+        d = d || 0.18; at(sel, 540, 700);
+        tl.to(sel, { scale: 0.9, opacity: 0, duration: d, ease: "power3.in" }, L(t));
+      }
+      function shake(sel, t, amp, dur, tag) {
+        var o = { k: 0 };
+        var f = function (k) { var tau = k * dur, a = amp * Math.exp(-14 * tau) * Math.sin(2 * Math.PI * 16 * tau); gsap.set(sel, { x: a, y: a * 0.6 }); };
+        tl.fromTo(o, { k: 0 }, { k: 1, duration: dur, ease: "none", onUpdate: function () { f(o.k); }, onReverseComplete: function () { f(0); } }, L(t));
+        tl.set(sel, { x: 0, y: 0 }, L(t) + dur + 0.01);
+      }
+      gsap.set(["#ef-s14", "#ef-s15", "#ef-s16", "#ef-s17", "#ef-s18", "#ef-s19"], { opacity: 1 });
+
+      // ---- 52,25 salida de la escena 13 y entrada de la 14
+      leave("#ef-s13", 52.25, 0.15);
+      at("#ef-s-axis", 540, 1000);
+      tl.fromTo("#ef-s-axis", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "none" }, L(52.39));
+      pop("#ef-sub", 52.39, 270, 392);
+      gsap.set(["#ef-s-regla", "#ef-s-marz", "#ef-s-plus", "#ef-nota14"], { opacity: 0 });
+      tl.set("#ef-cprS", { attr: { width: 109 } }, L(52.39));
+      tl.to("#ef-cprS", { attr: { width: 878 }, duration: 2.56, ease: "steps(13)" }, L(52.74));
+      pop("#ef-s-regla", 55.3, 726, 440);
+      pop("#ef-nota14", 55.5, 490, 1096);
+      // 56,16 el muro sube de golpe
+      gsap.set("#ef-s-wall", { opacity: 0 });
+      at("#ef-s-wall", 140, 1000);
+      tl.fromTo("#ef-s-wall", { scaleY: 0 }, { scaleY: 1, duration: 0.15, ease: "power3.out" }, L(56.16));
+      tl.fromTo("#ef-s-wall", { opacity: 0 }, { opacity: 1, duration: 0.03, ease: "none" }, L(56.16));
+      shake("#ef-s14", 56.31, 4, 0.2);
+      pop("#ef-s-marz", 56.25, 330, 510);
+      pop("#ef-s-plus", 56.25, 900, 410);
+
+      // ---- 56,47 escena 15
+      leave("#ef-s14", 56.34);
+      pop("#ef-moon", 56.52, 300, 420);
+      pop("#ef-f1", 56.54, 250, 960); pop("#ef-f2", 56.6, 400, 985); pop("#ef-f3", 56.66, 527, 1030);
+      pop("#ef-pan15", 56.6, 770, 630);
+      pop("#ef-cero", 57.4, 770, 560);
+
+      // ---- 58,90 escena 16
+      leave("#ef-s15", 58.55);
+      gsap.set("#ef-s16", { opacity: 0 });
+      tl.set("#ef-s16", { opacity: 1 }, L(58.74));
+      tl.fromTo("#ef-truck", { x: -800 }, { x: 0, duration: 0.7, ease: "power3.out" }, L(58.74));
+      pop("#ef-tg0", 60.84, 300, 460); pop("#ef-tg1", 61.16, 490, 460); pop("#ef-tg2", 61.8, 680, 460);
+
+      // ---- 62,60 escena 17
+      leave("#ef-s16", 62.25);
+      gsap.set("#ef-s17", { opacity: 0 });
+      tl.set("#ef-s17", { opacity: 1 }, L(62.42));
+      pop("#ef-ipc", 62.43, 540, 455);
+      var digs = [{ id: "ef-d0", x: DX0, from: 0, to: 1, t0: 64.39 }, { id: "ef-d1", x: DDX, from: 0, to: 3, t0: 64.45 }];
+      digs.forEach(function (g) {
+        var o = { p: 0 };
+        var draw = function () { var v = o.p >= 1 ? g.to : (o.p <= 0 ? g.from : (g.from + 1 + Math.floor(o.p * 9)) % 10); document.getElementById(g.id).innerHTML = seg7(String(v), g.x, DY, DW, DH, DT, AMBER); };
+        tl.fromTo(o, { p: 0 }, { p: 1, duration: 0.65, ease: "none", onUpdate: draw, onReverseComplete: draw }, L(g.t0));
+      });
+      pop("#ef-pct", 65.4, 610, 490);
+      pop("#ef-mar", 66.66, 175, 685); tl.fromTo("#ef-bmar", { attr: { width: 0 } }, { attr: { width: 500 }, duration: 0.7, ease: "expo.out" }, L(66.66));
+      pop("#ef-tmar", 67.1, 810, 685);
+      pop("#ef-abr", 67.0, 175, 775); tl.fromTo("#ef-babr", { attr: { width: 0 } }, { attr: { width: 650 }, duration: 0.7, ease: "expo.out" }, L(67.0));
+      pop("#ef-tabr", 67.45, 950, 775);
+      pop("#ef-nota17", 67.5, 530, 870);
+
+      // ---- 69,20 escena 18
+      leave("#ef-s17", 68.88);
+      gsap.set("#ef-s18", { opacity: 0 });
+      tl.set("#ef-s18", { opacity: 1 }, L(69.05));
+      pop("#ef-gauge", 69.07, 540, 960);
+      pop("#ef-needle", 69.07, 540, 960);
+      tl.fromTo("#ef-garc", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.5, ease: "power2.out" }, L(69.93));
+      pop("#ef-meta", 69.93, 540, 462);
+      pop("#ef-mark", 70.64, 540, 960);
+      pop("#ef-v28", 70.64, 400, 1020);
+      pop("#ef-n18", 70.75, 540, 1095);
+      at("#ef-needle", 540, 960);
+      tl.to("#ef-needle", { rotation: 36, duration: 0.9, ease: "back.out(1.2)" }, L(71.46));
+      pop("#ef-v40", 71.95, 676, 1020);
+
+      // ---- 73,60 retroceso a la escalera completa y zoom al pie del muro
+      out("#ef-s18", 73.45, 540, 800, 0.2, "power3.in");
+      gsap.set("#ef-s19", { opacity: 1 });
+      at("#ef-st2in", 540, 700);
+      tl.fromTo("#ef-st2in", { scale: 1.5 }, { scale: 1, duration: 0.7, ease: "power3.inOut" }, L(73.6));
+      tl.fromTo("#ef-st2in", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "none" }, L(73.6));
+      at("#ef-st2z", 0, 0);
+      tl.to("#ef-st2z", { x: -60, y: -640, scale: 1.7, duration: 0.8, ease: "power3.inOut" }, L(74.92));
+      pop("#ef-g1", 75.45, 360, 1070); pop("#ef-g2", 75.53, 610, 1010); pop("#ef-g3", 75.61, 905, 1000);
+      shake("#ef-t-wall", 77.44, 2.35, 0.25);
+      tl.set({}, {}, 25.9);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["efecto"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,168 @@
+<template>
+  <style>
+    @font-face { font-family: "Barlow Condensed"; font-weight: 600; src: url("assets/fonts/BarlowCondensed-SemiBold.ttf"); }
+    @font-face { font-family: "Barlow Condensed"; font-weight: 700; src: url("assets/fonts/BarlowCondensed-Bold.ttf"); }
+    @font-face { font-family: "Barlow Condensed"; font-weight: 800; src: url("assets/fonts/BarlowCondensed-ExtraBold.ttf"); }
+    #root { position: absolute; inset: 0; }
+    #hy-safe { position: absolute; inset: 0; transform: translateY(77px) scale(0.88); transform-origin: 540px 883px; }
+    #hy-svg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+  </style>
+  <div id="root" data-composition-id="hoy" data-width="1080" data-height="1920">
+    <div id="hy-safe"><svg id="hy-svg" viewBox="0 0 1080 1920"></svg></div>
+  </div>
+  <script src="assets/dibujo.js"></script>
+  <script>
+    (function () {
+      GLID = "hy-gl";
+      var T0 = 78.15;                      // la composicion arranca en 78,15 s; el codigo usa tiempos absolutos
+      // toma 6: la linea 21 es 1,703 s mas corta; lo que viene despues de 88,9 (toma 3) se adelanta
+      var L = function (t) { return +((t >= 88.9 ? t - 1.703 : t) - T0).toFixed(4); };
+
+      // ============ estado final de la escena 19 (identico al de efecto) ============
+      var s19 =
+        '<g id="hy-s19">' +
+          '<defs><clipPath id="hy-cp19"><rect x="0" y="300" width="1080" height="880"/></clipPath></defs>' +
+          '<g clip-path="url(#hy-cp19)"><g id="hy-u">' +
+            stairs({ id: "hy-us" }) + T(140, 400, "PARA SUBIR $372", { mono: true, s: 26, c: MUTED }) + T(140, 1106, "~$26 CADA 3 SEMANAS · CÁLCULO PROPIO", { mono: true, s: 26, c: MUTED }) +
+          '</g></g>' +
+          person(270, 1010, 1.15, "#4b6b8a", "#c8936a", "#2a201a") + person(385, 1021.5, 1.0925, ORANGE, "#eac6a2", "#5b3b24", { long: true }) + person(482.75, 1056, 0.713, AMBER, "#946043", "#1a1a1a") +
+          truck(520, 940, 0.42) +
+          '<g transform="translate(820 930)"><rect width="170" height="130" fill="#454a52" stroke="' + INK + '" stroke-width="5"/><path d="M-14 0 L85 -60 L184 0 Z" fill="' + ORANGE + '"/>' + T(85, 80, "TIENDA", { a: "middle", mono: true, s: 26, c: INK }) + '</g>' +
+        '</g>';
+
+      // ============ 20: seis alzas seguidas ============
+      var AH = function (i, h) { var x = 160 + i * 150; return "M" + x + " " + (980 - h) + " l-34 50 h22 v" + (h - 50) + " h24 v" + (-(h - 50)) + " h22 Z"; };
+      var MES = ["JUL", "AGO", "SEP", "OCT", "OCT", "NOV"];
+      var arrows = MES.map(function (m, i) {
+        var h = 120 + i * 50;
+        return '<g id="hy-ar' + i + '"><path id="hy-arp' + i + '" d="' + AH(i, h) + '" fill="' + ORANGE + '" fill-opacity="' + (0.45 + i * 0.1).toFixed(2) + '"/></g><g id="hy-am' + i + '">' + T(160 + i * 150, 1030, m, { a: "middle", mono: true, s: 26, c: MUTED }) + '</g>';
+      }).join("");
+      var s20 =
+        '<g id="hy-s20">' +
+          '<defs><clipPath id="hy-cpL"><rect id="hy-cprL" x="90" y="500" width="0" height="100"/></clipPath></defs>' +
+          '<g id="hy-gas">' + T(110, 450, "GASOLINA 93", { s: 110, w: 800, c: AMBER }) + '</g>' +
+          '<g id="hy-line"><line clip-path="url(#hy-cpL)" x1="110" x2="990" y1="560" y2="560" stroke="' + INK + '" stroke-width="4" stroke-dasharray="14 10"/></g>' +
+          '<g id="hy-linel">' + T(990, 538, "MÁXIMO HISTÓRICO", { a: "end", mono: true, s: 26, c: INK }) + '</g>' +
+          arrows +
+          '<g id="hy-six">' + T(990, 1092, "6 ALZAS SEGUIDAS", { a: "end", s: 52, w: 800, c: ORANGE }) + '</g>' +
+        '</g>';
+
+      // ============ 21: el proyecto de ley ============
+      function springD(wx, top, bot) {
+        var d = "M" + wx + " " + top;
+        for (var k = 1; k <= 7; k++) d += " L" + (wx + (k % 2 ? 24 : -24)) + " " + (top + (bot - top) * k / 8);
+        return d + " L" + wx + " " + bot;
+      }
+      var stubs = [150, 500].map(function (wx) { return '<line x1="' + wx + '" y1="190" x2="' + wx + '" y2="208" stroke="' + MUTED + '" stroke-width="7"/><line x1="' + wx + '" y1="248" x2="' + wx + '" y2="262" stroke="' + MUTED + '" stroke-width="7"/>'; }).join("");
+      var s21 =
+        '<g id="hy-s21">' +
+          '<g id="hy-doc">' + congress(330, 640, 1.25, INK) + T(330, 712, "GOBIERNO", { a: "middle", mono: true, s: 30, c: AMBER }) + '</g>' +
+          '<g id="hy-cong">' + T(790, 440, "MARZO", { a: "middle", mono: true, s: 26, c: MUTED }) + T(790, 492, "LO SOLTÓ", { a: "middle", s: 52, w: 800, c: INK }) + T(790, 580, "AHORA", { a: "middle", mono: true, s: 26, c: MUTED }) + T(790, 632, "LO BUSCA", { a: "middle", s: 52, w: 800, c: TEAL }) + '</g>' +
+          '<path d="M0 1130 L1080 1130" fill="none" stroke="' + INK + '" stroke-width="6"/>' +
+          '<line x1="0" x2="1080" y1="1164" y2="1164" stroke="#3a3c40" stroke-width="8" stroke-dasharray="50 40"/>' +
+          '<g id="hy-carx">' + car(500, 860, 0.8, { id: "hy-c", spring: TEAL, glow: true }) + '<g id="hy-stub" transform="translate(500 860) scale(0.8)">' + stubs + '</g></g>' +
+          '<g id="hy-q">' + T(802, 840, "¿DE VUELTA EL RESORTE?", { a: "middle", mono: true, s: 26, c: TEAL }) + '</g>' +
+        '</g>';
+
+      // ============ 22: la escalera, la familia y el muro ============
+      var s22 =
+        '<g id="hy-s22">' +
+          '<defs><clipPath id="hy-cpLit"><rect id="hy-cprLit" x="100" y="1010" width="900" height="0"/></clipPath></defs>' +
+          '<g id="hy-r22">' +
+            stairs({ id: "hy-t" }) +
+            '<path clip-path="url(#hy-cpLit)" d="' + (function () { var x0 = 140, x1 = 980, y0 = 1000, y1 = 470, weeks = 43, step = 26; var X = function (w) { return x0 + w / weeks * (x1 - x0); }, Y = function (v) { return y0 - v / 372 * (y0 - y1); }; var d = "M" + x0 + " " + y0, v = 0; for (var w = 3; w <= weeks + 1 && v < 372; w += 3) { var nv = Math.min(372, v + step); d += " L" + X(w) + " " + Y(v) + " L" + X(w) + " " + Y(nv); v = nv; } return d; })() + '" fill="none" stroke="#b9f3e8" stroke-width="8" stroke-linejoin="round" filter="url(#hy-gl)"/>' +
+            FAMILY(180, 1060, 0.8) +
+          '</g>' +
+        '</g>';
+
+      // ============ 23: el globo ============
+      var s23 =
+        '<g id="hy-s23">' +
+          '<g id="hy-bub"><path d="M190 400 Q190 330 260 330 L820 330 Q890 330 890 400 L890 680 Q890 750 820 750 L420 750 L300 860 L320 750 L260 750 Q190 750 190 680 Z" fill="' + PANEL + '" stroke="' + ORANGE + '" stroke-width="6"/></g>' +
+          '<g id="hy-b1">' + T(540, 520, "¿TE ALCANZÓ", { a: "middle", s: 96, w: 800, c: INK }) + '</g>' +
+          '<g id="hy-b2">' + T(540, 630, "EL TIEMPO?", { a: "middle", s: 96, w: 800, c: AMBER }) + '</g>' +
+          '<g id="hy-fam23">' + FAMILY(600, 1060, 0.8) + '</g>' +
+        '</g>';
+
+      var svg = document.getElementById("hy-svg");
+      svg.innerHTML = glowDefs() + s19 + s20 + s21 + s22 + s23;
+
+      // ============================================ linea de tiempo ============================================
+      var tl = gsap.timeline({ paused: true });
+      function at(sel, ox, oy) { gsap.set(sel, { svgOrigin: ox + " " + oy }); }
+      function pop(sel, t, ox, oy) {
+        at(sel, ox, oy);
+        tl.fromTo(sel, { scale: 0 }, { scale: 1, duration: 0.3, ease: "back.out(1.4)" }, L(t));
+        tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, L(t));
+      }
+      function leave(sel, t, d) {
+        d = d || 0.18; at(sel, 540, 700);
+        tl.to(sel, { scale: 0.9, opacity: 0, duration: d, ease: "power3.in" }, L(t));
+      }
+      function enter(sel, t) { gsap.set(sel, { opacity: 0 }); tl.set(sel, { opacity: 1 }, L(t)); }
+      function shake(sel, t, amp, dur) {
+        var o = { k: 0 };
+        var f = function (k) { var tau = k * dur, a = amp * Math.exp(-14 * tau) * Math.sin(2 * Math.PI * 16 * tau); gsap.set(sel, { x: a, y: a * 0.6 }); };
+        tl.fromTo(o, { k: 0 }, { k: 1, duration: dur, ease: "none", onUpdate: function () { f(o.k); }, onReverseComplete: function () { f(0); } }, L(t));
+        tl.set(sel, { x: 0, y: 0 }, L(t) + dur + 0.01);
+      }
+      // escena 19 como estado inicial (zoom al pie del muro) y salida completa
+      gsap.set("#hy-u", { svgOrigin: "0 0", x: -60, y: -640, scale: 1.7 });
+      leave("#hy-s19", 78.15, 0.17);
+
+      // ---- 20 (entra cuando la 19 esta en opacidad <= 0,15)
+      enter("#hy-s20", 78.33);
+      tl.fromTo("#hy-cprL", { attr: { width: 0 } }, { attr: { width: 900 }, duration: 0.7, ease: "power2.out" }, L(78.34));
+      pop("#hy-linel", 78.4, 900, 538);
+      pop("#hy-gas", 78.4, 300, 400);
+      MES.forEach(function (m, i) {
+        var t = 78.78 + i * 0.2;
+        at("#hy-ar" + i, 160 + i * 150, 980);
+        tl.fromTo("#hy-ar" + i, { scaleY: 0 }, { scaleY: 1, duration: 0.35, ease: "expo.out" }, L(t));
+        tl.fromTo("#hy-ar" + i, { opacity: 0 }, { opacity: 1, duration: 0.05, ease: "none" }, L(t));
+        pop("#hy-am" + i, t + 0.1, 160 + i * 150, 1020);
+      });
+      pop("#hy-six", 80.23, 840, 1070);
+      // 81,63 la flecha NOV crece hasta tocar la linea
+      tl.fromTo("#hy-arp5", { attr: { d: AH(5, 370) } }, { attr: { d: AH(5, 420) }, duration: 0.95, ease: "power2.out" }, L(81.63));
+      // 82,74 la linea destella una vez
+      tl.to("#hy-line", { opacity: 0.4, duration: 0.15, ease: "none" }, L(82.74));
+      tl.to("#hy-line", { opacity: 1, duration: 0.15, ease: "none" }, L(82.89));
+
+      // ---- 83,55 escena 21
+      leave("#hy-s20", 83.25, 0.17);
+      enter("#hy-s21", 83.43);
+      pop("#hy-doc", 83.55, 345, 590);
+      pop("#hy-cong", 84.29, 790, 540);
+      gsap.set(["#hy-c-sp0", "#hy-c-sp1"], { opacity: 0 });
+      tl.fromTo("#hy-carx", { x: -1300 }, { x: 0, duration: 0.6, ease: "power3.out" }, L(85.1));
+      pop("#hy-q", 86.3, 802, 830);
+      tl.set("#hy-stub", { opacity: 0 }, L(85.94));
+      tl.set(["#hy-c-sp0", "#hy-c-sp1"], { opacity: 1 }, L(85.94));
+      var sg = { s: 0 };
+      var drawSp = function (s) { [150, 500].forEach(function (wx, k) { document.querySelector("#hy-c-sp" + k + " path").setAttribute("d", springD(wx, 190, 190 + 72 * s)); }); };
+      drawSp(0);
+      tl.fromTo(sg, { s: 0 }, { s: 1, duration: 0.4, ease: "power2.out", onUpdate: function () { drawSp(sg.s); }, onReverseComplete: function () { drawSp(0); } }, L(85.94));
+
+      // ---- 89,15 retroceso a la escalera completa con la familia al pie
+      leave("#hy-s21", 88.95, 0.17);
+      enter("#hy-s22", 89.15);
+      at("#hy-r22", 540, 700);
+      tl.fromTo("#hy-r22", { scale: 1.5 }, { scale: 1, duration: 0.65, ease: "power3.inOut" }, L(89.15));
+      tl.fromTo("#hy-cprLit", { attr: { y: 1010, height: 0 } }, { attr: { y: 460, height: 550 }, duration: 1.3, ease: "power1.inOut" }, L(91.03));
+      shake("#hy-t-wall", 92.42, 4, 0.25);
+
+      // ---- 93,20 escena 23
+      leave("#hy-s22", 92.95, 0.17);
+      enter("#hy-s23", 93.13);
+      pop("#hy-bub", 93.2, 540, 590);
+      pop("#hy-fam23", 93.28, 680, 1040);
+      pop("#hy-b1", 93.42, 540, 490);
+      pop("#hy-b2", 93.75, 540, 600);
+      tl.set({}, {}, 16.377);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["hoy"] = tl;
+    })();
+  </script>
+</template>

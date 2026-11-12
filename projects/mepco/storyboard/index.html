@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+@font-face { font-family: "Barlow Condensed"; font-weight: 600; src: url("assets/fonts/BarlowCondensed-SemiBold.ttf"); }
+@font-face { font-family: "Barlow Condensed"; font-weight: 700; src: url("assets/fonts/BarlowCondensed-Bold.ttf"); }
+@font-face { font-family: "Barlow Condensed"; font-weight: 800; src: url("assets/fonts/BarlowCondensed-ExtraBold.ttf"); }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #26292d; }
+#root { position: absolute; inset: 0; }
+.esc { position: absolute; inset: 0; overflow: hidden; color: #ecebe6; font-family: "Barlow Condensed", sans-serif;
+  background: #26292d; background-image: radial-gradient(rgba(255,255,255,.07) 1.6px, transparent 1.8px); background-size: 36px 36px; }
+.mono { font-family: "JetBrains Mono", monospace; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; }
+.hud { position: absolute; top: 236px; left: 70px; right: 70px; display: flex; justify-content: space-between; font-size: 28px; color: #8b8d91; }
+.cap { position: absolute; left: 70px; right: 70px; top: 1236px; text-align: center; font-weight: 700; font-size: 66px; line-height: 76px; text-wrap: balance; }
+.cap b { font-weight: 800; background: #ff6a13; color: #26292d; box-shadow: 10px 0 0 #ff6a13, -10px 0 0 #ff6a13; }
+.foot { position: absolute; top: 1500px; left: 70px; right: 70px; }
+.foot .row { display: flex; justify-content: space-between; font-size: 26px; color: #8b8d91; }
+.foot .bar { position: relative; margin-top: 16px; height: 8px; background: #3d4248; border-radius: 4px; }
+.foot .bar b { position: absolute; left: 0; top: 0; bottom: 0; background: #ff6a13; border-radius: 4px; }
+svg.full { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+.panel { position: absolute; background: #0e0f10; border: 3px solid #3d4248; border-radius: 22px; }
+.chip { position: absolute; padding: 8px 18px 10px; border-radius: 999px; font-family: "JetBrains Mono", monospace; font-size: 24px; letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; border: 3px solid #8b8d91; color: #8b8d91; }
+.note { position: absolute; font-size: 22px; color: #8b8d91; }
+.zoomtag { position: absolute; right: 70px; top: 290px; font-size: 22px; color: #ff6a13; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="28" data-width="1080" data-height="1920">
+  <div id="s01" class="esc clip" data-start="0" data-duration="1"></div>
+  <div id="s02" class="esc clip" data-start="1" data-duration="1"></div>
+  <div id="s03" class="esc clip" data-start="2" data-duration="1"></div>
+  <div id="s04a" class="esc clip" data-start="3" data-duration="1"></div>
+  <div id="s04b" class="esc clip" data-start="4" data-duration="1"></div>
+  <div id="s05a" class="esc clip" data-start="5" data-duration="1"></div>
+  <div id="s05b" class="esc clip" data-start="6" data-duration="1"></div>
+  <div id="s06" class="esc clip" data-start="7" data-duration="1"></div>
+  <div id="s07" class="esc clip" data-start="8" data-duration="1"></div>
+  <div id="s08a" class="esc clip" data-start="9" data-duration="1"></div>
+  <div id="s08b" class="esc clip" data-start="10" data-duration="1"></div>
+  <div id="s09" class="esc clip" data-start="11" data-duration="1"></div>
+  <div id="s10a" class="esc clip" data-start="12" data-duration="1"></div>
+  <div id="s10b" class="esc clip" data-start="13" data-duration="1"></div>
+  <div id="s11a" class="esc clip" data-start="14" data-duration="1"></div>
+  <div id="s11b" class="esc clip" data-start="15" data-duration="1"></div>
+  <div id="s12" class="esc clip" data-start="16" data-duration="1"></div>
+  <div id="s13" class="esc clip" data-start="17" data-duration="1"></div>
+  <div id="s14" class="esc clip" data-start="18" data-duration="1"></div>
+  <div id="s15" class="esc clip" data-start="19" data-duration="1"></div>
+  <div id="s16" class="esc clip" data-start="20" data-duration="1"></div>
+  <div id="s17" class="esc clip" data-start="21" data-duration="1"></div>
+  <div id="s18" class="esc clip" data-start="22" data-duration="1"></div>
+  <div id="s19" class="esc clip" data-start="23" data-duration="1"></div>
+  <div id="s20" class="esc clip" data-start="24" data-duration="1"></div>
+  <div id="s21" class="esc clip" data-start="25" data-duration="1"></div>
+  <div id="s22" class="esc clip" data-start="26" data-duration="1"></div>
+  <div id="s23" class="esc clip" data-start="27" data-duration="1"></div>
+</div>
+
+<script>
+const BG = "#26292d", PANEL = "#0e0f10", LINE = "#3d4248", INK = "#ecebe6", MUTED = "#8b8d91",
+      AMBER = "#ffb000", ORANGE = "#ff6a13", TEAL = "#46c2b0", OFF = "#211d12";
+const TOTAL = 97.25;
+const SECTIONS = ["El golpe", "El amortiguador", "La decisión", "El efecto", "Hoy"];
+
+/* ---------- 7 segmentos ---------- */
+const SEG = { "0":"abcdef","1":"bc","2":"abged","3":"abgcd","4":"fgbc","5":"afgcd","6":"afgedc","7":"abc","8":"abcdefg","9":"abcdfg","-":"g" };
+function seg7(str, x, y, w, h, t, on, off = OFF) {
+  let s = "", cx = x;
+  for (const ch of str) {
+    if (ch === "." || ch === ",") { s += `<rect x="${cx - t * 0.2}" y="${y + h - t}" width="${t}" height="${t}" rx="${t * .3}" fill="${on}"/>`; cx += t * 1.2; continue; }
+    const k = SEG[ch] || "", hh = h / 2;
+    const g = { a: [cx + t, y, w - 2 * t, t], d: [cx + t, y + h - t, w - 2 * t, t], g: [cx + t, y + hh - t / 2, w - 2 * t, t],
+      f: [cx, y + t, t, hh - 1.5 * t], b: [cx + w - t, y + t, t, hh - 1.5 * t], e: [cx, y + hh + t / 2, t, hh - 1.5 * t], c: [cx + w - t, y + hh + t / 2, t, hh - 1.5 * t] };
+    for (const n in g) { const [a, b, c, d] = g[n]; s += `<rect x="${a}" y="${b}" width="${c}" height="${d}" rx="${t * .35}" fill="${k.includes(n) ? on : off}"/>`; }
+    cx += w + t * 1.1;
+  }
+  return s;
+}
+const GLOW = `<defs><filter id="gl" x="-20%" y="-30%" width="140%" height="160%"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
+const T = (x, y, txt, o = {}) => `<text x="${x}" y="${y}" font-family="${o.mono ? "JetBrains Mono" : "Barlow Condensed"}" font-weight="${o.w || (o.mono ? 500 : 700)}" font-size="${o.s || 30}" fill="${o.c || INK}" text-anchor="${o.a || "start"}" letter-spacing="${o.ls != null ? o.ls : (o.mono ? 3 : 0)}" ${o.extra || ""}>${txt}</text>`;
+
+/* ---------- auto en corte con resorte (local 640 x 330) ---------- */
+function car(x, y, sc, o = {}) {
+  const sw = 6, comp = o.comp || 0, lift = -comp * 40;   // comp: 0 normal, 1 comprimido
+  const body = o.body || "#454a52", spring = o.spring || TEAL;
+  let s = `<g transform="translate(${x} ${y}) scale(${sc})">`;
+  s += `<g transform="translate(0 ${lift * 0})">`;
+  s += `<path d="M30 190 L44 132 Q54 112 92 108 L190 102 L262 46 Q280 32 312 32 L430 32 Q462 32 484 54 L540 104 L590 112 Q622 118 626 146 L628 190 Z" fill="${body}" stroke="${INK}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+  s += `<path d="M214 104 L276 56 Q288 48 306 48 L360 48 L360 104 Z" fill="${BG}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>`;
+  s += `<path d="M380 104 L380 48 L428 48 Q450 48 466 62 L510 104 Z" fill="${BG}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>`;
+  s += `</g>`;
+  const wheels = o.wheels || [[150, 0], [500, 0]];
+  for (const [wx, dy] of wheels) {
+    const top = 190, bot = 262 + dy, n = 7;
+    if (!o.noSpring) {
+      let d = `M${wx} ${top}`;
+      for (let i = 1; i <= n; i++) d += ` L${wx + (i % 2 ? 24 : -24)} ${top + (bot - top) * i / (n + 1)}`;
+      d += ` L${wx} ${bot}`;
+      s += `<path d="${d}" fill="none" stroke="${spring}" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" ${o.glow ? 'filter="url(#gl)"' : ""}/>`;
+    } else {
+      s += `<line x1="${wx}" y1="${top}" x2="${wx}" y2="${top + 18}" stroke="${MUTED}" stroke-width="7"/><line x1="${wx}" y1="${bot - 14}" x2="${wx}" y2="${bot}" stroke="${MUTED}" stroke-width="7"/>`;
+    }
+    s += `<circle cx="${wx}" cy="${280 + dy}" r="50" fill="${PANEL}" stroke="${INK}" stroke-width="${sw}"/><circle cx="${wx}" cy="${280 + dy}" r="18" fill="#3a3c40"/>`;
+  }
+  return s + `</g>`;
+}
+
+/* ---------- personas planas ---------- */
+function person(x, y, sc, shirt, skin, hair, o = {}) {
+  let s = `<g transform="translate(${x} ${y}) scale(${sc})">`;
+  s += `<rect x="-34" y="-60" width="68" height="120" rx="30" fill="${shirt}"/>`;
+  s += `<rect x="-28" y="50" width="22" height="70" rx="10" fill="#2a2d31"/><rect x="6" y="50" width="22" height="70" rx="10" fill="#2a2d31"/>`;
+  s += `<circle cx="0" cy="-96" r="32" fill="${skin}"/>`;
+  s += o.long ? `<path d="M-34 -96 Q-34 -134 0 -134 Q34 -134 34 -96 L34 -50 L24 -50 L24 -100 L-24 -100 L-24 -50 L-34 -50 Z" fill="${hair}"/>` : `<path d="M-33 -100 Q-30 -134 0 -133 Q30 -134 33 -100 Q20 -114 0 -112 Q-20 -114 -33 -100 Z" fill="${hair}"/>`;
+  return s + `</g>`;
+}
+const FAMILY = (x, y, sc) => person(x, y, sc, "#4b6b8a", "#c8936a", "#2a201a") + person(x + 100 * sc, y + 10 * sc, sc * .95, ORANGE, "#eac6a2", "#5b3b24", { long: true }) + person(x + 185 * sc, y + 40 * sc, sc * .62, AMBER, "#946043", "#1a1a1a");
+
+/* ---------- barril ---------- */
+function barrel(x, y, sc, label) {
+  let s = `<g transform="translate(${x} ${y}) scale(${sc})">`;
+  s += `<rect x="-70" y="-100" width="140" height="200" rx="18" fill="#2a2d31" stroke="${INK}" stroke-width="6"/>`;
+  s += `<line x1="-70" y1="-40" x2="70" y2="-40" stroke="${INK}" stroke-width="6"/><line x1="-70" y1="40" x2="70" y2="40" stroke="${INK}" stroke-width="6"/>`;
+  s += `<ellipse cx="0" cy="-100" rx="70" ry="16" fill="#3a3c40" stroke="${INK}" stroke-width="6"/>`;
+  if (label) s += T(0, 14, label, { a: "middle", s: 30, w: 800, c: AMBER });
+  return s + `</g>`;
+}
+
+/* ---------- letrero LED de precio ---------- */
+function ledRow(x, y, label, value, on, sz = 1) {
+  const w = 92 * sz, h = 150 * sz, t = 17 * sz;
+  return T(x, y, label, { mono: true, s: 26, c: on === AMBER ? AMBER : MUTED }) + T(x, y + 38 * sz + h - 26 * sz, "$", { s: 100 * sz, c: on, w: 700 }) +
+    `<g ${on === AMBER ? 'filter="url(#gl)"' : ""}>${seg7(value, x + 62 * sz, y + 30 * sz, w, h, t, on)}</g>`;
+}
+
+/* ---------- gráfico: petróleo afuera vs precio en la bomba ---------- */
+const CH = { x0: 110, x1: 990, y0: 980, y1: 420, n: 40, lo: 900, hi: 1600 };
+const cx = (i) => CH.x0 + (i / (CH.n - 1)) * (CH.x1 - CH.x0);
+const cy = (v) => CH.y0 - (v - CH.lo) / (CH.hi - CH.lo) * (CH.y0 - CH.y1);
+const PAR = Array.from({ length: CH.n }, (_, i) => i < 6 ? 1050 : i < 10 ? 1050 + (i - 5) * 70 : i < 20 ? 1330 : i < 26 ? 1330 - (i - 19) * 45 : 1060);
+const PUMP = (() => { const o = []; let p = 1050; for (let i = 0; i < CH.n; i++) { if (i % 3 === 0 && i) { const d = PAR[i] - p; p += Math.max(-26, Math.min(26, d)); } o.push(p); } return o; })();
+const path = (arr, upto = CH.n) => arr.slice(0, upto).map((v, i) => `${i ? "L" : "M"}${cx(i).toFixed(1)} ${cy(v).toFixed(1)}`).join(" ");
+const stepPath = (arr, upto = CH.n) => { let d = ""; arr.slice(0, upto).forEach((v, i) => { d += i ? ` L${cx(i).toFixed(1)} ${cy(arr[i - 1]).toFixed(1)} L${cx(i).toFixed(1)} ${cy(v).toFixed(1)}` : `M${cx(0)} ${cy(v)}`; }); return d; };
+function gapArea(upto, sign) {
+  let top = "", bot = [];
+  for (let i = 0; i < upto; i++) { const a = PAR[i], b = PUMP[i]; if ((a - b) * sign > 0) { top += `${top ? "L" : "M"}${cx(i)} ${cy(a)} `; bot.unshift(`L${cx(i)} ${cy(b)}`); } else if (top) break; }
+  return top ? `<path d="${top}${bot.join(" ")} Z" fill="${TEAL}" fill-opacity=".3"/>` : "";
+}
+function chartFrame(o = {}) {
+  let s = "";
+  for (const v of [1000, 1200, 1400]) s += `<line x1="${CH.x0}" x2="${CH.x1}" y1="${cy(v)}" y2="${cy(v)}" stroke="${LINE}" stroke-width="2"/>`;
+  s += `<line x1="${CH.x0}" x2="${CH.x1}" y1="${CH.y0}" y2="${CH.y0}" stroke="${MUTED}" stroke-width="3"/>`;
+  s += T(CH.x0, CH.y0 + 44, o.left || "SEMANAS →", { mono: true, s: 22, c: MUTED });
+  if (o.legend !== false) {
+    s += `<line x1="110" x2="160" y1="352" y2="352" stroke="${MUTED}" stroke-width="5" stroke-dasharray="12 9"/>` + T(176, 361, "PETRÓLEO AFUERA", { mono: true, s: 24, c: MUTED });
+    s += `<line x1="600" x2="650" y1="352" y2="352" stroke="${ORANGE}" stroke-width="9" stroke-linecap="round"/>` + T(666, 361, "PRECIO BOMBA", { mono: true, s: 24, c: ORANGE });
+  }
+  return s;
+}
+
+/* ---------- marco común ---------- */
+function frame(t, sec, cap, inner, right) {
+  const prog = Math.min(1, t / TOTAL) * 100;
+  return `<div class="hud mono"><span>MEPCO · 2014–2026</span><span>${right || ""}</span></div>${inner}
+    <div class="cap">${cap}</div>
+    <div class="foot"><div class="row mono"><span>0${sec + 1}/05 ${SECTIONS[sec]}</span><span style="color:${AMBER}">● ${String(Math.floor(t / 60)).padStart(2, "0")}:${String(Math.floor(t % 60)).padStart(2, "0")}</span></div><div class="bar"><b style="width:${prog}%"></b></div></div>`;
+}
+
+const SC = {};
+
+/* 01 · 0,0 s · gancho: letrero de precios */
+SC.s01 = () => frame(0.0, 0, "Un jueves de marzo, la bencina subió <b>$370.</b>", `
+  <svg class="full">${GLOW}
+    <rect x="140" y="300" width="800" height="790" rx="26" fill="${PANEL}" stroke="${LINE}" stroke-width="4"/>
+    <path d="M140 326 Q140 300 166 300 L914 300 Q940 300 940 326 L940 400 L140 400 Z" fill="${ORANGE}"/>
+    ${T(540, 372, "PRECIOS · GASOLINA 93", { a: "middle", s: 60, w: 800, c: BG, ls: 3 })}
+    ${ledRow(190, 470, "MIÉ 25·03", "1170", "#a8916a")}
+    <line x1="180" x2="900" y1="690" y2="690" stroke="${LINE}" stroke-width="3"/>
+    ${ledRow(190, 750, "JUE 26·03", "1542", AMBER, 1.25)}
+    <rect x="640" y="975" width="270" height="92" rx="12" fill="${ORANGE}"/>
+    ${T(775, 1043, "+$372", { a: "middle", s: 76, w: 800, c: BG })}
+    ${T(190, 1034, "POR LITRO · PROM. RM", { mono: true, s: 24, c: MUTED })}
+  </svg>`, "JUE 26·03·2026");
+
+/* 02 · 4,0 s · de un día para otro */
+function cal(x, y, day, num, price, on) {
+  return `<g transform="translate(${x} ${y})"><rect width="360" height="440" rx="22" fill="${on ? PANEL : "#16171a"}" stroke="${on ? AMBER : LINE}" stroke-width="4"/>
+    <path d="M0 22 Q0 0 22 0 L338 0 Q360 0 360 22 L360 90 L0 90 Z" fill="${on ? ORANGE : "#2a2d31"}"/>
+    ${T(180, 64, day, { a: "middle", s: 52, w: 800, c: on ? BG : MUTED, ls: 4 })}
+    ${T(180, 270, num, { a: "middle", s: 190, w: 800, c: on ? INK : MUTED })}
+    ${T(180, 330, "MARZO 2026", { a: "middle", mono: true, s: 24, c: MUTED })}
+    <g ${on ? 'filter="url(#gl)"' : ""}>${seg7(price, 72, 360, 48, 56, 9, on ? AMBER : "#a8916a")}</g></g>`;
+}
+SC.s02 = () => frame(4.0, 0, "De un día <b>para otro.</b>", `
+  <svg class="full">${GLOW}
+    ${cal(80, 420, "MIÉ", "25", "1170", false)}
+    ${cal(640, 420, "JUE", "26", "1542", true)}
+    <path d="M470 640 L600 640" stroke="${ORANGE}" stroke-width="10" stroke-linecap="round"/><path d="M570 610 L604 640 L570 670" fill="none" stroke="${ORANGE}" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="535" cy="540" r="34" fill="${INK}"/><circle cx="552" cy="528" r="30" fill="${BG}"/>
+    ${T(535, 720, "1 NOCHE", { a: "middle", mono: true, s: 26, c: ORANGE })}
+    ${T(540, 960, "+$372 POR LITRO", { a: "middle", s: 84, w: 800, c: AMBER })}
+  </svg>`, "MIÉ → JUE");
+
+/* 03 · 5,6 s · doce años, una ley */
+SC.s03 = () => frame(5.6, 1, "Durante 12 años, una ley existía justamente para <b>evitar eso.</b>", `
+  <svg class="full">
+    <rect x="70" y="380" width="940" height="640" rx="22" fill="${PANEL}" stroke="${LINE}" stroke-width="3"/>
+    ${T(110, 450, "LEY N° 20.765 · 09·07·2014", { mono: true, s: 26, c: AMBER })}
+    ${(() => { let s = ""; for (let yv = 0; yv <= 12; yv++) { const x = 110 + yv * (860 / 12); s += `<line x1="${x}" x2="${x}" y1="900" y2="${yv % 2 ? 920 : 930}" stroke="${MUTED}" stroke-width="3"/>`; if (yv % 2 === 0) s += T(x, 972, String(2014 + yv), { a: "middle", mono: true, s: 22, c: MUTED }); } return s; })()}
+    <line x1="110" x2="970" y1="900" y2="900" stroke="${MUTED}" stroke-width="3"/>
+    <path d="M110 760 C 180 600, 230 820, 300 700 S 420 560, 480 760 S 600 620, 660 700 S 800 560, 860 740 S 940 640, 970 680" fill="none" stroke="${MUTED}" stroke-width="5" stroke-dasharray="12 9"/>
+    <path d="M110 740 C 300 720, 500 700, 700 705 S 900 700, 970 700" fill="none" stroke="${ORANGE}" stroke-width="10" stroke-linecap="round"/>
+    ${T(970, 660, "PRECIO BOMBA: SUAVE", { a: "end", mono: true, s: 22, c: ORANGE })}
+    ${T(110, 560, "PETRÓLEO: SALTA", { mono: true, s: 22, c: MUTED })}
+    <g transform="translate(760 430) rotate(-8)"><rect x="0" y="0" width="210" height="96" rx="8" fill="none" stroke="${AMBER}" stroke-width="4"/>${T(105, 44, "12 AÑOS", { a: "middle", s: 46, w: 800, c: AMBER })}${T(105, 78, "2014 – 2026", { a: "middle", mono: true, s: 18, c: AMBER })}</g>
+  </svg>`, "LEY 20.765");
+
+/* 04 · 9,8 s · amortiguador */
+const ROAD = (bumpX = 600, bumpH = 70) => `<path d="M0 1130 L${bumpX - 80} 1130 Q${bumpX} ${1130 - bumpH * 2} ${bumpX + 80} 1130 L1080 1130" fill="none" stroke="${INK}" stroke-width="6"/>${Array.from({ length: 12 }, (_, i) => `<rect x="${i * 90}" y="1160" width="50" height="8" fill="#3a3c40"/>`).join("")}`;
+SC.s04a = () => frame(9.8, 1, "Se llama MEPCO, y funciona como el <b>amortiguador</b> de un auto.", `
+  <svg class="full">${GLOW}
+    ${T(70, 420, "MEPCO", { s: 150, w: 800, c: INK })}
+    ${T(74, 470, "MECANISMO DE ESTABILIZACIÓN DE PRECIOS", { mono: true, s: 22, c: MUTED })}
+    ${T(74, 502, "DE LOS COMBUSTIBLES", { mono: true, s: 22, c: MUTED })}
+    ${ROAD(700, 40)}
+    ${car(170, 770, 1.1, { glow: true })}
+    <line x1="720" y1="980" x2="820" y2="640" stroke="${TEAL}" stroke-width="4"/>
+    <rect x="690" y="580" width="320" height="70" rx="10" fill="${TEAL}"/>${T(850, 630, "AMORTIGUADOR", { a: "middle", s: 46, w: 800, c: BG })}
+  </svg>`, "LEY 20.765");
+SC.s04b = () => frame(11.7, 1, "Se llama MEPCO, y funciona como el <b>amortiguador</b> de un auto.", `
+  <svg class="full">${GLOW}
+    <defs><clipPath id="zc"><rect x="70" y="520" width="940" height="660" rx="22"/></clipPath></defs>
+    <g clip-path="url(#zc)"><rect x="70" y="520" width="940" height="660" fill="#202226"/><g transform="translate(-1300 -1500) scale(2.4)">${ROAD(700, 40)}${car(170, 770, 1.1, { glow: true })}</g></g>
+    <rect x="70" y="520" width="940" height="660" rx="22" fill="none" stroke="${LINE}" stroke-width="4"/>
+    <rect x="200" y="380" width="680" height="100" rx="12" fill="${TEAL}"/>${T(540, 450, "MEPCO = AMORTIGUADOR", { a: "middle", s: 62, w: 800, c: BG })}
+  </svg><div class="zoomtag mono">ZOOM AL RESORTE</div>`, "LEY 20.765");
+
+/* 05 · 13,4 s · petróleo salta, Estado cobra menos impuesto */
+SC.s05a = () => frame(13.4, 1, "Cuando el petróleo <b>salta afuera,</b> el Estado cobra menos impuesto a la bencina.", `
+  <svg class="full">${GLOW}
+    ${barrel(200, 520, 1.1, "PETRÓLEO")}
+    ${T(200, 690, "AFUERA ↑", { a: "middle", mono: true, s: 28, c: AMBER })}
+    <path d="M330 520 L430 520 L470 400 L560 400 L600 520 L1000 520" fill="none" stroke="${MUTED}" stroke-width="6" stroke-dasharray="14 10"/>
+    ${T(515, 380, "EL BACHE", { a: "middle", mono: true, s: 24, c: MUTED })}
+    <path d="M0 1130 L560 1130 Q640 960 720 1130 L1080 1130" fill="none" stroke="${INK}" stroke-width="6"/>
+    ${car(130, 760, 1.1, { glow: true, wheels: [[150, 0], [500, -60]] })}
+  </svg>`, "EL BACHE");
+function liter(x, y, imp, par, label) {
+  const H = 520, k = H / 1700, hp = par * k, hi = imp * k;
+  return `<g transform="translate(${x} ${y})">
+    <rect x="0" y="${H - hp}" width="230" height="${hp}" fill="#3a3c40"/>${T(115, H - hp / 2 + 10, "IMPORTAR", { a: "middle", mono: true, s: 22, c: INK })}
+    <rect x="0" y="${H - hp - hi}" width="230" height="${hi}" fill="${TEAL}"/>${T(115, H - hp - hi / 2 + 10, "IMPUESTO", { a: "middle", mono: true, s: 22, c: BG, w: 700 })}
+    <rect x="0" y="0" width="230" height="${H}" fill="none" stroke="${LINE}" stroke-width="3" stroke-dasharray="8 8"/>
+    ${T(115, -24, label, { a: "middle", s: 40, w: 800, c: INK })}
+    ${T(115, H + 52, "$" + (imp + par).toLocaleString("es-CL"), { a: "middle", s: 56, w: 800, c: ORANGE })}</g>`;
+}
+SC.s05b = () => frame(15.4, 1, "Cuando el petróleo salta afuera, el Estado cobra <b>menos impuesto</b> a la bencina.", `
+  <svg class="full">
+    ${liter(160, 440, 450, 700, "ANTES")}
+    ${liter(690, 440, 270, 930, "BACHE")}
+    <path d="M430 700 L640 700" stroke="${MUTED}" stroke-width="6"/><path d="M615 680 L642 700 L615 720" fill="none" stroke="${MUTED}" stroke-width="6"/>
+    ${T(805, 400, "", {})}
+    <rect x="70" y="1050" width="940" height="2" fill="${LINE}"/>
+    ${T(540, 1100, "UN LITRO · CIFRAS ILUSTRATIVAS", { a: "middle", mono: true, s: 22, c: MUTED })}
+  </svg>`, "UN LITRO");
+
+/* 06 · 18,1 s · sube de a poco */
+SC.s06 = () => frame(18.1, 1, "Así el precio sube de a poco: unos <b>$20</b> cada tres semanas.", `
+  <svg class="full">
+    ${chartFrame()}
+    <path d="${path(PAR, 21)}" fill="none" stroke="${MUTED}" stroke-width="5" stroke-dasharray="12 9"/>
+    ${gapArea(21, 1)}
+    <path d="${stepPath(PUMP, 21)}" fill="none" stroke="${ORANGE}" stroke-width="9" stroke-linejoin="round"/>
+    ${[9, 12, 15, 18].map((i) => T(cx(i) + 6, cy(PUMP[i]) - 16, "+$20", { s: 30, w: 800, c: AMBER })).join("")}
+    ${T(cx(14), cy(1330) - 22, "ESTADO ABSORBE", { a: "middle", mono: true, s: 22, c: TEAL })}
+    <rect x="${CH.x0}" y="1030" width="880" height="2" fill="${LINE}"/>
+    ${T(CH.x0, 1072, "≈ $20–26 CADA 3 SEMANAS SEGÚN LA FUENTE · ILUSTRATIVO", { mono: true, s: 20, c: MUTED })}
+  </svg>`, "DE A POCO");
+
+/* 07 · 22,3 s · petróleo baja, Estado recupera */
+SC.s07 = () => frame(22.3, 1, "Y cuando el petróleo baja, el Estado cobra más y <b>recupera</b> lo que puso.", `
+  <svg class="full">
+    ${chartFrame()}
+    <path d="${path(PAR)}" fill="none" stroke="${MUTED}" stroke-width="5" stroke-dasharray="12 9"/>
+    ${gapArea(CH.n, 1)}
+    ${(() => { let top = "", bot = []; for (let i = 24; i < CH.n; i++) { if (PUMP[i] > PAR[i]) { top += `${top ? "L" : "M"}${cx(i)} ${cy(PUMP[i])} `; bot.unshift(`L${cx(i)} ${cy(PAR[i])}`); } } return `<path d="${top}${bot.join(" ")} Z" fill="${TEAL}" fill-opacity=".55"/>`; })()}
+    <path d="${stepPath(PUMP)}" fill="none" stroke="${ORANGE}" stroke-width="9" stroke-linejoin="round"/>
+    ${T(cx(14), cy(1330) - 22, "PONE", { a: "middle", s: 40, w: 800, c: TEAL })}
+    ${T(cx(33), cy(1180) - 30, "RECUPERA", { a: "middle", s: 40, w: 800, c: TEAL })}
+  </svg>`, "DE VUELTA");
+
+/* 08 · 26,6 s · no es más barato; te regala tiempo */
+SC.s08a = () => frame(26.6, 1, "No es <b>más barato.</b> Te regala tiempo para adaptarte.", `
+  <svg class="full">
+    <rect x="110" y="480" width="330" height="330" rx="20" fill="${TEAL}" fill-opacity=".3" stroke="${TEAL}" stroke-width="4"/>${T(275, 670, "PONE", { a: "middle", s: 70, w: 800, c: TEAL })}
+    ${T(540, 690, "=", { a: "middle", s: 150, w: 800, c: INK })}
+    <rect x="640" y="480" width="330" height="330" rx="20" fill="${TEAL}" fill-opacity=".55" stroke="${TEAL}" stroke-width="4"/>${T(805, 670, "RECUPERA", { a: "middle", s: 70, w: 800, c: BG })}
+    ${T(540, 940, "AL FINAL, EL MISMO PRECIO", { a: "middle", mono: true, s: 26, c: MUTED })}
+  </svg>`, "EL TRATO");
+SC.s08b = () => frame(27.6, 1, "No es más barato. Te regala <b>tiempo</b> para adaptarte.", `
+  <svg class="full">
+    ${FAMILY(250, 920, 1.5)}
+    <g transform="translate(560 420)"><rect width="420" height="420" rx="22" fill="${PANEL}" stroke="${LINE}" stroke-width="3"/>
+      ${T(30, 56, "SEMANAS", { mono: true, s: 22, c: MUTED })}
+      ${Array.from({ length: 20 }, (_, i) => `<rect x="${30 + (i % 5) * 76}" y="${86 + Math.floor(i / 5) * 76}" width="60" height="60" rx="8" fill="${i < 13 ? AMBER : "#2a2d31"}" fill-opacity="${i < 13 ? 0.25 + i * 0.05 : 1}"/>`).join("")}
+    </g>
+    ${T(770, 900, "TIEMPO PARA AJUSTAR", { a: "middle", mono: true, s: 24, c: AMBER })}
+    ${T(770, 940, "PRESUPUESTO, FLETES, PASAJES", { a: "middle", mono: true, s: 20, c: MUTED })}
+  </svg>`, "EL TRATO");
+
+/* 09 · 29,9 s · marzo 2026, guerra */
+SC.s09 = () => frame(29.9, 2, "En marzo de 2026, la guerra en Medio Oriente <b>disparó el petróleo.</b>", `
+  <svg class="full">${GLOW}
+    ${chartFrame({ left: "2026 →" })}
+    <path d="M110 ${cy(1050)} L560 ${cy(1060)} L620 ${cy(1150)} L700 ${cy(1450)} L760 ${cy(1560)} L990 ${cy(1560)}" fill="none" stroke="${MUTED}" stroke-width="6" stroke-dasharray="12 9"/>
+    <path d="M110 ${cy(1050)} L560 ${cy(1060)} L990 ${cy(1170)}" fill="none" stroke="${ORANGE}" stroke-width="9"/>
+    ${barrel(300, 580, .9, "GUERRA")}
+    ${T(300, 720, "MEDIO ORIENTE", { a: "middle", mono: true, s: 24, c: AMBER })}
+    ${T(700, cy(1330), "↑", { a: "middle", s: 80, w: 800, c: MUTED })}
+  </svg>`, "MARZO 2026");
+
+/* 10 · 34,5 s · el amortiguador hizo su trabajo; US$140 millones */
+SC.s10a = () => frame(34.5, 2, "El amortiguador <b>hizo su trabajo,</b> pero en una semana le costó al Fisco US$140 millones.", `
+  <svg class="full">${GLOW}
+    <path d="M0 1130 L470 1130 Q620 700 770 1130 L1080 1130" fill="none" stroke="${INK}" stroke-width="6"/>
+    <g transform="rotate(-26 295 1048)">${car(130, 740, 1.1, { glow: true, spring: TEAL, wheels: [[150, 0], [500, -34]] })}</g>
+    ${T(540, 470, "EL BACHE MÁS GRANDE", { a: "middle", s: 84, w: 800, c: INK })}
+    ${T(540, 520, "EL RESORTE AGUANTA", { a: "middle", mono: true, s: 26, c: TEAL })}
+  </svg>`, "MARZO 2026");
+SC.s10b = () => frame(38.0, 2, "El amortiguador hizo su trabajo, pero en una semana le costó al Fisco <b>US$140 millones.</b>", `
+  <svg class="full">${GLOW}
+    <rect x="110" y="380" width="860" height="360" rx="24" fill="${PANEL}" stroke="${LINE}" stroke-width="4"/>
+    ${T(150, 440, "COSTO PARA EL FISCO · 19 AL 25 DE MARZO", { mono: true, s: 22, c: MUTED })}
+    ${T(150, 640, "US$", { s: 110, w: 800, c: AMBER, extra: 'filter="url(#gl)"' })}
+    <g filter="url(#gl)">${seg7("140", 330, 500, 100, 170, 19, AMBER)}</g>
+    ${T(770, 640, "MILL.", { s: 76, w: 800, c: AMBER })}
+    ${T(150, 700, "EN UNA SEMANA · SEGÚN EL GOBIERNO", { mono: true, s: 22, c: MUTED })}
+    ${Array.from({ length: 14 }, (_, i) => `<g transform="translate(${170 + (i % 7) * 110} ${800 + Math.floor(i / 7) * 130}) rotate(${(i * 37) % 20 - 10})"><rect width="96" height="52" rx="6" fill="#3d7a52"/><rect x="6" y="6" width="84" height="40" rx="4" fill="none" stroke="#9fd3a8" stroke-width="2"/>${T(48, 36, "US$", { a: "middle", s: 22, w: 700, c: "#d9f0dc" })}</g>`).join("")}
+  </svg>`, "MARZO 2026");
+
+
+/* ===================== TRAMO 2 ===================== */
+function doc(x, y, w, h, lines, stamp) {
+  let s = `<g transform="translate(${x} ${y})"><rect width="${w}" height="${h}" rx="10" fill="#e9e6dd"/>`;
+  lines.forEach((l, i) => { s += T(36, 70 + i * 50, l, { mono: true, s: 22, c: "#3a3c40", w: 500 }); });
+  for (let i = 0; i < 6; i++) s += `<rect x="36" y="${70 + lines.length * 50 + i * 34}" width="${w - 72 - (i % 3) * 60}" height="10" rx="5" fill="#c9c4b8"/>`;
+  if (stamp) s += `<g transform="translate(${w * .52} ${h * .72}) rotate(-12)"><rect x="-170" y="-58" width="340" height="116" rx="10" fill="none" stroke="${ORANGE}" stroke-width="8"/>${T(0, 18, stamp, { a: "middle", s: 60, w: 800, c: ORANGE })}</g>`;
+  return s + `</g>`;
+}
+function congress(x, y, sc, col) {
+  let s = `<g transform="translate(${x} ${y}) scale(${sc})" fill="none" stroke="${col}" stroke-width="6">`;
+  s += `<path d="M-160 0 L160 0 M-140 0 L-140 -110 M140 0 L140 -110 M-170 -110 L170 -110 L0 -190 Z"/>`;
+  for (const cx2 of [-90, -30, 30, 90]) s += `<line x1="${cx2}" y1="-10" x2="${cx2}" y2="-100"/>`;
+  return s + `</g>`;
+}
+function truck(x, y, sc, cargo = true) {
+  let s = `<g transform="translate(${x} ${y}) scale(${sc})">`;
+  s += `<rect x="0" y="0" width="420" height="200" rx="10" fill="#454a52" stroke="${INK}" stroke-width="6"/>`;
+  s += `<path d="M420 60 L520 60 L580 130 L580 200 L420 200 Z" fill="#454a52" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/><path d="M440 80 L510 80 L550 125 L440 125 Z" fill="${BG}" stroke="${INK}" stroke-width="4"/>`;
+  if (cargo) [["PAN", 30], ["LECHE", 160], ["FRUTA", 290]].forEach(([n, bx]) => { s += `<rect x="${bx}" y="40" width="110" height="120" rx="8" fill="${PANEL}" stroke="${AMBER}" stroke-width="3"/>` + T(bx + 55, 110, n, { a: "middle", mono: true, s: 22, c: AMBER }); });
+  for (const wx of [90, 330, 500]) s += `<circle cx="${wx}" cy="215" r="44" fill="${PANEL}" stroke="${INK}" stroke-width="6"/><circle cx="${wx}" cy="215" r="16" fill="#3a3c40"/>`;
+  return s + `</g>`;
+}
+function stairs(o = {}) {               // regla de antes vs una noche: +$372
+  const x0 = 140, x1 = 980, y0 = 1000, y1 = 470, weeks = 43, step = 26;
+  const X = (w) => x0 + w / weeks * (x1 - x0), Y = (v) => y0 - v / 372 * (y0 - y1);
+  let d = `M${x0} ${y0}`, v = 0;
+  for (let w = 3; w <= weeks + 1 && v < 372; w += 3) { const nv = Math.min(372, v + step); d += ` L${X(w)} ${Y(v)} L${X(w)} ${Y(nv)}`; v = nv; }
+  let s = `<line x1="${x0}" x2="${x1}" y1="${y0}" y2="${y0}" stroke="${MUTED}" stroke-width="3"/>`;
+  for (const w of [0, 13, 26, 39]) s += T(X(w), y0 + 40, w ? w + " SEM" : "0", { a: "middle", mono: true, s: 20, c: MUTED });
+  s += `<path d="${d}" fill="none" stroke="${TEAL}" stroke-width="8" stroke-linejoin="round"/>`;
+  s += T(X(30), Y(372) - 30, "REGLA DE ANTES: ~43 SEMANAS", { a: "middle", mono: true, s: 22, c: TEAL });
+  s += `<line x1="${x0}" x2="${x0}" y1="${y0}" y2="${Y(372)}" stroke="${ORANGE}" stroke-width="14" stroke-linecap="round"/>`;
+  s += `<line x1="${x0}" x2="${X(10)}" y1="${Y(372)}" y2="${Y(372)}" stroke="${ORANGE}" stroke-width="14" stroke-linecap="round"/>`;
+  s += T(x0 + 20, Y(372) + 50, "MARZO 2026: 1 NOCHE", { mono: true, s: 22, c: ORANGE });
+  s += T(x1, Y(372) - 70, "+$372", { a: "end", s: 64, w: 800, c: AMBER });
+  return s;
+}
+
+SC.s11a = () => frame(40.8, 2, "Y el Gobierno <b>decidió soltarlo,</b> por decreto, sin pasar por el Congreso.", `
+  <svg class="full">${GLOW}
+    ${doc(110, 330, 520, 560, ["MINISTERIO DE HACIENDA", "DECRETO EXENTO N° 103", "20 · 03 · 2026"], "DECRETO")}
+    ${ROAD(820, 30)}
+    ${car(480, 860, .8, { noSpring: true })}
+    <path d="M${480 + 150 * .8 - 30} ${860 + 230 * .8} l60 -30 M${480 + 500 * .8 - 30} ${860 + 230 * .8} l60 -30" stroke="${ORANGE}" stroke-width="6"/>
+    ${T(800, 830, "SIN RESORTE", { a: "middle", mono: true, s: 24, c: ORANGE })}
+  </svg>`, "23·03·2026");
+SC.s11b = () => frame(43.2, 2, "Y el Gobierno decidió soltarlo, por decreto, <b>sin pasar por el Congreso.</b>", `
+  <svg class="full">
+    ${congress(540, 820, 1.6, MUTED)}
+    ${T(540, 900, "CONGRESO", { a: "middle", mono: true, s: 28, c: MUTED })}
+    <path d="M150 1010 C 300 1010, 300 420, 540 420 C 780 420, 780 1010, 930 1010" fill="none" stroke="${ORANGE}" stroke-width="10" stroke-dasharray="2 22" stroke-linecap="round"/>
+    <path d="M905 985 L935 1012 L900 1030" fill="none" stroke="${ORANGE}" stroke-width="8"/>
+    ${T(150, 1060, "HACIENDA", { a: "middle", mono: true, s: 24, c: ORANGE })}${T(930, 1060, "BOMBA", { a: "middle", mono: true, s: 24, c: ORANGE })}
+  </svg>`, "VÍA DECRETO");
+
+SC.s12 = () => frame(45.0, 2, "La 93 subió <b>$372.</b>", `
+  <svg class="full">${GLOW}
+    <path d="M0 1130 L470 1130 Q620 700 770 1130 L1080 1130" fill="none" stroke="${INK}" stroke-width="6"/>
+    <g transform="rotate(-26 295 1048)">${car(130, 740, 1.1, { noSpring: true })}</g>
+    ${[0, 1, 2].map((i) => `<line x1="${560 + i * 40}" y1="${880 - i * 30}" x2="${600 + i * 50}" y2="${820 - i * 40}" stroke="${ORANGE}" stroke-width="7" stroke-linecap="round"/>`).join("")}
+    <rect x="560" y="330" width="450" height="230" rx="18" fill="${PANEL}" stroke="${LINE}" stroke-width="3"/>
+    ${T(590, 380, "93 · 26·03", { mono: true, s: 24, c: AMBER })}
+    <g filter="url(#gl)">${seg7("1542", 640, 400, 70, 120, 14, AMBER)}</g>${T(590, 515, "$", { s: 80, w: 700, c: AMBER })}
+    <rect x="70" y="350" width="260" height="96" rx="12" fill="${ORANGE}"/>${T(200, 420, "+$372", { a: "middle", s: 76, w: 800, c: BG })}
+  </svg>`, "SIN AMORTIGUADOR");
+
+SC.s13 = () => frame(48.5, 2, "El diésel, <b>$580:</b> un 62%.", `
+  <svg class="full">${GLOW}
+    ${truck(540, 330, .62, false)}
+    ${T(110, 600, "GASOLINA 93", { s: 46, w: 800 })}${T(970, 600, "+$372", { a: "end", s: 46, w: 800, c: AMBER })}
+    <rect x="110" y="620" width="${860 * 32 / 62}" height="70" rx="8" fill="${AMBER}"/>${T(130 + 860 * 32 / 62, 670, "+32%", { s: 44, w: 800, c: AMBER })}
+    ${T(110, 800, "DIÉSEL", { s: 46, w: 800 })}${T(970, 800, "+$580", { a: "end", s: 46, w: 800, c: ORANGE })}
+    <rect x="110" y="820" width="760" height="70" rx="8" fill="${ORANGE}"/>${T(890, 870, "+62%", { s: 44, w: 800, c: ORANGE })}
+    ${T(110, 960, "ALZA DEL 26·03·2026 · ENAP", { mono: true, s: 22, c: MUTED })}
+  </svg>`, "26·03·2026");
+
+SC.s14 = () => frame(52.3, 3, "Con la regla de antes, esa alza habría tomado <b>casi un año.</b>", `
+  <svg class="full">${stairs()}
+    ${T(140, 400, "PARA SUBIR $372", { mono: true, s: 24, c: MUTED })}
+    ${T(140, 1100, "~$26 CADA 3 SEMANAS · CÁLCULO PROPIO", { mono: true, s: 20, c: MUTED })}
+  </svg>`, "ANTES VS. AHORA");
+
+SC.s15 = () => frame(56.2, 3, "Llegó en una noche, <b>sin tiempo</b> para adaptarse.", `
+  <svg class="full">
+    ${FAMILY(250, 920, 1.5)}
+    <g transform="translate(560 420)"><rect width="420" height="420" rx="22" fill="${PANEL}" stroke="${ORANGE}" stroke-width="4"/>
+      ${T(30, 56, "SEMANAS PARA AJUSTAR", { mono: true, s: 22, c: MUTED })}
+      ${Array.from({ length: 20 }, (_, i) => `<rect x="${30 + (i % 5) * 76}" y="${86 + Math.floor(i / 5) * 76}" width="60" height="60" rx="8" fill="#2a2d31"/>`).join("")}
+      ${T(210, 270, "0", { a: "middle", s: 200, w: 800, c: ORANGE })}
+    </g>
+    <circle cx="300" cy="420" r="44" fill="${INK}"/><circle cx="322" cy="404" r="40" fill="${BG}"/>
+  </svg>`, "1 NOCHE");
+
+SC.s16 = () => frame(59.0, 3, "Y el diésel mueve los <b>camiones</b> que traen todo lo que compras.", `
+  <svg class="full">
+    ${truck(110, 560, 1.4)}
+    ${ROAD(2000, 0)}
+    ${[["PAN", 190], ["LECHE", 380], ["FRUTA", 570]].map(([n, x]) => `<g transform="translate(${x + 40} 420)"><path d="M0 0 L120 0 L140 40 L120 80 L0 80 Z" fill="${ORANGE}"/>${T(60, 54, "↑", { a: "middle", s: 56, w: 800, c: BG })}</g>`).join("")}
+  </svg>`, "CADENA");
+
+SC.s17 = () => frame(62.7, 3, "En abril, los precios subieron <b>1,3%</b> en un solo mes: el mayor salto desde 2022.", `
+  <svg class="full">${GLOW}
+    <rect x="110" y="330" width="860" height="250" rx="22" fill="${PANEL}" stroke="${LINE}" stroke-width="3"/>
+    ${T(150, 385, "IPC · ABRIL 2026 · VARIACIÓN MENSUAL", { mono: true, s: 22, c: MUTED })}
+    ${T(150, 530, "+", { s: 110, w: 800, c: AMBER, extra: 'filter="url(#gl)"' })}
+    <g filter="url(#gl)">${seg7("1,3", 230, 410, 90, 140, 17, AMBER)}</g>${T(570, 530, "%", { s: 110, w: 800, c: AMBER })}
+    ${T(150, 690, "MAR", { mono: true, s: 24, c: MUTED })}<rect x="250" y="660" width="${1.0 * 500}" height="44" rx="6" fill="${MUTED}"/>${T(770, 694, "1,0%", { s: 40, w: 800, c: MUTED })}
+    ${T(150, 780, "ABR", { mono: true, s: 24, c: AMBER })}<rect x="250" y="750" width="${1.3 * 500}" height="44" rx="6" fill="${AMBER}"/>${T(920, 784, "1,3%", { s: 40, w: 800, c: AMBER })}
+    ${T(150, 880, "MAYOR ALZA MENSUAL DESDE JULIO 2022 · INE", { mono: true, s: 22, c: MUTED })}
+  </svg>`, "IPC");
+
+function gauge(v) { const a = (x) => Math.PI * (1 - x / 6); const C = [540, 960], R = 360; const P = (x, r = R) => [C[0] + r * Math.cos(a(x)), C[1] - r * Math.sin(a(x))];
+  const arc = (x0, x1, col, w) => { const [ax, ay] = P(x0), [bx, by] = P(x1); return `<path d="M${ax} ${ay} A${R} ${R} 0 0 1 ${bx} ${by}" fill="none" stroke="${col}" stroke-width="${w}"/>`; };
+  let s = arc(0, 6, "#3d4248", 60) + arc(2, 4, TEAL, 60);
+  for (let x = 0; x <= 6; x++) { const [tx, ty] = P(x, R + 70); s += T(tx, ty + 10, x + "%", { a: "middle", mono: true, s: 24, c: MUTED }); }
+  const [ox, oy] = P(2.8, R - 70); s += `<line x1="${C[0]}" y1="${C[1]}" x2="${ox}" y2="${oy}" stroke="${MUTED}" stroke-width="8" stroke-dasharray="10 10"/>`;
+  const [nx, ny] = P(v, R - 40); s += `<line x1="${C[0]}" y1="${C[1]}" x2="${nx}" y2="${ny}" stroke="${ORANGE}" stroke-width="14" stroke-linecap="round"/><circle cx="${C[0]}" cy="${C[1]}" r="24" fill="${ORANGE}"/>`;
+  return s; }
+SC.s18 = () => frame(69.3, 3, "La inflación anual pasó de 2,8 a <b>4%</b> en apenas un mes.", `
+  <svg class="full">
+    ${gauge(4.0)}
+    ${T(540, 1050, "2,8% → 4,0%", { a: "middle", s: 84, w: 800, c: INK })}
+    ${T(540, 470, "META BANCO CENTRAL: 3% ± 1", { a: "middle", mono: true, s: 22, c: TEAL })}
+    ${T(540, 1100, "INFLACIÓN EN 12 MESES · MARZO → ABRIL 2026 · INE", { a: "middle", mono: true, s: 20, c: MUTED })}
+  </svg>`, "INFLACIÓN");
+
+SC.s19 = () => frame(73.7, 3, "Lo que el amortiguador repartía en un año, la economía lo absorbió <b>de golpe.</b>", `
+  <svg class="full">
+    <defs><clipPath id="zc19"><rect x="0" y="300" width="1080" height="880"/></clipPath></defs>
+    <g clip-path="url(#zc19)"><g transform="translate(-60 -640) scale(1.7)">${stairs()}</g></g>
+    ${FAMILY(270, 1010, 1.15)}
+    ${truck(520, 940, .42)}
+    <g transform="translate(820 930)"><rect width="170" height="130" fill="#454a52" stroke="${INK}" stroke-width="5"/><path d="M-14 0 L85 -60 L184 0 Z" fill="${ORANGE}"/>${T(85, 80, "TIENDA", { a: "middle", mono: true, s: 24, c: INK })}</g>
+  </svg><div class="zoomtag mono">ZOOM AL PIE DEL MURO</div>`, "DE GOLPE");
+
+SC.s20 = () => frame(78.2, 4, "Hoy, tras seis alzas seguidas desde julio, la 93 está otra vez <b>cerca de su máximo histórico.</b>", `
+  <svg class="full">${GLOW}
+    ${["JUL", "AGO", "SEP", "OCT", "OCT", "NOV"].map((m, i) => { const x = 160 + i * 150, h = 120 + i * 50; return `<path d="M${x} ${980 - h} l-34 50 h22 v${h - 50} h24 v${-(h - 50)} h22 Z" fill="${ORANGE}" fill-opacity="${.45 + i * .1}"/>` + T(x, 1030, m, { a: "middle", mono: true, s: 22, c: MUTED }); }).join("")}
+    <line x1="110" x2="990" y1="560" y2="560" stroke="${INK}" stroke-width="4" stroke-dasharray="14 10"/>${T(990, 540, "MÁXIMO HISTÓRICO", { a: "end", mono: true, s: 22, c: INK })}
+    <rect x="110" y="330" width="420" height="170" rx="18" fill="${PANEL}" stroke="${LINE}" stroke-width="3"/>
+    ${T(140, 375, "93 · HOY · RM", { mono: true, s: 22, c: AMBER })}${T(140, 470, "≈$", { s: 70, w: 700, c: AMBER })}
+    <g filter="url(#gl)">${seg7("1538", 230, 390, 56, 90, 11, AMBER)}</g>
+    ${T(990, 1090, "6 ALZAS SEGUIDAS", { a: "end", s: 52, w: 800, c: ORANGE })}
+  </svg>`, "NOV 2026");
+
+SC.s21 = () => frame(84.7, 4, "Y ahora el Gobierno le pide al Congreso una ley para que cada alza no pase de <b>$20.</b>", `
+  <svg class="full">${GLOW}
+    ${doc(110, 330, 470, 520, ["PROYECTO DE LEY", "DISCUSIÓN INMEDIATA", "MÁX. $20/L POR ALZA", "90 DÍAS"], "")}
+    ${congress(820, 560, .9, INK)}
+    ${ROAD(2000, 0)}
+    ${car(500, 860, .8, { glow: true, spring: TEAL })}
+    ${T(780, 840, "¿DE VUELTA EL RESORTE?", { a: "middle", mono: true, s: 22, c: TEAL })}
+  </svg>`, "NOV 2026");
+
+SC.s22 = () => frame(90.3, 4, "¿Tú alcanzaste a adaptarte a un año de alzas en <b>una sola noche?</b>", `
+  <svg class="full">${stairs()}
+    ${FAMILY(180, 1060, .8)}
+  </svg>`, "¿Y TÚ?");
+
+SC.s23 = () => frame(94.3, 4, "Te leo en los <b>comentarios.</b>", `
+  <svg class="full">${GLOW}
+    <path d="M190 400 Q190 330 260 330 L820 330 Q890 330 890 400 L890 680 Q890 750 820 750 L420 750 L300 860 L320 750 L260 750 Q190 750 190 680 Z" fill="${PANEL}" stroke="${ORANGE}" stroke-width="6"/>
+    ${T(540, 520, "¿TE ALCANZÓ", { a: "middle", s: 96, w: 800, c: INK })}${T(540, 630, "EL TIEMPO?", { a: "middle", s: 96, w: 800, c: AMBER })}
+    ${FAMILY(600, 1060, .8)}
+  </svg>`, "COMENTA");
+
+/* 99 · prueba de contraste del fondo */
+SC.s99 = () => `${["#151617", "#1c1e21", "#26292d", "#33373c"].map((c, i) => `<div style="position:absolute;left:0;right:0;top:${i * 480}px;height:480px;background:${c}"><svg width="1080" height="480">${GLOW}${car(40, 60, .7, { glow: true })}<g transform="translate(560 120)">${seg7("1542", 0, 0, 70, 120, 14, AMBER)}</g>${T(560, 330, c, { mono: true, s: 28, c: MUTED })}</svg></div>`).join("")}`;
+
+document.querySelectorAll(".esc").forEach((el) => { el.innerHTML = SC[el.id](); });
+const tl = gsap.timeline({ paused: true });
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+</script>
+</body>
+</html>

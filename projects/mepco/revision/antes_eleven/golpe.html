@@ -1,0 +1,163 @@
+<template>
+  <style>
+    @font-face { font-family: "Barlow Condensed"; font-weight: 600; src: url("assets/fonts/BarlowCondensed-SemiBold.ttf"); }
+    @font-face { font-family: "Barlow Condensed"; font-weight: 700; src: url("assets/fonts/BarlowCondensed-Bold.ttf"); }
+    @font-face { font-family: "Barlow Condensed"; font-weight: 800; src: url("assets/fonts/BarlowCondensed-ExtraBold.ttf"); }
+    #root { position: absolute; inset: 0; }
+    #gp-safe { position: absolute; inset: 0; transform: translateY(77px) scale(0.88); transform-origin: 540px 883px; }
+    #gp-svg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+  </style>
+  <div id="root" data-composition-id="golpe" data-width="1080" data-height="1920">
+    <div id="gp-safe"><svg id="gp-svg" viewBox="0 0 1080 1920"></svg></div>
+  </div>
+  <script src="assets/dibujo.js"></script>
+  <script>
+    (function () {
+      GLID = "gp-gl";
+      var HREF = "http://www.w3.org/1999/xlink";
+      // ---------- LED de abajo: 4 digitos reescribibles ----------
+      var SZ = 1.25, DW = 92 * SZ, DH = 150 * SZ, DT = 17 * SZ, DX0 = 190 + 62 * SZ, DY = 750 + 30 * SZ, DSTEP = DW + DT * 1.1;
+      var FROM = [1, 1, 7, 0], TO = [1, 5, 4, 2];
+      function digitSvg(i, ch) { return seg7(String(ch), DX0 + i * DSTEP, DY, DW, DH, DT, AMBER); }
+
+      // ---------- escena 01: letrero (se dibuja una vez en defs y se muestra en dos mitades) ----------
+      var board =
+        '<rect x="140" y="300" width="800" height="790" rx="26" fill="' + PANEL + '" stroke="' + LINE + '" stroke-width="4"/>' +
+        '<path d="M140 326 Q140 300 166 300 L914 300 Q940 300 940 326 L940 400 L140 400 Z" fill="' + ORANGE + '"/>' +
+        T(540, 372, "PRECIOS · GASOLINA 93", { a: "middle", s: 60, w: 800, c: BG, ls: 3 }) +
+        ledRow(190, 470, "MIÉ 25·03", "1170", "#a8916a") +
+        '<line x1="180" x2="900" y1="690" y2="690" stroke="' + LINE + '" stroke-width="3"/>' +
+        ledRow(190, 750, "JUE 26·03", "", AMBER, SZ) +
+        [0, 1, 2, 3].map(function (i) { return '<g id="gp-dg' + i + '" filter="url(#' + GLID + ')">' + digitSvg(i, FROM[i]) + '</g>'; }).join("");
+
+      var s1 =
+        '<defs><clipPath id="gp-cA"><rect x="100" y="260" width="880" height="430"/></clipPath><clipPath id="gp-cB"><rect x="100" y="690" width="880" height="440"/></clipPath>' +
+        '<g id="gp-board">' + board + '</g></defs>' +
+        '<g id="gp-shA"><rect id="gp-shAb" x="140" y="300" width="800" height="390" rx="26" fill="' + PANEL + '" stroke="' + LINE + '" stroke-width="4"/><rect id="gp-shAh" x="140" y="300" width="800" height="100" rx="26" fill="' + ORANGE + '"/><rect id="gp-shAg" x="140" y="326" width="800" height="74" fill="' + ORANGE + '"/></g>' +
+        '<g id="gp-shB"><rect id="gp-shBb" x="140" y="690" width="800" height="400" rx="26" fill="' + PANEL + '" stroke="' + LINE + '" stroke-width="4"/><rect id="gp-shBh" x="140" y="690" width="800" height="0" rx="26" fill="' + ORANGE + '"/><rect id="gp-shBg" x="140" y="716" width="800" height="0" fill="' + ORANGE + '"/></g>' +
+        '<g id="gp-bdA"><g clip-path="url(#gp-cA)"><use href="#gp-board" xlink:href="#gp-board"/></g></g>' +
+        '<g id="gp-bdB"><g clip-path="url(#gp-cB)"><use href="#gp-board" xlink:href="#gp-board"/></g>' +
+        '<g id="gp-lbl">' + T(190, 1034, "POR LITRO · PROM. RM", { mono: true, s: 26, c: MUTED }) + '</g>' +
+        '<g id="gp-tag"><rect x="640" y="975" width="270" height="92" rx="12" fill="' + ORANGE + '"/>' + T(775, 1043, "+$372", { a: "middle", s: 76, w: 800, c: BG }) + '</g></g>';
+
+      // ---------- escena 02: calendarios ----------
+      var s2 =
+        '<g id="gp-s2">' +
+        '<g id="gp-calA">' + cal(80, 420, "MIÉ", "25", "1170", false) + '</g>' +
+        '<g id="gp-calB">' + cal(640, 420, "JUE", "26", "1542", true) + '</g>' +
+        '<g id="gp-moon"><circle cx="535" cy="540" r="34" fill="' + INK + '"/><circle cx="552" cy="528" r="30" fill="' + BG + '"/></g>' +
+        '<path id="gp-ar1" d="M470 640 L600 640" pathLength="1" stroke="' + ORANGE + '" stroke-width="10" stroke-linecap="round" fill="none"/>' +
+        '<path id="gp-ar2" d="M570 610 L604 640 L570 670" pathLength="1" fill="none" stroke="' + ORANGE + '" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<g id="gp-noche">' + T(535, 720, "1 NOCHE", { a: "middle", mono: true, s: 26, c: ORANGE }) + '</g>' +
+        '<g id="gp-tot">' + T(540, 960, "+$372 POR LITRO", { a: "middle", s: 84, w: 800, c: AMBER }) + '</g>' +
+        '</g>';
+
+      // ---------- escena 03: ley y eje ----------
+      var ticks = "";
+      for (var yv = 0; yv <= 12; yv++) {
+        var x = 110 + yv * (860 / 12);
+        ticks += '<line x1="' + x + '" x2="' + x + '" y1="900" y2="' + (yv % 2 ? 920 : 930) + '" stroke="' + MUTED + '" stroke-width="3"/>';
+        if (yv % 2 === 0) ticks += T(x, 972, String(2014 + yv), { a: "middle", mono: true, s: 26, c: MUTED });
+      }
+      var s3 =
+        '<g id="gp-p3">' +
+        '<rect x="70" y="380" width="940" height="640" rx="22" fill="' + PANEL + '" stroke="' + LINE + '" stroke-width="3"/>' +
+        T(110, 450, "LEY N° 20.765 · 09·07·2014", { mono: true, s: 26, c: AMBER }) +
+        ticks + '<line x1="110" x2="970" y1="900" y2="900" stroke="' + MUTED + '" stroke-width="3"/>' +
+        '<defs><clipPath id="gp-clA"><rect id="gp-clAr" x="90" y="500" width="0" height="400"/></clipPath><clipPath id="gp-clB"><rect id="gp-clBr" x="90" y="600" width="0" height="200"/></clipPath></defs>' +
+        '<path clip-path="url(#gp-clA)" d="M110 760 C 180 600, 230 820, 300 700 S 420 560, 480 760 S 600 620, 660 700 S 800 560, 860 740 S 940 640, 970 680" fill="none" stroke="' + MUTED + '" stroke-width="5" stroke-dasharray="12 9"/>' +
+        '<path clip-path="url(#gp-clB)" d="M110 740 C 300 720, 500 700, 700 705 S 900 700, 970 700" fill="none" stroke="' + ORANGE + '" stroke-width="10" stroke-linecap="round"/>' +
+        '<g id="gp-lbB">' + T(970, 660, "PRECIO BOMBA: SUAVE", { a: "end", mono: true, s: 26, c: ORANGE }) + '</g>' +
+        '<g id="gp-lbA">' + T(110, 560, "PETRÓLEO: SALTA", { mono: true, s: 26, c: MUTED }) + '</g>' +
+        '<g id="gp-stamp"><g transform="translate(730 430) rotate(-8)"><rect x="0" y="0" width="250" height="100" rx="8" fill="' + PANEL + '" stroke="' + AMBER + '" stroke-width="4"/>' +
+        T(125, 50, "12 AÑOS", { a: "middle", s: 46, w: 800, c: AMBER }) + T(125, 86, "2014 – 2026", { a: "middle", mono: true, s: 26, c: AMBER, ls: 1 }) + '</g></g>' +
+        '</g>';
+
+      var svg = document.getElementById("gp-svg");
+      svg.setAttribute("xmlns:xlink", HREF);
+      svg.innerHTML = glowDefs() + s3 + s2 + s1;
+
+      // ---------- linea de tiempo ----------
+      var tl = gsap.timeline({ paused: true });
+      function pop(sel, t, ox, oy) {
+        gsap.set(sel, { svgOrigin: ox + " " + oy });
+        tl.fromTo(sel, { scale: 0 }, { scale: 1, duration: 0.3, ease: "back.out(1.4)" }, t);
+        tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, t);
+      }
+
+      // contador LED: cada digito pasa por valores intermedios cada 2 cuadros y se fija
+      var RUN0 = 2.2, RUNDUR = 0.62, RUNGAP = 0.06, STEPS = 9;
+      function digitAt(i, p) {
+        if (p >= 1) return TO[i];
+        if (p <= 0) return FROM[i];
+        return (FROM[i] + 1 + Math.floor(p * STEPS)) % 10;
+      }
+      [1, 2, 3].forEach(function (i) {
+        var st = { p: 0 };
+        function draw() { document.getElementById("gp-dg" + i).innerHTML = digitSvg(i, digitAt(i, st.p)); }
+        tl.fromTo(st, { p: 0 }, { p: 1, duration: RUNDUR, ease: "none", onUpdate: draw, onReverseComplete: draw }, RUN0 + i * RUNGAP);
+      });
+
+      // 3,22 etiqueta +$372 y rotulo
+      pop("#gp-tag", 3.22, 775, 1021);
+      pop("#gp-lbl", 3.22, 360, 1028);
+
+      // 3,75 - 4,25 transicion: el letrero se encoge y se parte en las dos hojas
+      var T0 = 3.75, TD = 0.45;   // mitades -> hojas; a T0+TD las hojas ocupan el lugar exacto de las cascaras
+      gsap.set("#gp-bdA", { svgOrigin: "540 495" });
+      gsap.set("#gp-bdB", { svgOrigin: "540 890" });
+      tl.fromTo("#gp-bdA", { x: 0, y: 0, scale: 1 }, { x: -280, y: 145, scale: 0.45, duration: TD, ease: "power3.inOut" }, T0);
+      tl.fromTo("#gp-bdB", { x: 0, y: 0, scale: 1 }, { x: 280, y: -250, scale: 0.45, duration: TD, ease: "power3.inOut" }, T0);
+      tl.fromTo(["#gp-bdA", "#gp-bdB"], { opacity: 1 }, { opacity: 0, duration: 0.1, ease: "none" }, T0 + 0.04);
+      // cascaras sin texto: parten con el tamano de cada mitad y terminan igual a su hoja (cabecera incluida)
+      gsap.set("#gp-shA, #gp-shB", { opacity: 0 });
+      tl.set("#gp-shA, #gp-shB", { opacity: 1 }, T0 + 0.04);
+      var SH = { x: 140, w: 800, r: 26 };
+      function shell(id, y0, h0, hh0, c0, f0, s0, xe, hcol0, hcol1) {
+        tl.fromTo("#gp-" + id + "b", { attr: { x: SH.x, y: y0, width: SH.w, height: h0, rx: SH.r } }, { attr: { x: xe, y: 420, width: 360, height: 440, rx: 22 }, duration: TD, ease: "power3.inOut" }, T0);
+        tl.fromTo("#gp-" + id + "b", { attr: { fill: f0, stroke: c0 } }, { attr: { fill: s0[0], stroke: s0[1] }, duration: TD, ease: "power3.inOut" }, T0);
+        tl.fromTo("#gp-" + id + "h", { attr: { x: SH.x, y: y0, width: SH.w, height: hh0, rx: SH.r, fill: hcol0 } }, { attr: { x: xe, y: 420, width: 360, height: 90, rx: 22, fill: hcol1 }, duration: TD, ease: "power3.inOut" }, T0);
+        tl.fromTo("#gp-" + id + "g", { attr: { x: SH.x, y: y0 + 26, width: SH.w, height: Math.max(hh0 - 26, 0), fill: hcol0 } }, { attr: { x: xe, y: 442, width: 360, height: 68, fill: hcol1 }, duration: TD, ease: "power3.inOut" }, T0);
+      }
+      shell("shA", 300, 390, 100, LINE, PANEL, ["#16171a", LINE], 80, ORANGE, "#2a2d31");
+      shell("shB", 690, 400, 0, LINE, PANEL, [PANEL, AMBER], 640, ORANGE, ORANGE);
+      // las hojas ocupan el lugar de las cascaras en el ultimo cuadro de la transformacion
+      gsap.set("#gp-calA", { opacity: 0 });
+      gsap.set("#gp-calB", { opacity: 0 });
+      tl.set("#gp-calA, #gp-calB", { opacity: 1 }, T0 + TD);
+      tl.set("#gp-shA, #gp-shB", { opacity: 0 }, T0 + TD);
+
+      // 4,34 flecha, luna, 1 NOCHE; 4,83 +$372 POR LITRO
+      gsap.set(["#gp-ar1", "#gp-ar2"], { strokeDasharray: "1 2", strokeDashoffset: 1, opacity: 0 });
+      tl.set("#gp-ar1", { opacity: 1 }, 4.34);
+      tl.fromTo("#gp-ar1", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.17, ease: "power2.out" }, 4.34);
+      tl.set("#gp-ar2", { opacity: 1 }, 4.5);
+      tl.fromTo("#gp-ar2", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.09, ease: "power2.out" }, 4.5);
+      pop("#gp-moon", 4.34, 540, 540);
+      pop("#gp-noche", 4.34, 535, 710);
+      pop("#gp-tot", 4.83, 540, 925);
+
+      // 5,45 - 6,05 transicion: calendarios hacia 2026, entra el panel de la ley desde 1,4
+      gsap.set("#gp-s2", { svgOrigin: "970 900" });
+      tl.fromTo("#gp-s2", { scale: 1 }, { scale: 0.04, duration: 0.3, ease: "power3.inOut" }, 5.45);
+      tl.fromTo("#gp-s2", { opacity: 1 }, { opacity: 0, duration: 0.1, ease: "none" }, 5.72);
+      gsap.set("#gp-p3", { svgOrigin: "540 700" });
+      tl.fromTo("#gp-p3", { scale: 1.4 }, { scale: 1, duration: 0.6, ease: "power3.inOut" }, 5.45);
+      tl.fromTo("#gp-p3", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "none" }, 5.65);
+
+      // 6,07 sello 12 AÑOS
+      pop("#gp-stamp", 6.07, 865, 480);
+
+      // 6,98 lineas
+      gsap.set("#gp-lbA, #gp-lbB", { opacity: 0 });
+      tl.fromTo("#gp-clAr", { attr: { width: 0 } }, { attr: { width: 900 }, duration: 1.62, ease: "power2.out" }, 6.98);
+      tl.fromTo("#gp-clBr", { attr: { width: 0 } }, { attr: { width: 900 }, duration: 1.32, ease: "power2.out" }, 7.28);
+      tl.fromTo("#gp-lbA", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "none" }, 6.98);
+      tl.fromTo("#gp-lbB", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "none" }, 7.28);
+      tl.set({}, {}, 9.75);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["golpe"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,323 @@
+<template>
+  <style>
+    @font-face { font-family: "Barlow Condensed"; font-weight: 600; src: url("assets/fonts/BarlowCondensed-SemiBold.ttf"); }
+    @font-face { font-family: "Barlow Condensed"; font-weight: 700; src: url("assets/fonts/BarlowCondensed-Bold.ttf"); }
+    @font-face { font-family: "Barlow Condensed"; font-weight: 800; src: url("assets/fonts/BarlowCondensed-ExtraBold.ttf"); }
+    #root { position: absolute; inset: 0; }
+    #de-safe { position: absolute; inset: 0; transform: translateY(77px) scale(0.88); transform-origin: 540px 883px; }
+    #de-svg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+  </style>
+  <div id="root" data-composition-id="decision" data-width="1080" data-height="1920">
+    <div id="de-safe"><svg id="de-svg" viewBox="0 0 1080 1920"></svg></div>
+  </div>
+  <script src="assets/dibujo.js"></script>
+  <script src="assets/retime.js"></script>
+  <script>
+    (function () {
+      GLID = "de-gl";
+      var T0 = 29.75;                      // la composicion arranca en 29,75 s: el codigo usa tiempos absolutos
+      var L = function (t) { return +(t - T0).toFixed(4); };
+
+      // ============ estado final de la escena 08b (identico al de amortiguador) ============
+      var cells = "";
+      for (var q = 0; q < 20; q++) {
+        var cxq = 30 + (q % 5) * 76, cyq = 86 + Math.floor(q / 5) * 76;
+        cells += '<rect x="' + cxq + '" y="' + cyq + '" width="60" height="60" rx="8" fill="#2a2d31"/>';
+        if (q < 13) cells += '<rect x="' + cxq + '" y="' + cyq + '" width="60" height="60" rx="8" fill="' + AMBER + '" fill-opacity="' + (0.25 + q * 0.05).toFixed(2) + '"/>';
+      }
+      var s8 =
+        '<g id="de-f1">' + person(250, 920, 1.5, "#4b6b8a", "#c8936a", "#2a201a") + '</g>' +
+        '<g id="de-f2">' + person(400, 935, 1.425, ORANGE, "#eac6a2", "#5b3b24", { long: true }) + '</g>' +
+        '<g id="de-f3">' + person(527.5, 980, 0.93, AMBER, "#946043", "#1a1a1a") + '</g>' +
+        '<g id="de-panel8"><g transform="translate(560 420)"><rect width="420" height="420" rx="22" fill="' + PANEL + '" stroke="' + LINE + '" stroke-width="3"/>' + T(30, 56, "SEMANAS", { mono: true, s: 26, c: MUTED }) + cells + '</g></g>' +
+        '<g id="de-tj">' + T(770, 900, "TIEMPO PARA AJUSTAR", { a: "middle", mono: true, s: 26, c: AMBER }) + '</g>' +
+        '<g id="de-pf">' + T(770, 942, "PRESUPUESTO, FLETES,", { a: "middle", mono: true, s: 26, c: MUTED, ls: 1 }) + T(770, 978, "PASAJES", { a: "middle", mono: true, s: 26, c: MUTED, ls: 1 }) + '</g>';
+
+      // ============ 09: grafico de marzo 2026 ============
+      var chart =
+        '<g id="de-ch">' +
+          '<defs><clipPath id="de-cpD"><rect id="de-cprD" x="90" y="380" width="0" height="700"/></clipPath><clipPath id="de-cpO"><rect id="de-cprO" x="90" y="380" width="0" height="700"/></clipPath></defs>' +
+          '<g id="de-chf">' + chartFrame({ left: "2026 →" }) + '</g>' +
+          '<path clip-path="url(#de-cpD)" d="M110 ' + cy(1050) + ' L560 ' + cy(1060) + ' L620 ' + cy(1150) + ' L700 ' + cy(1450) + ' L760 ' + cy(1560) + ' L990 ' + cy(1560) + '" fill="none" stroke="' + MUTED + '" stroke-width="6" stroke-dasharray="12 9"/>' +
+          '<path clip-path="url(#de-cpO)" d="M110 ' + cy(1050) + ' L560 ' + cy(1060) + ' L990 ' + cy(1170) + '" fill="none" stroke="' + ORANGE + '" stroke-width="9"/>' +
+          '<g id="de-bar">' + barrel(300, 580, 0.9, "GUERRA") + '</g>' +
+          '<g id="de-barl">' + T(300, 722, "MEDIO ORIENTE", { a: "middle", mono: true, s: 26, c: AMBER }) + '</g>' +
+          '<g id="de-arr">' + T(700, cy(1330), "↑", { a: "middle", s: 80, w: 800, c: MUTED }) + '</g>' +
+        '</g>';
+
+      // ============ 10a: el bache grande, con resorte ============
+      var ROADB = "M0 1130 L470 1130 Q620 700 770 1130 L1080 1130";
+      var w10 =
+        '<g id="de-w10">' +
+          '<path d="' + ROADB + '" fill="none" stroke="' + INK + '" stroke-width="6"/>' +
+          '<g id="de-car1x"><g id="de-car1g">' + car(130, 740, 1.1, { id: "de-c1", spring: TEAL }) + '</g></g>' +
+          '<g id="de-t10a">' + T(540, 470, "EL BACHE MÁS GRANDE", { a: "middle", s: 84, w: 800, c: INK }) + '</g>' +
+          '<g id="de-t10b">' + T(540, 520, "EL RESORTE AGUANTA", { a: "middle", mono: true, s: 26, c: TEAL }) + '</g>' +
+        '</g>';
+
+      // ============ 10b: letrero LED y billetes ============
+      var LX = 330, LY = 500, LW = 100, LH = 170, LT = 19, LST = LW + LT * 1.1;
+      function ledDigits(pre, x, y, w, h, t, vals) {
+        var st = w + t * 1.1;
+        return vals.map(function (v, i) { return '<g id="' + pre + i + '" filter="url(#' + GLID + ')">' + seg7(String(v), x + i * st, y, w, h, t, AMBER) + '</g>'; }).join("");
+      }
+      var bills = Array.from({ length: 14 }, function (_, i) {
+        return '<g id="de-bl' + i + '"><g transform="translate(' + (170 + (i % 7) * 110) + ' ' + (800 + Math.floor(i / 7) * 130) + ') rotate(' + ((i * 37) % 20 - 10) + ')"><rect width="96" height="52" rx="6" fill="#3d7a52"/><rect x="6" y="6" width="84" height="40" rx="4" fill="none" stroke="#9fd3a8" stroke-width="2"/>' + T(48, 36, "US$", { a: "middle", s: 26, w: 700, c: "#d9f0dc" }) + '</g></g>';
+      }).join("");
+      var s10b =
+        '<g id="de-s10b">' +
+          '<g id="de-sign">' +
+            '<rect x="110" y="380" width="860" height="360" rx="24" fill="' + PANEL + '" stroke="' + LINE + '" stroke-width="4"/>' +
+            T(150, 440, "COSTO PARA EL FISCO · 19 AL 25 DE MARZO", { mono: true, s: 26, c: MUTED }) +
+            T(150, 640, "US$", { s: 110, w: 800, c: AMBER, extra: 'filter="url(#' + GLID + ')"' }) +
+            ledDigits("de-ld", LX, LY, LW, LH, LT, [0, 0, 0]) +
+            '<g id="de-mill">' + T(770, 640, "MILL.", { s: 76, w: 800, c: AMBER }) + '</g>' +
+            '<g id="de-snote">' + T(150, 704, "EN UNA SEMANA · SEGÚN EL GOBIERNO", { mono: true, s: 26, c: MUTED }) + '</g>' +
+          '</g>' + bills +
+        '</g>';
+
+      // ============ 11a: decreto y resortes que se cortan ============
+      var dec = doc(110, 330, 520, 560, ["MINISTERIO DE HACIENDA", "DECRETO EXENTO N° 103", "20 · 03 · 2026"], "");
+      var halves = "";
+      [150, 500].forEach(function (wx, k) {
+        var pts = [[wx, 190]]; for (var i = 1; i <= 7; i++) pts.push([wx + (i % 2 ? 24 : -24), 190 + 9 * i]); pts.push([wx, 262]);
+        var dd = function (a, b) { return pts.slice(a, b + 1).map(function (p, i) { return (i ? "L" : "M") + p[0] + " " + p[1]; }).join(" "); };
+        halves += '<g id="de-th' + k + '" opacity="0"><path d="' + dd(0, 4) + '" fill="none" stroke="' + TEAL + '" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></g>' +
+          '<g id="de-bh' + k + '" opacity="0"><path d="' + dd(4, 8) + '" fill="none" stroke="' + TEAL + '" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/></g>' +
+          '<g id="de-st' + k + '" opacity="0"><line x1="' + wx + '" y1="190" x2="' + wx + '" y2="208" stroke="' + MUTED + '" stroke-width="7"/><line x1="' + wx + '" y1="248" x2="' + wx + '" y2="262" stroke="' + MUTED + '" stroke-width="7"/></g>';
+      });
+      var s11a =
+        '<g id="de-s11a">' +
+          '<g id="de-doc">' + dec + '</g>' +
+          '<g id="de-stamp"><g transform="translate(380.4 733.2) rotate(-12)"><rect x="-170" y="-58" width="340" height="116" rx="10" fill="none" stroke="' + ORANGE + '" stroke-width="8"/>' + T(0, 18, "DECRETO", { a: "middle", s: 60, w: 800, c: ORANGE }) + '</g></g>' +
+          '<g id="de-w11">' +
+            '<path d="M0 1130 L740 1130 Q820 1070 900 1130 L1080 1130" fill="none" stroke="' + INK + '" stroke-width="6"/>' +
+            '<line x1="0" x2="1080" y1="1164" y2="1164" stroke="#3a3c40" stroke-width="8" stroke-dasharray="50 40"/>' +
+            car(480, 860, 0.8, { id: "de-c3", spring: TEAL }) +
+            '<g transform="translate(480 860) scale(0.8)">' + halves + '</g>' +
+            '<path id="de-sl0" d="M' + (480 + 150 * 0.8 - 30) + ' ' + (860 + 230 * 0.8) + ' l60 -30" pathLength="1" stroke="' + ORANGE + '" stroke-width="6" fill="none"/>' +
+            '<path id="de-sl1" d="M' + (480 + 500 * 0.8 - 30) + ' ' + (860 + 230 * 0.8) + ' l60 -30" pathLength="1" stroke="' + ORANGE + '" stroke-width="6" fill="none"/>' +
+          '</g>' +
+          '<g id="de-sinres">' + T(800, 830, "SIN RESORTE", { a: "middle", mono: true, s: 26, c: ORANGE }) + '</g>' +
+        '</g>';
+
+      // ============ 11b: el Congreso ============
+      var s11b =
+        '<g id="de-s11b">' +
+          '<defs><clipPath id="de-cpC"><rect id="de-cprC" x="100" y="380" width="0" height="700"/></clipPath></defs>' +
+          '<g id="de-cong">' + congress(540, 820, 1.6, MUTED) + T(540, 900, "CONGRESO", { a: "middle", mono: true, s: 28, c: MUTED }) + '</g>' +
+          '<path clip-path="url(#de-cpC)" d="M150 1010 C 300 1010, 300 420, 540 420 C 780 420, 780 1010, 930 1010" fill="none" stroke="' + ORANGE + '" stroke-width="10" stroke-dasharray="2 22" stroke-linecap="round"/>' +
+          '<path id="de-ahead" d="M905 985 L935 1012 L900 1030" pathLength="1" fill="none" stroke="' + ORANGE + '" stroke-width="8"/>' +
+          '<g id="de-hac">' + T(150, 1062, "HACIENDA", { a: "middle", mono: true, s: 26, c: ORANGE }) + '</g>' +
+          '<g id="de-bom">' + T(930, 1062, "BOMBA", { a: "middle", mono: true, s: 26, c: ORANGE }) + '</g>' +
+        '</g>';
+
+      // ============ 12: el mismo bache, sin resorte ============
+      var w12 =
+        '<g id="de-w12">' +
+          '<path d="' + ROADB + '" fill="none" stroke="' + INK + '" stroke-width="6"/>' +
+          '<g id="de-car2x"><g id="de-car2y"><g id="de-car2g">' + car(130, 740, 1.1, { id: "de-c2", noSpring: true }) + '</g></g></g>' +
+          [0, 1, 2].map(function (i) { return '<line id="de-im' + i + '" pathLength="1" x1="' + (560 + i * 40) + '" y1="' + (880 - i * 30) + '" x2="' + (600 + i * 50) + '" y2="' + (820 - i * 40) + '" stroke="' + ORANGE + '" stroke-width="7" stroke-linecap="round"/>'; }).join("") +
+          '<g id="de-lp"><rect x="560" y="330" width="450" height="230" rx="18" fill="' + PANEL + '" stroke="' + LINE + '" stroke-width="3"/>' + T(590, 380, "93 · 26·03", { mono: true, s: 26, c: AMBER }) +
+            ledDigits("de-lq", 640, 400, 70, 120, 14, [1, 1, 7, 0]) + T(590, 515, "$", { s: 80, w: 700, c: AMBER }) + '</g>' +
+          '<g id="de-tag"><rect x="70" y="350" width="260" height="96" rx="12" fill="' + ORANGE + '"/>' + T(200, 420, "+$372", { a: "middle", s: 76, w: 800, c: BG }) + '</g>' +
+        '</g>';
+
+      // ============ 13: barras de combustible ============
+      var s13 =
+        '<g id="de-s13">' +
+          '<g id="de-truck">' + truck(540, 330, 0.62, false) + '</g>' +
+          '<g id="de-g1">' + T(110, 600, "GASOLINA 93", { s: 46, w: 800 }) + '</g>' +
+          '<g id="de-g2">' + T(970, 600, "+$372", { a: "end", s: 46, w: 800, c: AMBER, extra: 'id="de-n1"' }) + '</g>' +
+          '<rect id="de-b1" x="110" y="620" width="0" height="70" rx="8" fill="' + AMBER + '"/>' +
+          '<g id="de-p1">' + T(574, 670, "+32%", { s: 44, w: 800, c: AMBER }) + '</g>' +
+          '<g id="de-d1">' + T(110, 800, "DIÉSEL", { s: 46, w: 800 }) + '</g>' +
+          '<g id="de-d2">' + T(970, 800, "+$580", { a: "end", s: 46, w: 800, c: ORANGE, extra: 'id="de-n2"' }) + '</g>' +
+          '<rect id="de-b2" x="110" y="820" width="0" height="70" rx="8" fill="' + ORANGE + '"/>' +
+          '<g id="de-p2">' + T(890, 870, "+62%", { s: 44, w: 800, c: ORANGE }) + '</g>' +
+          '<g id="de-nt">' + T(110, 962, "ALZA DEL 26·03·2026 · ENAP", { mono: true, s: 26, c: MUTED }) + '</g>' +
+        '</g>';
+
+      var svg = document.getElementById("de-svg");
+      svg.innerHTML = glowDefs() + '<g id="de-s8">' + s8 + '</g>' + chart + w10 + s10b +
+        '<rect id="de-cut" x="-300" y="-300" width="1680" height="2500" fill="' + TEAL + '" opacity="0"/>' + s11a + s11b + w12 + s13;
+
+      // ======================================== linea de tiempo ========================================
+      var tl = gsap.timeline({ paused: true });
+      function at(sel, ox, oy) { gsap.set(sel, { svgOrigin: ox + " " + oy }); }
+      function pop(sel, t, ox, oy) {
+        at(sel, ox, oy);
+        tl.fromTo(sel, { scale: 0 }, { scale: 1, duration: 0.3, ease: "back.out(1.4)" }, L(t));
+        tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, L(t));
+      }
+      function out(sel, t, ox, oy, d, ez) {
+        at(sel, ox, oy);
+        tl.to(sel, { scale: 0, duration: d || 0.18, ease: ez || "power2.in" }, L(t));
+        tl.to(sel, { opacity: 0, duration: 0.05, ease: "none" }, L(t) + (d || 0.18) - 0.05);
+      }
+      function springD(wx, top, bot) {
+        var d = "M" + wx + " " + top;
+        for (var k = 1; k <= 7; k++) d += " L" + (wx + (k % 2 ? 24 : -24)) + " " + (top + (bot - top) * k / 8);
+        return d + " L" + wx + " " + bot;
+      }
+      // contador LED: cada digito pasa por valores cada 2 cuadros y se fija
+      function ledRun(pre, x, y, w, h, t, from, to, t0, dur, gap, steps) {
+        var st = w + t * 1.1;
+        from.forEach(function (f, i) {
+          var o = { p: 0 };
+          var draw = function () {
+            var v = o.p >= 1 ? to[i] : (o.p <= 0 ? from[i] : (from[i] + 1 + Math.floor(o.p * steps)) % 10);
+            document.getElementById(pre + i).innerHTML = seg7(String(v), x + i * st, y, w, h, t, AMBER);
+          };
+          tl.fromTo(o, { p: 0 }, { p: 1, duration: dur, ease: "none", onUpdate: draw, onReverseComplete: draw }, L(t0) + i * gap);
+        });
+      }
+
+      // ---- 29,75 - 30,40 retroceso: salen la familia y el panel, vuelve el grafico
+      out("#de-f1", 29.75, 250, 960, 0.2, "power3.in");
+      out("#de-f2", 29.81, 400, 985, 0.2, "power3.in");
+      out("#de-f3", 29.87, 527, 1030, 0.2, "power3.in");
+      out("#de-panel8", 29.77, 770, 630, 0.25, "power3.in");
+      out("#de-tj", 29.75, 770, 890, 0.18, "power3.in");
+      out("#de-pf", 29.75, 770, 950, 0.18, "power3.in");
+      at("#de-ch", 540, 700);
+      tl.fromTo("#de-ch", { scale: 1.12 }, { scale: 1, duration: 0.55, ease: "power3.inOut" }, L(29.85));
+      tl.fromTo("#de-ch", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "none" }, L(29.85));
+      gsap.set(["#de-bar", "#de-barl", "#de-arr"], { opacity: 0 });
+
+      // ---- 09
+      tl.fromTo("#de-cprD", { attr: { width: 0 } }, { attr: { width: 470 }, duration: 0.9, ease: "power2.out" }, L(30.1));
+      tl.fromTo("#de-cprO", { attr: { width: 0 } }, { attr: { width: 470 }, duration: 0.9, ease: "power2.out" }, L(30.1));
+      pop("#de-bar", 31.68, 300, 580);
+      pop("#de-barl", 31.76, 300, 712);
+      tl.to("#de-cprD", { attr: { width: 900 }, duration: 0.6, ease: "power2.in" }, L(32.94));
+      tl.to("#de-cprO", { attr: { width: 900 }, duration: 0.9, ease: "power2.out" }, L(32.94));
+      pop("#de-arr", 33.3, 700, cy(1330) - 25);
+
+      // ---- 10a: la calle con el bache grande y el auto inclinado
+      gsap.set("#de-w10", { opacity: 0 });
+      tl.set("#de-w10", { opacity: 1 }, L(34.05));
+      out("#de-bar", 34.0, 300, 580, 0.2); out("#de-barl", 34.0, 300, 712, 0.2); out("#de-arr", 34.0, 700, cy(1330) - 25, 0.2);
+      tl.to("#de-ch", { scale: 0.9, opacity: 0, duration: 0.25, ease: "power3.in" }, L(34.0));
+      tl.fromTo("#de-car1x", { x: -900 }, { x: 0, duration: 0.3, ease: "power3.out" }, L(34.1));
+      at("#de-car1g", 295, 1048);
+      tl.to("#de-car1g", { rotation: -26, duration: 0.8, ease: "power2.inOut" }, L(34.4));
+      var tm1 = { p: 0 };
+      var drawC1 = function (p) { var dy = -34 * p; gsap.set("#de-c1-wh1", { y: dy }); document.querySelector("#de-c1-sp1 path").setAttribute("d", springD(500, 190, 262 + dy)); };
+      tl.fromTo(tm1, { p: 0 }, { p: 1, duration: 0.8, ease: "power2.inOut", onUpdate: function () { drawC1(tm1.p); }, onReverseComplete: function () { drawC1(0); } }, L(34.4));
+      tl.set("#de-c1-sp0 path, #de-c1-sp1 path", { attr: { filter: "url(#de-gl)" } }, L(35.0));
+      pop("#de-t10a", 35.37, 540, 440);
+      pop("#de-t10b", 35.45, 540, 512);
+
+      // ---- 10a -> 10b: zoom al resorte, corte por color al letrero
+      var ZS = 40, ZX = 269, ZY = 995;
+      out("#de-t10a", 37.62, 540, 440, 0.15); out("#de-t10b", 37.62, 540, 512, 0.15);
+      at("#de-w10", 0, 0);
+      tl.to("#de-w10", { x: ZX * (1 - ZS), y: ZY * (1 - ZS), scale: ZS, duration: 0.3, ease: "power3.in" }, L(37.82));
+      tl.fromTo("#de-cut", { opacity: 0 }, { opacity: 1, duration: 0.04, ease: "none" }, L(38.08));
+      tl.set("#de-w10", { opacity: 0 }, L(38.12));
+      tl.set("#de-cut", { opacity: 0 }, L(38.12));
+      gsap.set("#de-sign", { opacity: 0 });
+      at("#de-sign", 540, 560);
+      tl.set("#de-sign", { opacity: 1 }, L(38.12));
+      tl.fromTo("#de-sign", { scale: 8 }, { scale: 1, duration: 0.4, ease: "power3.out" }, L(38.12));
+      gsap.set(["#de-mill", "#de-snote"], { opacity: 0 });
+      ledRun("de-ld", LX, LY, LW, LH, LT, [0, 0, 0], [1, 4, 0], 38.6, 0.6, 0.06, 9);
+      pop("#de-mill", 39.2, 810, 615);
+      pop("#de-snote", 39.28, 450, 695);
+      for (var b = 0; b < 14; b++) {
+        var tb = 39.24 + b * 0.04;
+        tl.fromTo("#de-bl" + b, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, L(tb));
+        tl.fromTo("#de-bl" + b, { y: -90 }, { y: 0, duration: 0.3, ease: "power2.in" }, L(tb));
+        tl.to("#de-bl" + b, { y: -8, duration: 0.07, ease: "power1.out" }, L(tb) + 0.3);
+        tl.to("#de-bl" + b, { y: 0, duration: 0.07, ease: "power1.in" }, L(tb) + 0.37);
+      }
+
+      // ---- 11a
+      at("#de-s10b", 540, 700);
+      out("#de-s10b", 40.5, 540, 700, 0.2, "power3.in");
+      pop("#de-doc", 40.7, 370, 610);
+      gsap.set(["#de-stamp", "#de-sinres"], { opacity: 0 });
+      gsap.set(["#de-sl0", "#de-sl1"], { strokeDasharray: "1 2", strokeDashoffset: 1, opacity: 0 });
+      gsap.set("#de-w11", { opacity: 0 });
+      tl.set("#de-w11", { opacity: 1 }, L(40.85));
+      at("#de-w11", 800, 1000);
+      tl.fromTo("#de-w11", { scale: 0.3 }, { scale: 1, duration: 0.3, ease: "back.out(1.4)" }, L(40.85));
+      // 41,97 los resortes se cortan
+      [0, 1].forEach(function (k) {
+        tl.set("#de-c3-sp" + k, { opacity: 0 }, L(41.97));
+        tl.set(["#de-th" + k, "#de-bh" + k, "#de-st" + k], { opacity: 1 }, L(41.97));
+        tl.to("#de-th" + k, { y: 70, rotation: k ? 25 : -25, duration: 0.3, ease: "power2.in" }, L(41.97));
+        tl.to("#de-bh" + k, { y: 110, rotation: k ? -30 : 30, duration: 0.3, ease: "power2.in" }, L(41.97));
+        tl.to(["#de-th" + k, "#de-bh" + k], { opacity: 0, duration: 0.08, ease: "none" }, L(41.97) + 0.22);
+        tl.set("#de-sl" + k, { opacity: 1 }, L(41.97));
+        tl.fromTo("#de-sl" + k, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.12, ease: "power2.out" }, L(41.97));
+      });
+      pop("#de-sinres", 41.97, 800, 820);
+      // 42,72 cae el timbre
+      gsap.set("#de-stamp", { svgOrigin: "380 733" });
+      tl.fromTo("#de-stamp", { scale: 1.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.2, ease: "power3.in" }, L(42.72));
+      tl.fromTo("#de-stamp", { x: 0 }, { x: 3, duration: 0.04, ease: "none", yoyo: true, repeat: 3 }, L(42.92));
+      tl.set("#de-stamp", { x: 0 }, L(43.1));
+
+      // ---- 11b
+      out("#de-doc", 43.0, 370, 610, 0.2, "power3.in"); out("#de-stamp", 43.0, 380, 733, 0.2, "power3.in");
+      out("#de-sinres", 43.0, 800, 820, 0.15); out("#de-w11", 43.0, 800, 1000, 0.2, "power3.in");
+      pop("#de-cong", 43.1, 540, 820);
+      gsap.set(["#de-hac", "#de-bom"], { opacity: 0 });
+      gsap.set("#de-ahead", { strokeDasharray: "1 2", strokeDashoffset: 1, opacity: 0 });
+      pop("#de-hac", 43.2, 150, 1050); pop("#de-bom", 43.2, 930, 1050);
+      tl.fromTo("#de-cprC", { attr: { width: 0 } }, { attr: { width: 840 }, duration: 1.0, ease: "none" }, L(43.2));
+      tl.set("#de-ahead", { opacity: 1 }, L(44.2));
+      tl.fromTo("#de-ahead", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.1, ease: "none" }, L(44.2));
+
+      // ---- 12: el mismo bache, sin resorte
+      out("#de-cong", 44.75, 540, 820, 0.18); out("#de-hac", 44.75, 150, 1050, 0.15); out("#de-bom", 44.75, 930, 1050, 0.15);
+      at("#de-s11b", 540, 700);
+      tl.to("#de-s11b", { opacity: 0, duration: 0.15, ease: "none" }, L(44.8));
+      gsap.set("#de-w12", { opacity: 0 });
+      tl.set("#de-w12", { opacity: 1 }, L(44.85));
+      gsap.set(["#de-lp", "#de-tag"], { opacity: 0 });
+      gsap.set(["#de-im0", "#de-im1", "#de-im2"], { strokeDasharray: "1 2", strokeDashoffset: 1, opacity: 0 });
+      tl.fromTo("#de-car2x", { x: -900 }, { x: 0, duration: 0.3, ease: "power3.out" }, L(44.85));
+      at("#de-car2g", 295, 1048);
+      tl.to("#de-car2g", { rotation: -26, duration: 0.8, ease: "power2.inOut" }, L(45.1));
+      tl.to("#de-car2y", { y: -14, duration: 0.1, ease: "power1.out" }, L(45.8));
+      tl.to("#de-car2y", { y: 0, duration: 0.12, ease: "power1.in" }, L(45.9));
+      // 46,02 impacto: sacudida determinista de 8 px amortiguada en 0,25 s y tres lineas
+      var tmS = { k: 0 };
+      var shake = function (k) { var tau = k * 0.25, a = 8 * Math.exp(-14 * tau) * Math.sin(2 * Math.PI * 16 * tau); gsap.set("#de-w12", { x: a, y: a * 0.6 }); };
+      tl.fromTo(tmS, { k: 0 }, { k: 1, duration: 0.25, ease: "none", onUpdate: function () { shake(tmS.k); }, onReverseComplete: function () { shake(0); } }, L(46.02));
+      tl.set("#de-w12", { x: 0, y: 0 }, L(46.28));
+      [0, 1, 2].forEach(function (i) {
+        tl.set("#de-im" + i, { opacity: 1 }, L(46.02));
+        tl.fromTo("#de-im" + i, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.12, ease: "power2.out" }, L(46.02));
+        tl.to("#de-im" + i, { opacity: 0, duration: 0.1, ease: "none" }, L(46.5));
+      });
+      pop("#de-lp", 46.2, 785, 445);
+      ledRun("de-lq", 640, 400, 70, 120, 14, [1, 1, 7, 0], [1, 5, 4, 2], 46.5, 0.7, 0.06, 9);
+      pop("#de-tag", 47.76, 200, 398);
+
+      // ---- 13
+      out("#de-w12", 48.12, 540, 700, 0.2, "power3.in");
+      pop("#de-truck", 48.26, 720, 410);
+      pop("#de-g1", 48.3, 215, 590);
+      pop("#de-g2", 48.36, 920, 590);
+      tl.fromTo("#de-b1", { attr: { width: 0 } }, { attr: { width: 444 }, duration: 0.8, ease: "expo.out" }, L(48.55));
+      var n1 = { v: 0 }, n2 = { v: 0 };
+      tl.fromTo(n1, { v: 0 }, { v: 372, duration: 0.8, ease: "expo.out", onUpdate: function () { document.getElementById("de-n1").textContent = "+$" + Math.round(n1.v); }, onReverseComplete: function () { document.getElementById("de-n1").textContent = "+$0"; } }, L(48.55));
+      pop("#de-d1", 48.71, 165, 790);
+      pop("#de-d2", 48.75, 920, 790);
+      tl.fromTo("#de-b2", { attr: { width: 0 } }, { attr: { width: 760 }, duration: 1.08, ease: "power2.out" }, L(48.71));
+      tl.fromTo(n2, { v: 0 }, { v: 580, duration: 1.08, ease: "power2.out", onUpdate: function () { document.getElementById("de-n2").textContent = "+$" + Math.round(n2.v); }, onReverseComplete: function () { document.getElementById("de-n2").textContent = "+$0"; } }, L(48.71));
+      pop("#de-p1", 50.47, 620, 655);
+      pop("#de-p2", 50.47, 935, 855);
+      pop("#de-nt", 50.6, 360, 950);
+      tl.set({}, {}, 22.5);
+
+      window.__timelines = window.__timelines || {};
+      retime(tl, 34.275, 37.462);   // toma de voz actual (ver retime_build.py)
+      window.__timelines["decision"] = tl;
+    })();
+  </script>
+</template>

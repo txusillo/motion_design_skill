@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Barlow Condensed"; font-weight: 600; src: url("assets/fonts/BarlowCondensed-SemiBold.ttf"); }
+      @font-face { font-family: "Barlow Condensed"; font-weight: 700; src: url("assets/fonts/BarlowCondensed-Bold.ttf"); }
+      @font-face { font-family: "Barlow Condensed"; font-weight: 800; src: url("assets/fonts/BarlowCondensed-ExtraBold.ttf"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #26292d; }
+      #root { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="99.052" data-width="1080" data-height="1920">
+      <div id="fondo" class="clip" data-composition-id="fondo" data-composition-src="compositions/fondo.html"
+        data-start="0" data-duration="13.23" data-track-index="0" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="pregunta" class="clip" data-composition-id="pregunta" data-composition-src="compositions/pregunta.html"
+        data-start="0" data-duration="3.48" data-track-index="9" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="golpe" class="clip" data-composition-id="golpe" data-composition-src="compositions/golpe.html"
+        data-start="3.48" data-duration="9.75" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="amortiguador" class="clip" data-composition-id="amortiguador" data-composition-src="compositions/amortiguador.html"
+        data-start="13.23" data-duration="21.045" data-track-index="2" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="decision" class="clip" data-composition-id="decision" data-composition-src="compositions/decision.html"
+        data-start="34.275" data-duration="22.5" data-track-index="3" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="efecto" class="clip" data-composition-id="efecto" data-composition-src="compositions/efecto.html"
+        data-start="56.775" data-duration="25.9" data-track-index="4" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="hoy" class="clip" data-composition-id="hoy" data-composition-src="compositions/hoy.html"
+        data-start="82.675" data-duration="16.377" data-track-index="5" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="marco" class="clip" data-composition-id="marco" data-composition-src="compositions/marco.html"
+        data-start="3.48" data-duration="95.572" data-track-index="6" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="subtitulos" class="clip" data-composition-id="subtitulos" data-composition-src="compositions/subtitulos.html"
+        data-start="0" data-duration="99.052" data-track-index="7" data-track-kind="captions" data-width="1080" data-height="1920"></div>
+      <audio id="voz" class="clip" src="assets/voice/voz.mp3" data-start="0" data-track-index="8" data-volume="1"></audio>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

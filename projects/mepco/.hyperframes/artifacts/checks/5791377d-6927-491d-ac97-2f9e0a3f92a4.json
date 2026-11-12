@@ -1,0 +1,393 @@
+{
+  "ok": false,
+  "strict": false,
+  "browserSkipped": false,
+  "lint": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 1,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "gsap_repeated_fromto_without_baseline",
+        "severity": "warning",
+        "message": "2 tl.fromTo() calls target \"#gp-s2\" with no stable baseline. The last-authored fromTo \"from\" values become the element's resting state for any seek before the first tween actually runs, because GSAP applies fromTo from-values at authoring time (immediateRender), not at tween position.",
+        "selector": "#gp-s2",
+        "dataAttributes": {},
+        "sourceFile": "/home/queno/hyperframes-videos/mepco/compositions/golpe.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add `immediateRender: false` to every fromTo except the earliest-positioned one (at 5.35s), so pre-first-tween seeks keep its \"from\" values. A hiding `tl.set(..., 0)` baseline trips gsap_timeline_set_initial_hide, and a `gsap.set` authored before the fromTo calls is overwritten by them."
+      }
+    ],
+    "filesScanned": 5
+  },
+  "runtime": {
+    "ok": false,
+    "errorCount": 1,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "console_error",
+        "severity": "error",
+        "message": "[HyperFrames] composition script error: golpe ReferenceError: glowDefs is not defined",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "9.75",
+          "data-width": "1080",
+          "data-height": "1920"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 0,
+        "url": "",
+        "line": 1339
+      }
+    ]
+  },
+  "layout": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 1,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "content_overlap",
+        "severity": "warning",
+        "time": 0.542,
+        "selector": "#mc-h0",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 698.32,
+          "top": 391.52,
+          "right": 953.6,
+          "bottom": 424.08,
+          "width": 255.28,
+          "height": 32.56
+        },
+        "containerSelector": "#mc-h1",
+        "text": "JUE 26·03·2026",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply. Decoration nobody needs to read can take data-layout-ignore.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/marco.html",
+        "bbox": {
+          "x": 698.32,
+          "y": 391.52,
+          "width": 255.28,
+          "height": 32.56
+        },
+        "firstSeen": 0.542,
+        "lastSeen": 3.792,
+        "occurrences": 4,
+        "heldMs": 0,
+        "times": [
+          0.542,
+          1.625,
+          2.708,
+          3.792
+        ]
+      }
+    ],
+    "duration": 9.75,
+    "samples": [
+      0.542,
+      1.625,
+      2.708,
+      3.792,
+      4.875,
+      5.958,
+      7.042,
+      8.125,
+      9.208
+    ],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 1,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "samples": [
+      0.542,
+      2.708,
+      4.875,
+      7.042,
+      9.208
+    ],
+    "checked": 42,
+    "passed": 42
+  },
+  "craft": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 2,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and 16 text elements stay under it for 0.5 s or more, the smallest \"01/05 EL GOLPE\" at 23 px: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "01/05 EL GOLPE",
+        "selector": "#mc-s0",
+        "dataAttributes": {},
+        "sourceFile": "compositions/marco.html",
+        "bbox": {
+          "x": 126.4,
+          "y": 1502.96,
+          "width": 237.05,
+          "height": 30.8
+        },
+        "time": 0,
+        "times": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          4.125,
+          5,
+          5.75,
+          5.75,
+          6,
+          7,
+          8,
+          9
+        ],
+        "fontPx": 22.88,
+        "floorPx": 28,
+        "seconds": 5.625,
+        "elements": [
+          {
+            "selector": "#mc-s0",
+            "text": "01/05 EL GOLPE",
+            "fontPx": 22.88,
+            "time": 0,
+            "seconds": 5.625
+          },
+          {
+            "selector": "#mc-t0",
+            "text": "● 00:00",
+            "fontPx": 22.88,
+            "time": 0,
+            "seconds": 1
+          },
+          {
+            "selector": "#mc-t1",
+            "text": "● 00:01",
+            "fontPx": 22.88,
+            "time": 1,
+            "seconds": 1
+          },
+          {
+            "selector": "#mc-t2",
+            "text": "● 00:02",
+            "fontPx": 22.88,
+            "time": 2,
+            "seconds": 1
+          },
+          {
+            "selector": "#mc-t3",
+            "text": "● 00:03",
+            "fontPx": 22.88,
+            "time": 3,
+            "seconds": 1
+          },
+          {
+            "selector": "#mc-t4",
+            "text": "● 00:04",
+            "fontPx": 22.88,
+            "time": 4,
+            "seconds": 1
+          },
+          {
+            "selector": "#mc-t5",
+            "text": "● 00:05",
+            "fontPx": 22.88,
+            "time": 5,
+            "seconds": 1
+          },
+          {
+            "selector": "#mc-s1",
+            "text": "02/05 EL AMORTIGUADOR",
+            "fontPx": 22.88,
+            "time": 5.75,
+            "seconds": 4
+          },
+          {
+            "selector": "#mc-t6",
+            "text": "● 00:06",
+            "fontPx": 22.88,
+            "time": 6,
+            "seconds": 1
+          },
+          {
+            "selector": "#mc-t7",
+            "text": "● 00:07",
+            "fontPx": 22.88,
+            "time": 7,
+            "seconds": 1
+          },
+          {
+            "selector": "#mc-t8",
+            "text": "● 00:08",
+            "fontPx": 22.88,
+            "time": 8,
+            "seconds": 1
+          },
+          {
+            "selector": "#mc-t9",
+            "text": "● 00:09",
+            "fontPx": 22.88,
+            "time": 9,
+            "seconds": 0.75
+          },
+          {
+            "selector": "#mc-hud-l",
+            "text": "MEPCO · 2014–2026",
+            "fontPx": 24.64,
+            "time": 0,
+            "seconds": 9.75
+          },
+          {
+            "selector": "#mc-h0",
+            "text": "JUE 26·03·2026",
+            "fontPx": 24.64,
+            "time": 0,
+            "seconds": 4
+          },
+          {
+            "selector": "#mc-h1",
+            "text": "MIÉ → JUE",
+            "fontPx": 24.64,
+            "time": 4.125,
+            "seconds": 1.5
+          },
+          {
+            "selector": "#mc-h2",
+            "text": "LEY 20.765",
+            "fontPx": 24.64,
+            "time": 5.75,
+            "seconds": 4
+          }
+        ]
+      },
+      {
+        "code": "line_unread",
+        "severity": "warning",
+        "message": "The film's last line \"● 00:09\" (2 words) is on screen 0.75 s (±0.01 s), under the 2.00 s a closing line needs: hold it about 0.5 s + 0.3 s a word and at least 2 s before the film ends; see references/motion.md.",
+        "text": "● 00:09",
+        "selector": "#mc-t9",
+        "dataAttributes": {},
+        "sourceFile": "compositions/marco.html",
+        "bbox": {
+          "x": 835.08,
+          "y": 1502.96,
+          "width": 118.51999999999998,
+          "height": 30.799999999999955
+        },
+        "time": 9,
+        "words": 2,
+        "seconds": 0.754,
+        "floorSeconds": 2,
+        "measured": [
+          {
+            "time": 8.625,
+            "opacity": null,
+            "heightPx": null
+          },
+          {
+            "time": 8.75,
+            "opacity": null,
+            "heightPx": null
+          },
+          {
+            "time": 8.875,
+            "opacity": null,
+            "heightPx": null
+          },
+          {
+            "time": 9,
+            "opacity": 1,
+            "heightPx": 31
+          },
+          {
+            "time": 9.125,
+            "opacity": 1,
+            "heightPx": 31
+          },
+          {
+            "time": 9.25,
+            "opacity": 1,
+            "heightPx": 31
+          },
+          {
+            "time": 9.375,
+            "opacity": 1,
+            "heightPx": 31
+          },
+          {
+            "time": 9.5,
+            "opacity": 1,
+            "heightPx": 31
+          },
+          {
+            "time": 9.625,
+            "opacity": 1,
+            "heightPx": 31
+          }
+        ]
+      }
+    ],
+    "enabled": true,
+    "step": 0.125,
+    "samples": 78
+  },
+  "audio": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": []
+  },
+  "hdr": {
+    "autoPromotion": null,
+    "inspection": "available"
+  },
+  "snapshots": {
+    "enabled": false,
+    "files": [],
+    "times": [],
+    "findingFiles": []
+  }
+}

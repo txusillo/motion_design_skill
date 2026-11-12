@@ -1,0 +1,78 @@
+<template>
+  <style>
+    @font-face { font-family: "Barlow Condensed"; font-weight: 700; src: url("assets/fonts/BarlowCondensed-Bold.ttf"); }
+    @font-face { font-family: "Barlow Condensed"; font-weight: 800; src: url("assets/fonts/BarlowCondensed-ExtraBold.ttf"); }
+    #root { position: absolute; inset: 0; }
+    #pq-safe { position: absolute; inset: 0; transform: translateY(77px) scale(0.88); transform-origin: 540px 883px; }
+    #pq-svg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+  </style>
+  <div id="root" data-composition-id="pregunta" data-width="1080" data-height="1920">
+    <div id="pq-safe"><svg id="pq-svg" viewBox="0 0 1080 1920"></svg></div>
+  </div>
+  <script src="assets/dibujo.js"></script>
+  <script src="assets/retime.js"></script>
+  <script>
+    (function () {
+      GLID = "pq-gl";
+      // ---------- letrero MEPCO ----------
+      var panel =
+        '<rect x="140" y="250" width="800" height="330" rx="26" fill="' + PANEL + '" stroke="' + LINE + '" stroke-width="4"/>' +
+        '<path d="M140 276 Q140 250 166 250 L914 250 Q940 250 940 276 L940 330 L140 330 Z" fill="' + ORANGE + '"/>' +
+        T(540, 310, "ESTABILIZADOR · COMBUSTIBLES", { a: "middle", s: 46, w: 800, c: BG, ls: 3 }) +
+        '<g filter="url(#' + GLID + ')">' + T(540, 535, "MEPCO", { a: "middle", s: 210, w: 800, c: AMBER, ls: 14 }) + '</g>';
+      // ---------- resorte bajo el letrero ----------
+      var sp = "M540 580", n = 9, top = 580, bot = 840;
+      for (var i = 1; i <= n; i++) sp += " L" + (540 + (i % 2 ? 46 : -46)) + " " + (top + (bot - top) * i / (n + 1));
+      sp += " L540 " + bot;
+      var spring =
+        '<g id="pq-spring"><path d="' + sp + '" fill="none" stroke="' + TEAL + '" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" filter="url(#' + GLID + ')"/></g>' +
+        '<rect id="pq-base" x="400" y="840" width="280" height="18" rx="9" fill="' + LINE + '"/>';
+      // ---------- auto fantasma tachado (izquierda) ----------
+      var ghost =
+        '<g id="pq-car"><g opacity="0.35">' + car(40, 702, 0.48, { noSpring: true, body: "#3a3c40" }) + '</g>' +
+        '<path id="pq-x" d="M60 720 L330 880" pathLength="1" stroke="' + ORANGE + '" stroke-width="12" stroke-linecap="round" fill="none"/></g>';
+      // ---------- persona a pie con bolsas (derecha) ----------
+      function bag(x, y, col) {
+        return '<path d="M' + (x + 14) + ' ' + y + ' Q' + (x + 30) + ' ' + (y - 34) + ' ' + (x + 46) + ' ' + y + '" fill="none" stroke="' + INK + '" stroke-width="5"/>' +
+          '<rect x="' + x + '" y="' + y + '" width="60" height="74" rx="8" fill="' + col + '" stroke="' + INK + '" stroke-width="4"/>';
+      }
+      var walker =
+        '<g id="pq-person">' + person(840, 740, 1.0, "#4b6b8a", "#c8936a", "#2a201a") +
+        bag(752, 776, AMBER) + bag(868, 776, ORANGE) + '</g>';
+      // ---------- pregunta ----------
+      var Q = { s: 92, w: 800 };
+      var q =
+        '<g id="pq-l1">' + T(540, 1010, "¿QUÉ ES EL MEPCO,", { a: "middle", s: Q.s, w: Q.w, c: INK }) + '</g>' +
+        '<g id="pq-l2">' + T(540, 1114, 'Y POR QUÉ <tspan id="pq-af" fill="' + INK + '">TE AFECTA</tspan>', { a: "middle", s: Q.s, w: Q.w, c: INK }) + '</g>' +
+        '<g id="pq-l3">' + T(540, 1206, "AUNQUE NO TENGAS AUTO?", { a: "middle", s: 78, w: Q.w, c: INK }) + '</g>';
+
+      document.getElementById("pq-svg").innerHTML = glowDefs() + '<g id="pq-all"><g transform="translate(0 140)">' + panel + spring + ghost + walker + q + '</g></g>';
+
+      var tl = gsap.timeline({ paused: true });
+      function pop(sel, t, ox, oy) {
+        gsap.set(sel, { svgOrigin: ox + " " + oy });
+        tl.fromTo(sel, { scale: 0.6 }, { scale: 1, duration: 0.3, ease: "back.out(1.6)" }, t);
+        tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none" }, t);
+      }
+      // cuadro 0: letrero y primera linea ya visibles; el resorte rebota
+      gsap.set("#pq-spring", { svgOrigin: "540 840" });
+      tl.fromTo("#pq-spring", { scaleY: 0.55 }, { scaleY: 1, duration: 1.1, ease: "elastic.out(1.1, 0.35)" }, 0.05);
+      // 0,95 "y por que te afecta"
+      pop("#pq-l2", 0.95, 540, 1090);
+      tl.fromTo("#pq-af", { attr: { fill: INK } }, { attr: { fill: ORANGE }, duration: 0.12, ease: "none" }, 1.6);
+      pop("#pq-person", 1.6, 840, 860);
+      // 1,95 "aunque no tengas auto?"
+      pop("#pq-l3", 1.95, 540, 1180);
+      pop("#pq-car", 2.4, 190, 800);
+      gsap.set("#pq-x", { strokeDasharray: "1 2", strokeDashoffset: 1 });
+      tl.fromTo("#pq-x", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.2, ease: "power2.out" }, 2.8);
+      // salida completa antes del gancho (3,48)
+      gsap.set("#pq-all", { svgOrigin: "540 900" });
+      tl.fromTo("#pq-all", { scale: 1, opacity: 1 }, { scale: 0.9, opacity: 0, duration: 0.17, ease: "power3.in" }, 3.28);
+      tl.set({}, {}, 3.48);
+      window.__timelines = window.__timelines || {};
+      retime(tl, 0, 0);   // toma de voz actual (ver retime_build.py)
+      window.__timelines["pregunta"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,338 @@
+<template>
+  <style>
+    @font-face { font-family: "Barlow Condensed"; font-weight: 600; src: url("assets/fonts/BarlowCondensed-SemiBold.ttf"); }
+    @font-face { font-family: "Barlow Condensed"; font-weight: 700; src: url("assets/fonts/BarlowCondensed-Bold.ttf"); }
+    @font-face { font-family: "Barlow Condensed"; font-weight: 800; src: url("assets/fonts/BarlowCondensed-ExtraBold.ttf"); }
+    #root { position: absolute; inset: 0; }
+    #am-safe { position: absolute; inset: 0; transform: translateY(77px) scale(0.88); transform-origin: 540px 883px; }
+    #am-svg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+  </style>
+  <div id="root" data-composition-id="amortiguador" data-width="1080" data-height="1920">
+    <div id="am-safe"><svg id="am-svg" viewBox="0 0 1080 1920"></svg></div>
+  </div>
+  <script src="assets/dibujo.js"></script>
+  <script>
+    (function () {
+      GLID = "am-gl";
+      var T0 = 9.75;                       // la composicion arranca en 9,75 s: todo el codigo usa tiempos absolutos
+      var WA = [[0,0],[13.434,13.434],[13.98,13.96],[14.04,14.33],[14.471,15.903],[16.108,17.217],[17.199,18.267],[18.093,19.138]];
+      // toma 5: la linea 5 es mas larga; W lleva tiempos de la toma 4 (sin gancho) a la toma 5
+      function W(t) { for (var i = 1; i < WA.length; i++) if (t <= WA[i][0]) { var a = WA[i - 1], b = WA[i]; return a[1] + (t - a[0]) * (b[1] - a[1]) / (b[0] - a[0]); } return t + 1.045; }
+      var L = function (t) { return +(W(t) - T0).toFixed(4); };
+      var cl = function (x) { return Math.max(0, Math.min(1, x)); };
+      var eo = function (x) { return 1 - Math.pow(1 - x, 3); };
+
+      // =============== 03 -> 04a: el estado final de la escena 03 (identico al ultimo cuadro de golpe) ===============
+      var ticks = "";
+      for (var yv = 0; yv <= 12; yv++) {
+        var xx = 110 + yv * (860 / 12);
+        ticks += '<line x1="' + xx + '" x2="' + xx + '" y1="900" y2="' + (yv % 2 ? 920 : 930) + '" stroke="' + MUTED + '" stroke-width="3"/>';
+        if (yv % 2 === 0) ticks += T(xx, 972, String(2014 + yv), { a: "middle", mono: true, s: 26, c: MUTED });
+      }
+      var p3 =
+        '<rect id="am-p3bg" x="70" y="380" width="940" height="640" rx="22" fill="' + PANEL + '" stroke="' + LINE + '" stroke-width="3"/>' +
+        '<g id="am-p3t1">' + T(110, 450, "LEY N° 20.765 · 09·07·2014", { mono: true, s: 26, c: AMBER }) + '</g>' +
+        '<g id="am-p3ax">' + ticks + '<line x1="110" x2="970" y1="900" y2="900" stroke="' + MUTED + '" stroke-width="3"/></g>' +
+        '<path id="am-p3gr" d="M110 760 C 180 600, 230 820, 300 700 S 420 560, 480 760 S 600 620, 660 700 S 800 560, 860 740 S 940 640, 970 680" fill="none" stroke="' + MUTED + '" stroke-width="5" stroke-dasharray="12 9"/>' +
+        '<path id="am-p3or" d="M110 740 C 300 720, 500 700, 700 705 S 900 700, 970 700" fill="none" stroke="' + ORANGE + '" stroke-width="10" stroke-linecap="round"/>' +
+        '<g id="am-p3lbB">' + T(970, 660, "PRECIO BOMBA: SUAVE", { a: "end", mono: true, s: 26, c: ORANGE }) + '</g>' +
+        '<g id="am-p3lbA">' + T(110, 560, "PETRÓLEO: SALTA", { mono: true, s: 26, c: MUTED }) + '</g>' +
+        '<g id="am-p3st"><g transform="translate(730 430) rotate(-8)"><rect x="0" y="0" width="250" height="100" rx="8" fill="' + PANEL + '" stroke="' + AMBER + '" stroke-width="4"/>' +
+        T(125, 50, "12 AÑOS", { a: "middle", s: 46, w: 800, c: AMBER }) + T(125, 86, "2014 – 2026", { a: "middle", mono: true, s: 26, c: AMBER, ls: 1 }) + '</g></g>';
+
+      // =============== mundo: calle, rayas, auto, y lo de la escena 05a ===============
+      var WHEEL_X = 130 + 500 * 1.1;        // x del centro de la rueda delantera (auto en x=130, escala 1,1)
+      var carSvg = car(130, 765, 1.1, { id: "am-car", spring: MUTED });
+      var world =
+        '<path id="am-road" d="M0 1130 L1080 1130" fill="none" stroke="' + INK + '" stroke-width="6"/>' +
+        '<line id="am-dash" x1="-100" x2="3400" y1="1164" y2="1164" stroke="#3a3c40" stroke-width="8" stroke-dasharray="50 40"/>' +
+        '<g id="am-carg">' + carSvg + '</g>' +
+        '<g id="am-s5a">' +
+          '<g id="am-barrel">' + barrel(200, 520, 1.1, "PETRÓLEO") + '</g>' +
+          '<g id="am-afuera">' + T(200, 690, "INTERNACIONAL ↑", { a: "middle", mono: true, s: 28, c: AMBER }) + '</g>' +
+          '<defs><clipPath id="am-cpB"><rect id="am-cprB" x="300" y="360" width="0" height="200"/></clipPath></defs>' +
+          '<path clip-path="url(#am-cpB)" d="M330 520 L430 520 L470 400 L560 400 L600 520 L1000 520" fill="none" stroke="' + MUTED + '" stroke-width="6" stroke-dasharray="14 10"/>' +
+          '<g id="am-bache">' + T(515, 380, "EL BACHE", { a: "middle", mono: true, s: 26, c: MUTED }) + '</g>' +
+        '</g>';
+
+      var sc4 =
+        '<g id="am-s4">' +
+          '<defs><clipPath id="am-zc"><rect id="am-zcr" x="-200" y="250" width="1480" height="960"/></clipPath></defs>' +
+          '<rect id="am-zfill" x="70" y="520" width="940" height="660" rx="22" fill="#202226"/>' +
+          '<g clip-path="url(#am-zc)"><g id="am-world">' + world + '</g></g>' +
+          '<rect id="am-zbord" x="70" y="520" width="940" height="660" rx="22" fill="none" stroke="' + LINE + '" stroke-width="4"/>' +
+          '<g id="am-title">' + T(70, 420, "MEPCO", { s: 150, w: 800, c: INK }) + '</g>' +
+          '<g id="am-sub">' + T(74, 472, "MECANISMO DE ESTABILIZACIÓN DE PRECIOS", { mono: true, s: 26, c: MUTED }) + T(74, 508, "DE LOS COMBUSTIBLES", { mono: true, s: 26, c: MUTED }) + '</g>' +
+          '<path id="am-lead" d="M680 980 L780 640" pathLength="1" stroke="' + TEAL + '" stroke-width="4" fill="none"/>' +
+          '<g id="am-amort"><rect x="650" y="580" width="330" height="70" rx="10" fill="' + TEAL + '"/>' + T(815, 630, "AMORTIGUADOR", { a: "middle", s: 46, w: 800, c: BG }) + '</g>' +
+          '<g id="am-eq"><rect x="200" y="380" width="680" height="100" rx="12" fill="' + TEAL + '"/>' + T(540, 450, "MEPCO = AMORTIGUADOR", { a: "middle", s: 62, w: 800, c: BG }) + '</g>' +
+        '</g>';
+
+      // =============== 05b: dos litros ===============
+      var HL = 520, KL = HL / 1700;
+      function litro(id, x, y, imp, par, label, price) {
+        var hp = par * KL, hi = imp * KL;
+        return '<g id="' + id + '" transform="translate(' + x + ' ' + y + ')">' +
+          '<rect id="' + id + 'g" x="0" y="' + (HL - hp) + '" width="230" height="' + hp + '" fill="#3a3c40"/>' +
+          '<g id="' + id + 'tg">' + T(115, HL - hp / 2 + 10, "IMPORTAR", { a: "middle", mono: true, s: 26, c: INK }) + '</g>' +
+          '<rect id="' + id + 't" x="0" y="' + (HL - hp - hi) + '" width="230" height="' + hi + '" fill="' + TEAL + '"/>' +
+          '<g id="' + id + 'tt">' + T(115, HL - hp - hi / 2 + 10, "IMPUESTO", { a: "middle", mono: true, s: 26, c: BG, w: 700 }) + '</g>' +
+          '<rect x="0" y="0" width="230" height="' + HL + '" fill="none" stroke="' + LINE + '" stroke-width="3" stroke-dasharray="8 8"/>' +
+          T(115, -24, label, { a: "middle", s: 40, w: 800, c: INK }) +
+          T(115, HL + 52, price, { a: "middle", s: 56, w: 800, c: ORANGE, extra: 'id="' + id + 'p"' }) + '</g>';
+      }
+      var s5b =
+        '<g id="am-s5b">' +
+          '<g id="am-lA">' + litro("am-la", 160, 440, 450, 700, "ANTES", "$1.150") + '</g>' +
+          '<g id="am-arr"><path d="M430 700 L640 700" stroke="' + MUTED + '" stroke-width="6"/><path d="M615 680 L642 700 L615 720" fill="none" stroke="' + MUTED + '" stroke-width="6"/></g>' +
+          '<g id="am-lB">' + litro("am-lb", 690, 440, 450, 700, "BACHE", "$1.150") + '</g>' +
+          '<g id="am-nota5">' + '<rect x="70" y="1050" width="940" height="2" fill="' + LINE + '"/>' + T(540, 1100, "UN LITRO · CIFRAS ILUSTRATIVAS", { a: "middle", mono: true, s: 26, c: MUTED }) + '</g>' +
+        '</g>';
+
+      // =============== 06 y 07: grafico ===============
+      var NP = CH.n;
+      function areaB() {
+        var top = "", bot = [];
+        for (var i = 24; i < NP; i++) if (PUMP[i] > PAR[i]) { top += (top ? "L" : "M") + cx(i) + " " + cy(PUMP[i]) + " "; bot.unshift("L" + cx(i) + " " + cy(PAR[i])); }
+        return '<path d="' + top + bot.join(" ") + ' Z" fill="' + TEAL + '" fill-opacity=".55"/>';
+      }
+      function bbox(pts) { var a = 1e9, b = 1e9, c = -1e9, d = -1e9; pts.forEach(function (p) { a = Math.min(a, p[0]); b = Math.min(b, p[1]); c = Math.max(c, p[0]); d = Math.max(d, p[1]); }); return { x: a, y: b, w: c - a, h: d - b }; }
+      var ptsA = [], ptsB = [], runA = true;
+      for (var i = 0; i < NP; i++) { if (PAR[i] > PUMP[i] && runA) { ptsA.push([cx(i), cy(PAR[i])], [cx(i), cy(PUMP[i])]); } else if (ptsA.length) runA = false; }
+      for (var j = 24; j < NP; j++) if (PUMP[j] > PAR[j]) ptsB.push([cx(j), cy(PUMP[j])], [cx(j), cy(PAR[j])]);
+      var bA = bbox(ptsA), bB = bbox(ptsB);
+      function clipDef(id) { return '<clipPath id="am-cp' + id + '"><rect id="am-cpr' + id + '" x="90" y="380" width="0" height="660"/></clipPath>'; }
+      var chart =
+        '<g id="am-ch">' +
+          '<defs>' + clipDef("D") + clipDef("O") + clipDef("A") + clipDef("C") + '</defs>' +
+          '<g id="am-chf">' + chartFrame() + '</g>' +
+          '<g id="am-arAw"><g clip-path="url(#am-cpA)">' + gapArea(NP, 1) + '</g></g>' +
+          '<g id="am-arBw"><g clip-path="url(#am-cpC)">' + areaB() + '</g></g>' +
+          '<g id="am-chl"><path clip-path="url(#am-cpD)" d="' + path(PAR) + '" fill="none" stroke="' + MUTED + '" stroke-width="5" stroke-dasharray="12 9"/>' +
+          '<path clip-path="url(#am-cpO)" d="' + stepPath(PUMP) + '" fill="none" stroke="' + ORANGE + '" stroke-width="9" stroke-linejoin="round"/></g>' +
+          [9, 12, 15, 18].map(function (k) { return '<g id="am-p20' + k + '">' + T(cx(k) + 6, cy(PUMP[k]) - 16, "+$20", { s: 30, w: 800, c: AMBER }) + '</g>'; }).join("") +
+          '<g id="am-lbE">' + T(cx(14), cy(1330) - 22, "ESTADO ABSORBE", { a: "middle", mono: true, s: 26, c: TEAL }) + '</g>' +
+          '<g id="am-lbP">' + T(cx(14), cy(1330) - 22, "PONE", { a: "middle", s: 40, w: 800, c: TEAL }) + '</g>' +
+          '<g id="am-lbR">' + T(cx(33), cy(1180) - 30, "RECUPERA", { a: "middle", s: 40, w: 800, c: TEAL }) + '</g>' +
+          '<g id="am-nota6"><rect x="' + CH.x0 + '" y="1052" width="880" height="2" fill="' + LINE + '"/>' + T(CH.x0, 1094, "≈ $20–26 CADA 3 SEMANAS", { mono: true, s: 26, c: MUTED }) + T(CH.x0, 1130, "SEGÚN LA FUENTE · ILUSTRATIVO", { mono: true, s: 26, c: MUTED }) + '</g>' +
+        '</g>';
+
+      // =============== 08a / 08b ===============
+      var s8a =
+        '<g id="am-s8a">' +
+          '<g id="am-sqA"><rect x="110" y="480" width="330" height="330" rx="20" fill="' + TEAL + '" fill-opacity=".3" stroke="' + TEAL + '" stroke-width="4"/><g id="am-sqAt">' + T(275, 670, "PONE", { a: "middle", s: 70, w: 800, c: TEAL }) + '</g></g>' +
+          '<g id="am-eqs">' + T(540, 690, "=", { a: "middle", s: 150, w: 800, c: INK }) + '</g>' +
+          '<g id="am-sqB"><rect x="640" y="480" width="330" height="330" rx="20" fill="' + TEAL + '" fill-opacity=".55" stroke="' + TEAL + '" stroke-width="4"/><g id="am-sqBt">' + T(805, 670, "RECUPERA", { a: "middle", s: 70, w: 800, c: BG }) + '</g></g>' +
+          '<g id="am-final">' + T(540, 940, "AL FINAL, EL MISMO PRECIO", { a: "middle", mono: true, s: 26, c: MUTED }) + '</g>' +
+        '</g>';
+      var cells = "";
+      for (var q = 0; q < 20; q++) {
+        var cxq = 30 + (q % 5) * 76, cyq = 86 + Math.floor(q / 5) * 76;
+        cells += '<rect x="' + cxq + '" y="' + cyq + '" width="60" height="60" rx="8" fill="#2a2d31"/>';
+        if (q < 13) cells += '<rect id="am-ce' + q + '" x="' + cxq + '" y="' + cyq + '" width="60" height="60" rx="8" fill="' + AMBER + '" fill-opacity="' + (0.25 + q * 0.05).toFixed(2) + '"/>';
+      }
+      var s8b =
+        '<g id="am-s8b">' +
+          '<g id="am-f1">' + person(250, 920, 1.5, "#4b6b8a", "#c8936a", "#2a201a") + '</g>' +
+          '<g id="am-f2">' + person(400, 935, 1.425, ORANGE, "#eac6a2", "#5b3b24", { long: true }) + '</g>' +
+          '<g id="am-f3">' + person(527.5, 980, 0.93, AMBER, "#946043", "#1a1a1a") + '</g>' +
+          '<g id="am-panel8"><g transform="translate(560 420)"><rect width="420" height="420" rx="22" fill="' + PANEL + '" stroke="' + LINE + '" stroke-width="3"/>' + T(30, 56, "SEMANAS", { mono: true, s: 26, c: MUTED }) + cells + '</g></g>' +
+          '<g id="am-tj">' + T(770, 900, "TIEMPO PARA AJUSTAR", { a: "middle", mono: true, s: 26, c: AMBER }) + '</g>' +
+          '<g id="am-pf">' + T(770, 942, "PRESUPUESTO, FLETES,", { a: "middle", mono: true, s: 26, c: MUTED, ls: 1 }) + T(770, 978, "PASAJES", { a: "middle", mono: true, s: 26, c: MUTED, ls: 1 }) + '</g>' +
+        '</g>';
+
+      var svg = document.getElementById("am-svg");
+      svg.innerHTML = glowDefs() + '<g id="am-p3">' + p3 + '</g>' + sc4 + s5b + '<rect id="am-cut" x="-300" y="-300" width="1680" height="2500" fill="' + TEAL + '" opacity="0"/>' + chart + s8a + s8b;
+
+      // ======================================================= linea de tiempo =======================================================
+      var tl = gsap.timeline({ paused: true });
+      function at(sel, ox, oy) { gsap.set(sel, { svgOrigin: ox + " " + oy }); }
+      function pop(sel, t, ox, oy) {
+        at(sel, ox, oy);
+        tl.fromTo(sel, { scale: 0 }, { scale: 1, duration: 0.3, ease: "back.out(1.4)" }, L(t));
+        tl.fromTo(sel, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, L(t));
+      }
+      function out(sel, t, ox, oy, d, ez) {
+        at(sel, ox, oy);
+        tl.to(sel, { scale: 0, duration: d || 0.18, ease: ez || "power2.in" }, L(t));
+        tl.to(sel, { opacity: 0, duration: 0.05, ease: "none" }, L(t) + (d || 0.18) - 0.05);
+      }
+      function fade(sel, t, d, to) { tl.to(sel, { opacity: to == null ? 0 : to, duration: d, ease: "none" }, L(t)); }
+
+      // ---- estado inicial: lo que no existe todavia
+      gsap.set("#am-road", { opacity: 0 });
+      gsap.set("#am-lead", { strokeDasharray: "1 2", strokeDashoffset: 1, opacity: 0 });
+
+      // ---- 9,75 - 10,30: el panel baja y la linea naranja se vuelve la calle
+      out("#am-p3st", 9.75, 865, 480, 0.15);
+      out("#am-p3lbB", 9.79, 790, 650, 0.15);
+      out("#am-p3lbA", 9.83, 230, 552, 0.15);
+      out("#am-p3t1", 9.87, 340, 442, 0.15);
+      out("#am-p3gr", 9.91, 540, 700, 0.15);
+      out("#am-p3ax", 9.95, 540, 935, 0.15);
+      at("#am-p3bg", 540, 720);
+      tl.to("#am-p3bg", { scaleY: 0.01, duration: 0.22, ease: "power3.inOut" }, L(9.98));
+      tl.set("#am-p3bg", { opacity: 0 }, L(10.2));
+      tl.to("#am-p3or", { attr: { d: "M0 1130 C 360 1130, 720 1130, 840 1130 S 1000 1130, 1080 1130", stroke: INK, "stroke-width": 6 }, duration: 0.3, ease: "power3.inOut" }, L(10.0));
+      tl.set("#am-p3or", { opacity: 0 }, L(10.3));
+      tl.set("#am-road", { opacity: 1 }, L(10.3));
+      tl.fromTo("#am-carg", { x: -900 }, { x: 0, duration: 0.3, ease: "power3.out" }, L(10.0));
+      tl.fromTo("#am-dash", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none" }, L(10.2));
+
+      // ---- 10,30 MEPCO
+      pop("#am-title", 10.3, 250, 370);
+      pop("#am-sub", 10.38, 300, 490);
+
+      // ---- el mundo: calle que se mueve a 80 px/s, baches, rueda y resorte (una sola funcion del tiempo)
+      function springD(wx, top, bot) {
+        var d = "M" + wx + " " + top;
+        for (var k = 1; k <= 7; k++) d += " L" + (wx + (k % 2 ? 24 : -24)) + " " + (top + (bot - top) * k / 8);
+        return d + " L" + wx + " " + bot;
+      }
+      var elRoad = document.getElementById("am-road"), elDash = document.getElementById("am-dash");
+      var elSp = document.querySelector("#am-car-sp1 path");
+      function raiseAt(xw, c, P) { var u = (xw - (c - 80)) / 160; return (u > 0 && u < 1) ? P * 4 * u * (1 - u) : 0; }
+      var BD = W(14.471) - 14.471;   // el bache llega en "se dispara"
+      function drawWorld(tt) {
+        var cs = 744 - 80 * (tt - 12.2);
+        var Ps = 40 * eo(cl((tt - 10.3) / 0.3)) * (1 - eo(cl((tt - 13.4) / 0.5)));
+        var cb = 680 + 80 * (14.95 + BD - tt);
+        var Pb = 85 * eo(cl((tt - 14.47 - BD) / 0.45));
+        elRoad.setAttribute("d", "M0 1130 L" + (cs - 80) + " 1130 Q" + cs + " " + (1130 - 2 * Ps) + " " + (cs + 80) + " 1130 L" + (cb - 80) + " 1130 Q" + cb + " " + (1130 - 2 * Pb) + " " + (cb + 80) + " 1130 L3400 1130");
+        elDash.setAttribute("stroke-dashoffset", (80 * (tt - 10.2)).toFixed(2));
+        var raise = raiseAt(WHEEL_X, cs, Ps) + raiseAt(WHEEL_X, cb, Pb);
+        var dy = -(raise / 1.1) * 0.78;
+        gsap.set("#am-car-wh1", { y: dy });
+        elSp.setAttribute("d", springD(500, 190, 262 + dy));
+      }
+      drawWorld(10.3);
+      var tm = { p: 0 }, WD = W(15.3) - 10.3;
+      tl.fromTo(tm, { p: 0 }, { p: 1, duration: WD, ease: "none", onUpdate: function () { drawWorld(10.3 + tm.p * WD); }, onReverseComplete: function () { drawWorld(10.3); } }, L(10.3));
+
+      // ---- 11,67 resortes verde agua y rotulo AMORTIGUADOR
+      tl.set("#am-car-sp0 path, #am-car-sp1 path", { attr: { stroke: TEAL, filter: "url(#am-gl)" } }, L(11.67));
+      pop("#am-amort", 11.67, 815, 615);
+      tl.fromTo("#am-lead", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.25, ease: "power2.out" }, L(11.67));
+      tl.set("#am-lead", { opacity: 1 }, L(11.67));
+
+      // ---- 11,90 - 12,40 zoom al resorte delantero (encuadre 04b)
+      at("#am-world", 0, 0);
+      out("#am-title", 11.9, 250, 370, 0.15);
+      out("#am-sub", 11.9, 300, 490, 0.15);
+      out("#am-amort", 11.9, 815, 615, 0.15);
+      fade("#am-lead", 11.9, 0.1);
+      tl.to("#am-world", { x: -1204, y: -1488, scale: 2.4, duration: 0.5, ease: "power3.out" }, L(11.9));
+      tl.to("#am-zcr", { attr: { x: 70, y: 520, width: 940, height: 660, rx: 22 }, duration: 0.5, ease: "power3.out" }, L(11.9));
+      tl.fromTo(["#am-zfill", "#am-zbord"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" }, L(12.0));
+      pop("#am-eq", 12.12, 540, 430);
+
+      // ---- 13,35 - 13,95 vuelta a la vista completa
+      out("#am-eq", 13.35, 540, 430, 0.18);
+      tl.to("#am-world", { x: 0, y: 0, scale: 1, duration: 0.6, ease: "power3.inOut" }, L(13.35));
+      tl.to("#am-zcr", { attr: { x: -200, y: 250, width: 1480, height: 960, rx: 0 }, duration: 0.6, ease: "power3.inOut" }, L(13.35));
+      fade(["#am-zfill", "#am-zbord"], 13.35, 0.3);
+      fade("#am-dash", 13.35, 0.2);
+
+      // ---- 05a
+      pop("#am-barrel", 13.98, 200, 520);
+      pop("#am-afuera", 14.04, 200, 680);
+      tl.fromTo("#am-cprB", { attr: { width: 0 } }, { attr: { width: 720 }, duration: 0.6, ease: "power2.out" }, L(14.47));
+      pop("#am-bache", 14.7, 515, 372);
+
+      // ---- 15,30 zoom que atraviesa el resorte (trasero, el que se ve) hasta llenar de verde agua; corte por color a 05b
+      var ZS = 40, ZX = 295, ZY = 996;
+      tl.to("#am-world", { x: ZX * (1 - ZS), y: ZY * (1 - ZS), scale: ZS, duration: 0.3, ease: "power3.in" }, L(15.3));
+      tl.fromTo("#am-cut", { opacity: 0 }, { opacity: 1, duration: 0.04, ease: "none" }, L(15.56));
+      tl.set("#am-world", { opacity: 0 }, L(15.6));
+      tl.set("#am-cut", { opacity: 0 }, L(15.6));
+
+      // ---- 05b litros: entra armada y agrandada, con el bloque IMPUESTO verde agua donde estaba el resorte
+      gsap.set("#am-lA", { opacity: 0, svgOrigin: "275 677" });
+      tl.set("#am-lA", { opacity: 1 }, L(15.6));
+      tl.fromTo("#am-lA", { x: ZX - 275, y: ZY - 677, scale: 18 }, { x: 0, y: 0, scale: 1, duration: 0.4, ease: "power3.out" }, L(15.6));
+      var ST = 16.11;
+      pop("#am-arr", ST, 535, 700);
+      pop("#am-lB", ST + 0.04, 805, 700);
+      var imp0 = 450 * KL, par0 = 700 * KL, imp1 = 270 * KL, par1 = 930 * KL;
+      var tmL = { v: 0 };
+      function drawLitro(v) {
+        var hp = par0 + (par1 - par0) * v, hi = imp0 + (imp1 - imp0) * v;
+        var g = document.getElementById("am-lbg"), t = document.getElementById("am-lbt");
+        g.setAttribute("y", HL - hp); g.setAttribute("height", hp);
+        t.setAttribute("y", HL - hp - hi); t.setAttribute("height", hi);
+        document.querySelector("#am-lbtg text").setAttribute("y", HL - hp / 2 + 10);
+        document.querySelector("#am-lbtt text").setAttribute("y", HL - hp - hi / 2 + 10);
+        document.getElementById("am-lbp").textContent = "$" + Math.round(1150 + 50 * v).toLocaleString("es-CL");
+      }
+      tl.fromTo(tmL, { v: 0 }, { v: 1, duration: 0.7, ease: "expo.out", onUpdate: function () { drawLitro(tmL.v); }, onReverseComplete: function () { drawLitro(0); } }, L(16.25));
+      pop("#am-nota5", 16.8, 540, 1090);
+
+      // ---- 18,00 - 18,50 retroceso: los litros salen, entra el grafico
+      out("#am-s5b", 18.0, 540, 700, 0.3);
+      tl.fromTo("#am-chf", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "none" }, L(18.2));
+
+      // ---- 06: grafico
+      var X = function (i) { return cx(i); };
+      tl.fromTo("#am-cprD", { attr: { width: 0 } }, { attr: { width: X(20) - 90 }, duration: 1.6, ease: "power2.out" }, L(18.09));
+      tl.to("#am-cprD", { attr: { width: X(NP - 1) - 90 + 6 }, duration: 1.35, ease: "power2.inOut" }, L(23.0));
+      var fr = [[18.3, 110], [18.95, X(6)], [19.46, X(9)], [20.09, X(12)], [20.5, X(15)], [21.4, X(18)], [21.62, X(20)], [23.05, X(20)],
+        [23.25, X(21)], [23.75, X(24)], [24.2, X(27)], [24.65, X(30)], [25.1, X(33)], [25.45, X(36)], [25.85, X(39) + 6]];
+      // el tramo 21,62 -> 23,05 es una pausa (mismo ancho): no lleva tween
+      var keysA = [], prev = null;
+      fr.forEach(function (k) { if (prev && k[1] === prev[1]) { prev = k; return; } if (prev && k[0] - prev[0] > 0) keysA.push([prev, k]); prev = k; });
+      keysA.forEach(function (pair) {
+        ["#am-cprO", "#am-cprA"].forEach(function (id) {
+          tl.to(id, { attr: { width: pair[1][1] - 90 }, duration: pair[1][0] - pair[0][0], ease: "none" }, L(pair[0][0]));
+        });
+      });
+      [[9, 19.46], [12, 20.09], [15, 20.5], [18, 21.4]].forEach(function (a) { pop("#am-p20" + a[0], a[1], X(a[0]) + 30, cy(PUMP[a[0]]) - 28); });
+      pop("#am-lbE", 19.5, X(14), cy(1330) - 30);
+      pop("#am-nota6", 21.4, 540, 1090);
+
+      // ---- 07
+      out("#am-nota6", 22.9, 540, 1090, 0.2);
+      // PONE: cambio con blur swap en 24,98
+      gsap.set("#am-lbP", { opacity: 0, filter: "blur(6px)" });
+      tl.fromTo("#am-lbE", { opacity: 1, filter: "blur(0px)" }, { opacity: 0, filter: "blur(6px)", duration: 0.13, ease: "none", immediateRender: false }, L(24.85));
+      tl.fromTo("#am-lbP", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.13, ease: "none", immediateRender: false }, L(24.98));
+      // RECUPERA: el area se llena
+      tl.set("#am-cprC", { attr: { width: X(24) - 90 } }, L(24.98));
+      tl.to("#am-cprC", { attr: { width: X(NP - 1) - 90 + 6 }, duration: 0.95, ease: "none" }, L(24.98));
+      pop("#am-lbR", 25.3, X(33), cy(1180) - 46);
+
+      // ---- 26,45 - 26,90: las areas se vuelven los cuadrados y el grafico se desvanece
+      fade(["#am-chf", "#am-chl", "#am-p209", "#am-p2012", "#am-p2015", "#am-p2018", "#am-lbP", "#am-lbR"], 26.45, 0.25);
+      gsap.set("#am-arAw", { svgOrigin: bA.x + " " + bA.y });
+      gsap.set("#am-arBw", { svgOrigin: bB.x + " " + bB.y });
+      tl.to("#am-arAw", { x: 110 - bA.x, y: 480 - bA.y, scaleX: 330 / bA.w, scaleY: 330 / bA.h, duration: 0.45, ease: "power3.inOut" }, L(26.45));
+      tl.to("#am-arBw", { x: 640 - bB.x, y: 480 - bB.y, scaleX: 330 / bB.w, scaleY: 330 / bB.h, duration: 0.45, ease: "power3.inOut" }, L(26.45));
+      gsap.set(["#am-s8a"], { opacity: 0 });
+      tl.set("#am-s8a", { opacity: 1 }, L(26.9));
+      tl.set(["#am-arAw", "#am-arBw"], { opacity: 0 }, L(26.9));
+      gsap.set(["#am-sqAt", "#am-sqBt", "#am-eqs", "#am-final"], { opacity: 0 });
+      pop("#am-sqAt", 26.78, 275, 650);
+      pop("#am-sqBt", 26.82, 805, 650);
+      pop("#am-eqs", 26.9, 540, 640);
+      pop("#am-final", 26.96, 540, 930);
+
+      // ---- 27,50 08b: los cuadrados salen (0,25 s, power3.in) mientras entra la familia
+      out("#am-sqAt", 27.5, 275, 650, 0.15);
+      out("#am-sqBt", 27.5, 805, 650, 0.15);
+      out("#am-sqA", 27.5, 275, 645, 0.25, "power3.in");
+      out("#am-sqB", 27.5, 805, 645, 0.25, "power3.in");
+      out("#am-eqs", 27.5, 540, 640, 0.15);
+      out("#am-final", 27.5, 540, 930, 0.15);
+      pop("#am-f1", 27.5, 250, 960);
+      pop("#am-f2", 27.56, 400, 985);
+      pop("#am-f3", 27.62, 527, 1030);
+      pop("#am-panel8", 27.6, 770, 630);
+      for (var c = 0; c < 13; c++) tl.fromTo("#am-ce" + c, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "none" }, L(28.15 + c * 0.06));
+      pop("#am-tj", 28.2, 770, 890);
+      pop("#am-pf", 28.4, 770, 932);
+      tl.set({}, {}, 21.045);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["amortiguador"] = tl;
+    })();
+  </script>
+</template>

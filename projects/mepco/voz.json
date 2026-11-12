@@ -1,0 +1,248 @@
+{
+  "provider": "elevenlabs",
+  "kokoro": {
+    "voice": "ef_dora",
+    "speed": 1.0,
+    "pause": 0.3
+  },
+  "lines": [
+    {
+      "text": "¿Qué es el MEPCO, y por qué te afecta aunque no tengas auto?",
+      "groups": [
+        "MEPCO,",
+        "auto?"
+      ]
+    },
+    {
+      "text": "Un jueves de marzo, la bencina subió trescientos setenta pesos.",
+      "groups": [
+        "marzo,",
+        "$370."
+      ]
+    },
+    {
+      "text": "De un día para otro.",
+      "groups": [
+        "otro."
+      ]
+    },
+    {
+      "text": "Durante doce años, una ley existía justamente para evitar eso.",
+      "groups": [
+        "años,",
+        "eso."
+      ]
+    },
+    {
+      "text": "Se llama MEPCO, y funciona como el amortiguador de un auto.",
+      "groups": [
+        "MEPCO,",
+        "auto."
+      ]
+    },
+    {
+      "text": "Cuando el precio internacional del petróleo se dispara, el Estado cobra menos impuesto a la bencina.",
+      "groups": [
+        "dispara,",
+        "bencina."
+      ]
+    },
+    {
+      "text": "Así el precio sube de a poco: unos veinte pesos cada tres semanas.",
+      "groups": [
+        "poco:",
+        "semanas."
+      ]
+    },
+    {
+      "text": "Y cuando el petróleo baja, el Estado cobra más y recupera lo que puso.",
+      "groups": [
+        "baja,",
+        "puso."
+      ]
+    },
+    {
+      "text": "No es más barato. Te regala tiempo para adaptarte.",
+      "groups": [
+        "barato.",
+        "adaptarte."
+      ]
+    },
+    {
+      "text": "En marzo de dos mil veintiséis, la guerra en Medio Oriente disparó el petróleo.",
+      "groups": [
+        "2026,",
+        "petróleo."
+      ]
+    },
+    {
+      "text": "El amortiguador hizo su trabajo, pero en una semana le costó al Fisco ciento cuarenta millones de dólares.",
+      "groups": [
+        "trabajo,",
+        "Fisco",
+        "US$140 millones."
+      ]
+    },
+    {
+      "text": "Y el Gobierno decidió soltarlo, por decreto, sin pasar por el Congreso.",
+      "groups": [
+        "soltarlo,",
+        "Congreso."
+      ]
+    },
+    {
+      "text": "La noventa y tres subió trescientos setenta y dos pesos.",
+      "groups": [
+        "$372."
+      ]
+    },
+    {
+      "text": "El diésel, quinientos ochenta: un sesenta y dos por ciento.",
+      "groups": [
+        "$580:",
+        "62%."
+      ]
+    },
+    {
+      "text": "Con la regla de antes, esa alza habría tomado casi un año.",
+      "groups": [
+        "antes,",
+        "año."
+      ]
+    },
+    {
+      "text": "Llegó en una noche, sin tiempo para adaptarse.",
+      "groups": [
+        "noche,",
+        "adaptarse."
+      ]
+    },
+    {
+      "text": "Y el diésel mueve los camiones que traen todo lo que compras.",
+      "groups": [
+        "camiones",
+        "compras."
+      ]
+    },
+    {
+      "text": "En abril, los precios subieron uno coma tres por ciento en un solo mes: el mayor salto desde dos mil veintidós.",
+      "groups": [
+        "1,3%",
+        "mes:",
+        "2022."
+      ]
+    },
+    {
+      "text": "La inflación anual pasó de dos coma ocho a cuatro por ciento en apenas un mes.",
+      "groups": [
+        "anual",
+        "4%",
+        "mes."
+      ]
+    },
+    {
+      "text": "Lo que el amortiguador repartía en un año, la economía lo absorbió de golpe.",
+      "groups": [
+        "año,",
+        "golpe."
+      ]
+    },
+    {
+      "text": "Hoy, tras seis alzas seguidas desde julio, la noventa y tres vuelve a niveles de récord.",
+      "groups": [
+        "julio,",
+        "93",
+        "récord."
+      ]
+    },
+    {
+      "text": "Y ahora, el mismo Gobierno busca volver a amortiguar las alzas.",
+      "groups": [
+        "Gobierno",
+        "alzas."
+      ]
+    },
+    {
+      "text": "¿Tú alcanzaste a adaptarte a un año de alzas en una sola noche?",
+      "groups": [
+        "adaptarte",
+        "noche?"
+      ]
+    },
+    {
+      "text": "Te leo en los comentarios.",
+      "groups": [
+        "comentarios."
+      ]
+    }
+  ],
+  "digits": [
+    [
+      "veinte pesos.",
+      "$20."
+    ],
+    [
+      "trescientos setenta y dos pesos.",
+      "$372."
+    ],
+    [
+      "trescientos setenta pesos.",
+      "$370."
+    ],
+    [
+      "veinte pesos",
+      "$20"
+    ],
+    [
+      "ciento cuarenta millones de dólares.",
+      "US$140 millones."
+    ],
+    [
+      "dos mil veintiséis,",
+      "2026,"
+    ],
+    [
+      "dos mil veintidós.",
+      "2022."
+    ],
+    [
+      "noventa y tres",
+      "93"
+    ],
+    [
+      "quinientos ochenta:",
+      "$580:"
+    ],
+    [
+      "sesenta y dos por ciento.",
+      "62%."
+    ],
+    [
+      "uno coma tres por ciento",
+      "1,3%"
+    ],
+    [
+      "dos coma ocho",
+      "2,8%"
+    ],
+    [
+      "cuatro por ciento",
+      "4%"
+    ],
+    [
+      "doce",
+      "12"
+    ]
+  ],
+  "hold_end": 1.6,
+  "template": "templates/subtitulos.template.html",
+  "elevenlabs": {
+    "voice_id": "fawH90GsqqfRlrMoVpk5",
+    "model": "eleven_v4",
+    "tag": "",
+    "settings": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  }
+}

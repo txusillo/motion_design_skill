@@ -1,0 +1,72 @@
+<template>
+  <style>
+    @font-face { font-family: "Barlow Condensed"; font-weight: 700; src: url("assets/fonts/BarlowCondensed-Bold.ttf"); }
+    @font-face { font-family: "Barlow Condensed"; font-weight: 800; src: url("assets/fonts/BarlowCondensed-ExtraBold.ttf"); }
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    #sub-safe {
+      position: absolute;
+      inset: 0;
+      transform: translateY(77px) scale(0.88);
+      transform-origin: 540px 883px;
+    }
+    #sub-box {
+      position: absolute;
+      left: 70px;
+      top: 1240px;
+      width: 940px;
+      height: 170px;
+    }
+    .sub-group {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      font-family: "Barlow Condensed", sans-serif; font-weight: 700;
+      font-size: 66px;
+      line-height: 76px;
+      color: #ecebe6;
+      text-align: center;
+    }
+    .sub-group > div {
+      width: 100%;
+      text-wrap: balance;
+    }
+    .sub-word {
+      opacity: 0;
+    }
+  </style>
+  <div id="root" data-composition-id="subtitulos" data-width="1080" data-height="1920">
+    <div id="sub-safe">
+      <div id="sub-box">
+{{ROWS}}
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var INK = "#ecebe6";
+      var ACC = "#ff6a13";
+      var PAPER = "#26292d";
+      var WORDS = {{WORDS}};
+      var tl = gsap.timeline({ paused: true });
+      // grupos 0 y 1: la pregunta del gancho ya esta en pantalla, no se subtitula
+      gsap.set("#sub-g0, #sub-g1", { opacity: 0 });
+      WORDS = WORDS.filter(function (w) { return !document.querySelector("#sub-g0 #" + w[0] + ", #sub-g1 #" + w[0]); });
+      WORDS.forEach(function (w) {
+        tl.set("#" + w[0], {
+          opacity: 1,
+          backgroundColor: ACC,
+          color: PAPER,
+          boxShadow: "8px 0 0 " + ACC + ", -8px 0 0 " + ACC,
+        }, w[1]);
+        tl.set("#" + w[0], { backgroundColor: "transparent", color: INK, boxShadow: "none" }, w[2]);
+      });
+      window.__timelines = window.__timelines || {};
+      window.__timelines["subtitulos"] = tl;
+    })();
+  </script>
+</template>

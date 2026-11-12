@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@600;700&family=JetBrains+Mono:wght@500;700&family=IBM+Plex+Mono:wght@500;600&family=Archivo:wdth,wght@62..100,700..900&family=Anton&family=Source+Serif+4:ital,wght@0,600;1,500&family=Courier+Prime:wght@400;700&display=swap">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; }
+.f { position: absolute; inset: 0; overflow: hidden; display: none; }
+.f.on { display: block; }
+.abs { position: absolute; }
+svg.full { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+
+/* ---------- A · SURTIDOR ---------- */
+.A { background: #151617; color: #ecebe6; font-family: "Barlow", sans-serif;
+  background-image: radial-gradient(rgba(255,255,255,.06) 1.6px, transparent 1.8px); background-size: 36px 36px; }
+.A .lbl { font-family: "JetBrains Mono", monospace; font-size: 26px; letter-spacing: .16em; text-transform: uppercase; color: #8b8d91; }
+.A .hud { top: 200px; left: 60px; right: 60px; display: flex; justify-content: space-between; }
+.A .cap { left: 70px; right: 70px; top: 1250px; text-align: center; font-family: "Barlow Condensed"; font-weight: 700; font-size: 66px; line-height: 1.12; }
+.A .cap b { background: #ff6a13; color: #151617; padding: 0 12px; font-weight: 800; }
+.A .foot { top: 1450px; left: 60px; right: 60px; display: flex; justify-content: space-between; }
+
+/* ---------- B · PLANO ---------- */
+.B { background: #1c4d86; color: #eaf2ff; font-family: "IBM Plex Mono", monospace;
+  background-image:
+    linear-gradient(rgba(234,242,255,.16) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(234,242,255,.16) 1.5px, transparent 1.5px),
+    linear-gradient(rgba(234,242,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(234,242,255,.07) 1px, transparent 1px);
+  background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px; }
+.B .lbl { font-size: 24px; letter-spacing: .14em; text-transform: uppercase; }
+.B .hud { top: 196px; left: 60px; right: 60px; display: flex; justify-content: space-between; }
+.B .title { font-family: "Archivo"; font-stretch: 62%; font-weight: 900; text-transform: uppercase; line-height: .9; }
+.B .cap { left: 70px; right: 70px; top: 1250px; text-align: center; font-family: "Archivo"; font-stretch: 75%; font-weight: 800; font-size: 62px; line-height: 1.12; }
+.B .cap b { color: #1c4d86; background: #eaf2ff; padding: 0 12px; }
+.B .cap b.r { background: #ff4d3d; color: #fff; }
+.B .stamp { border: 3px solid #eaf2ff; padding: 18px 22px; }
+.B .foot { top: 1440px; left: 60px; right: 60px; border: 3px solid #eaf2ff; display: grid; grid-template-columns: 1fr 1fr 1fr; }
+.B .foot div { padding: 14px 18px; border-right: 3px solid #eaf2ff; font-size: 20px; letter-spacing: .1em; text-transform: uppercase; }
+.B .foot div:last-child { border-right: 0; }
+.B .foot span { display: block; opacity: .6; font-size: 16px; }
+
+/* ---------- C · PRENSA ---------- */
+.C { background: #ece5d6; color: #1b1a18; font-family: "Source Serif 4", serif;
+  background-image: radial-gradient(rgba(27,26,24,.10) 1.2px, transparent 1.5px); background-size: 9px 9px; }
+.C .lbl { font-family: "Courier Prime", monospace; font-size: 26px; letter-spacing: .08em; text-transform: uppercase; }
+.C .hud { top: 196px; left: 60px; right: 60px; display: flex; justify-content: space-between; border-bottom: 3px solid #1b1a18; padding-bottom: 12px; }
+.C .anton { font-family: "Anton", sans-serif; text-transform: uppercase; line-height: .92; letter-spacing: .005em; }
+.C .clip { background: #f7f3ea; box-shadow: 0 18px 30px rgba(0,0,0,.18); }
+.C .torn { clip-path: polygon(0 2%, 6% 0, 13% 1.5%, 21% 0, 30% 2%, 38% .5%, 47% 2%, 55% 0, 64% 1.8%, 72% .3%, 81% 2%, 90% .4%, 100% 1.5%, 100% 98%, 93% 100%, 85% 98.4%, 76% 100%, 67% 98%, 58% 99.6%, 49% 98%, 40% 100%, 31% 98.5%, 22% 100%, 13% 98%, 5% 99.6%, 0 98%); }
+.C .hl { background: linear-gradient(transparent 12%, #ffe14a 12%, #ffe14a 88%, transparent 88%); padding: 0 10px; }
+.C .cap { left: 50px; right: 50px; top: 1250px; text-align: center; font-family: "Source Serif 4"; font-weight: 600; font-size: 54px; line-height: 1.18; }
+.C .cap b { font-weight: 600; background: linear-gradient(transparent 14%, #ffe14a 14%, #ffe14a 90%, transparent 90%); padding: 0 8px; }
+.C .foot { top: 1450px; left: 60px; right: 60px; display: flex; justify-content: space-between; border-top: 3px solid #1b1a18; padding-top: 12px; }
+.C .ticket { background: #fbfaf6; font-family: "Courier Prime", monospace; color: #222; box-shadow: 0 14px 24px rgba(0,0,0,.2); }
+</style>
+</head>
+<body>
+
+<!-- A1 · SURTIDOR · gancho -->
+<div class="f A" id="A1">
+  <div class="abs hud"><span class="lbl">MEPCO · 2014–2026</span><span class="lbl">JUE 26·03·26</span></div>
+  <svg class="full" id="A1s"></svg>
+  <div class="abs cap">Un jueves de marzo, la bencina subió <b>370 pesos</b>.</div>
+  <div class="abs foot"><span class="lbl">01 · EL GOLPE</span><span class="lbl" style="color:#ffb000">● GASOLINA 93 · RM</span></div>
+</div>
+
+<!-- A2 · SURTIDOR · amortiguador -->
+<div class="f A" id="A2">
+  <div class="abs hud"><span class="lbl">MEPCO · 2014–2026</span><span class="lbl">LEY 20.765</span></div>
+  <svg class="full" id="A2s"></svg>
+  <div class="abs cap">Se llama MEPCO, y funciona como el <b>amortiguador</b> de un auto.</div>
+  <div class="abs foot"><span class="lbl">02 · EL AMORTIGUADOR</span><span class="lbl" style="color:#ffb000">● CÓMO FUNCIONA</span></div>
+</div>
+
+<!-- B1 · PLANO · gancho -->
+<div class="f B" id="B1">
+  <div class="abs hud"><span class="lbl">PLANO N° 01 · MEPCO</span><span class="lbl">ESC 1:1 · $/LITRO</span></div>
+  <svg class="full" id="B1s"></svg>
+  <div class="abs cap">Un jueves de marzo, la bencina subió <b class="r">370 pesos</b>.</div>
+  <div class="abs foot"><div><span>Pieza</span>Precio 93</div><div><span>Fecha</span>26·03·2026</div><div><span>Fuente</span>ENAP</div></div>
+</div>
+
+<!-- B2 · PLANO · amortiguador -->
+<div class="f B" id="B2">
+  <div class="abs hud"><span class="lbl">PLANO N° 02 · MEPCO</span><span class="lbl">CORTE A–A</span></div>
+  <svg class="full" id="B2s"></svg>
+  <div class="abs cap">Se llama MEPCO, y funciona como el <b>amortiguador</b> de un auto.</div>
+  <div class="abs foot"><div><span>Pieza</span>Amortiguador</div><div><span>Norma</span>Ley 20.765</div><div><span>Desde</span>09·07·2014</div></div>
+</div>
+
+<!-- C1 · PRENSA · gancho -->
+<div class="f C" id="C1">
+  <div class="abs hud"><span class="lbl">Edición especial</span><span class="lbl">Jueves 26 de marzo, 2026</span></div>
+  <div class="abs clip torn" style="left:70px; top:300px; width:720px; padding:46px 44px 54px; transform: rotate(-2.2deg);">
+    <div class="lbl" style="font-size:22px; margin-bottom:14px;">Economía · Combustibles</div>
+    <div class="anton" style="font-size:150px;">Alza<br>histórica</div>
+    <div style="font-size:34px; font-style:italic; font-weight:500; margin-top:18px; line-height:1.25;">La gasolina 93 sube <span class="hl" style="font-style:normal; font-weight:600;">$372,2</span> por litro de un día para otro.</div>
+  </div>
+  <div class="abs ticket" style="left:640px; top:640px; width:360px; padding:30px 28px; transform: rotate(5deg);">
+    <div style="text-align:center; font-weight:700; font-size:26px;">ESTACIÓN DE SERVICIO</div>
+    <div style="text-align:center; font-size:20px; margin-bottom:14px;">BOLETA ELECTRÓNICA</div>
+    <div style="border-top:2px dashed #555; margin:10px 0;"></div>
+    <div style="display:flex; justify-content:space-between; font-size:24px;"><span>G93 25/03</span><span>$1.170</span></div>
+    <div style="display:flex; justify-content:space-between; font-size:24px; margin-top:6px;"><span>G93 26/03</span><span style="font-weight:700;">$1.542</span></div>
+    <div style="border-top:2px dashed #555; margin:12px 0;"></div>
+    <div style="display:flex; justify-content:space-between; font-size:30px; font-weight:700;"><span>DIF</span><span style="color:#c8321e;">+$372</span></div>
+    <div style="font-size:18px; margin-top:12px;">PRECIO POR LITRO · PROM. RM</div>
+  </div>
+  <svg class="full" id="C1s"></svg>
+  <div class="abs cap">Un jueves de marzo, la bencina subió <b>370 pesos</b>.</div>
+  <div class="abs foot"><span class="lbl">01 / El golpe</span><span class="lbl">Fuente: ENAP</span></div>
+</div>
+
+<!-- C2 · PRENSA · amortiguador -->
+<div class="f C" id="C2">
+  <div class="abs hud"><span class="lbl">Explicado</span><span class="lbl">Ley N° 20.765 · 2014</span></div>
+  <div class="abs clip" style="left:60px; top:300px; width:960px; height:860px; transform: rotate(.8deg);"></div>
+  <svg class="full" id="C2s"></svg>
+  <div class="abs" style="left:110px; top:340px; transform: rotate(.8deg);">
+    <div class="lbl" style="font-size:22px;">Fig. 1 — Cómo funciona</div>
+    <div class="anton" style="font-size:110px; margin-top:8px;">El <span class="hl">amortiguador</span></div>
+  </div>
+  <div class="abs cap">Se llama MEPCO, y funciona como el <b>amortiguador</b> de un auto.</div>
+  <div class="abs foot"><span class="lbl">02 / El mecanismo</span><span class="lbl">Ilustrativo</span></div>
+</div>
+
+<script>
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, parent, text) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; parent.appendChild(e); return e; }
+
+/* 7 segmentos: celda w x h, grosor t */
+const SEG = { "0":"abcdef","1":"bc","2":"abged","3":"abgcd","4":"fgbc","5":"afgcd","6":"afgedc","7":"abc","8":"abcdefg","9":"abcdfg" };
+function seg7(p, str, x, y, w, h, t, on, off) {
+  const g = el("g", {}, p); let cx = x;
+  for (const ch of str) {
+    if (ch === ".") { el("rect", { x: cx - w*0.12, y: y + h - t, width: t, height: t, fill: on }, g); cx += t * 0.6; continue; }
+    const s = SEG[ch] || ""; const hh = h / 2, sk = -0.08;
+    const segs = {
+      a: [cx + t, y, w - 2*t, t], d: [cx + t, y + h - t, w - 2*t, t], g: [cx + t, y + hh - t/2, w - 2*t, t],
+      f: [cx, y + t, t, hh - 1.5*t], b: [cx + w - t, y + t, t, hh - 1.5*t],
+      e: [cx, y + hh + t/2, t, hh - 1.5*t], c: [cx + w - t, y + hh + t/2, t, hh - 1.5*t] };
+    for (const k in segs) { const [sx, sy, sw, shh] = segs[k]; el("rect", { x: sx, y: sy, width: sw, height: shh, rx: t*0.35, fill: s.includes(k) ? on : off }, g); }
+    cx += w + t * 1.1;
+  }
+  return g;
+}
+
+/* Auto en corte con amortiguador visible. Coordenadas locales 640 x 330 */
+function car(p, x, y, s, c) {
+  const g = el("g", { transform: `translate(${x} ${y}) scale(${s})` }, p);
+  const sw = c.sw || 6;
+  // cuerpo
+  el("path", { d: "M30 190 L44 132 Q54 112 92 108 L190 102 L262 46 Q280 32 312 32 L430 32 Q462 32 484 54 L540 104 L590 112 Q622 118 626 146 L628 190 Z", fill: c.body, stroke: c.line, "stroke-width": sw, "stroke-linejoin": "round" }, g);
+  el("path", { d: "M214 104 L276 56 Q288 48 306 48 L360 48 L360 104 Z", fill: c.glass, stroke: c.line, "stroke-width": sw*0.7, "stroke-linejoin": "round" }, g);
+  el("path", { d: "M380 104 L380 48 L428 48 Q450 48 466 62 L510 104 Z", fill: c.glass, stroke: c.line, "stroke-width": sw*0.7, "stroke-linejoin": "round" }, g);
+  // ruedas con amortiguador
+  for (const wx of [150, 500]) {
+    // resorte
+    let d = `M${wx} 190`; const n = 7, top = 190, bot = 262;
+    for (let i = 1; i <= n; i++) d += ` L${wx + (i % 2 ? 22 : -22)} ${top + (bot - top) * i / (n + 1)}`;
+    d += ` L${wx} ${bot}`;
+    el("path", { d, fill: "none", stroke: c.spring, "stroke-width": sw*0.9, "stroke-linejoin": "round", "stroke-linecap": "round" }, g);
+    el("circle", { cx: wx, cy: 280, r: 50, fill: c.tire, stroke: c.line, "stroke-width": sw }, g);
+    el("circle", { cx: wx, cy: 280, r: 20, fill: c.hub, stroke: c.line, "stroke-width": sw*0.6 }, g);
+  }
+  return g;
+}
+
+/* -------- A1 surtidor: letrero de precios -------- */
+(function () {
+  const s = document.getElementById("A1s");
+  // poste del letrero
+  el("rect", { x: 140, y: 290, width: 800, height: 860, rx: 26, fill: "#0c0d0e", stroke: "#2b2d30", "stroke-width": 4 }, s);
+  el("rect", { x: 140, y: 290, width: 800, height: 110, rx: 26, fill: "#ff6a13" }, s);
+  el("rect", { x: 140, y: 360, width: 800, height: 40, fill: "#ff6a13" }, s);
+  el("text", { x: 540, y: 368, "text-anchor": "middle", "font-family": "Barlow Condensed", "font-weight": 800, "font-size": 64, fill: "#151617", "letter-spacing": 4 }, s, "PRECIOS HOY");
+  // fila antes (apagada)
+  el("text", { x: 190, y: 470, "font-family": "JetBrains Mono", "font-size": 26, fill: "#8b8d91", "letter-spacing": 4 }, s, "93 · MIÉ 25·03");
+  el("text", { x: 190, y: 590, "font-family": "Barlow Condensed", "font-weight": 700, "font-size": 96, fill: "#a8916a" }, s, "$");
+  seg7(s, "1170", 250, 498, 92, 150, 17, "#a8916a", "#1b1a17");
+  el("line", { x1: 180, x2: 900, y1: 700, y2: 700, stroke: "#2b2d30", "stroke-width": 3 }, s);
+  // fila después (encendida)
+  el("text", { x: 190, y: 768, "font-family": "JetBrains Mono", "font-size": 26, fill: "#ffb000", "letter-spacing": 4 }, s, "93 · JUE 26·03");
+  const glow = el("filter", { id: "gl", x: "-20%", y: "-20%", width: "140%", height: "140%" }, el("defs", {}, s));
+  el("feGaussianBlur", { stdDeviation: 7, result: "b" }, glow); const m = el("feMerge", {}, glow); el("feMergeNode", { in: "b" }, m); el("feMergeNode", { in: "SourceGraphic" }, m);
+  el("text", { x: 190, y: 905, "font-family": "Barlow Condensed", "font-weight": 700, "font-size": 120, fill: "#ffb000", filter: "url(#gl)" }, s, "$");
+  const g = seg7(s, "1542", 262, 790, 118, 196, 22, "#ffb000", "#211d12"); g.setAttribute("filter", "url(#gl)");
+  // etiqueta alza
+  el("rect", { x: 600, y: 1010, width: 300, height: 96, rx: 12, fill: "#ff6a13" }, s);
+  el("text", { x: 750, y: 1080, "text-anchor": "middle", "font-family": "Barlow Condensed", "font-weight": 800, "font-size": 76, fill: "#151617" }, s, "+$372");
+  el("text", { x: 190, y: 1070, "font-family": "JetBrains Mono", "font-size": 24, fill: "#8b8d91", "letter-spacing": 3 }, s, "POR LITRO · PROM. RM");
+})();
+
+/* -------- A2 surtidor: auto + dos trazos -------- */
+(function () {
+  const s = document.getElementById("A2s");
+  // trazos arriba: camino (gris) vs lo que sientes (naranjo)
+  el("text", { x: 90, y: 330, "font-family": "JetBrains Mono", "font-size": 26, fill: "#8b8d91", "letter-spacing": 4 }, s, "— — PETRÓLEO AFUERA");
+  el("text", { x: 90, y: 372, "font-family": "JetBrains Mono", "font-size": 26, fill: "#ff6a13", "letter-spacing": 4 }, s, "━━ PRECIO EN LA BOMBA");
+  el("path", { d: "M80 640 L380 640 L430 440 L520 440 L570 640 L1000 640", fill: "none", stroke: "#8b8d91", "stroke-width": 5, "stroke-dasharray": "16 12" }, s);
+  el("path", { d: "M80 640 L360 640 C 460 640, 470 530, 560 520 C 680 510, 760 610, 1000 630", fill: "none", stroke: "#ff6a13", "stroke-width": 10, "stroke-linecap": "round" }, s);
+  el("text", { x: 610, y: 470, "font-family": "Barlow Condensed", "font-weight": 700, "font-size": 40, fill: "#ffb000" }, s, "LO QUE ABSORBE EL ESTADO");
+  // calle + bache
+  el("path", { d: "M0 1130 L560 1130 Q620 1060 680 1130 L1080 1130", fill: "none", stroke: "#ecebe6", "stroke-width": 6 }, s);
+  for (let i = 0; i < 1080; i += 90) el("rect", { x: i, y: 1160, width: 50, height: 8, fill: "#3a3c40" }, s);
+  car(s, 140, 770, 1.1, { body: "#24262a", line: "#ecebe6", glass: "#151617", spring: "#ff6a13", tire: "#0c0d0e", hub: "#3a3c40", sw: 6 });
+})();
+
+/* -------- B1 plano: cota de precio -------- */
+(function () {
+  const s = document.getElementById("B1s"); const ink = "#eaf2ff", red = "#ff4d3d";
+  el("text", { x: 70, y: 340, "font-family": "IBM Plex Mono", "font-size": 24, fill: ink, "letter-spacing": 3 }, s, "FIG. 1 — PRECIO GASOLINA 93 ($/L)");
+  // dos columnas como barras técnicas
+  const base = 1120, k = 0.5; // 1 peso = 0.5 px desde 0? usar escala desde 800
+  const h1 = (1170 - 800) * 0.9, h2 = (1542 - 800) * 0.9;
+  el("rect", { x: 230, y: base - h1, width: 220, height: h1, fill: "none", stroke: ink, "stroke-width": 4 }, s);
+  for (let yy = base - h1 + 20; yy < base; yy += 26) el("line", { x1: 230, x2: 450, y1: yy, y2: yy + 0, stroke: ink, "stroke-opacity": .25, "stroke-width": 2 }, s);
+  el("rect", { x: 610, y: base - h2, width: 220, height: h2, fill: "none", stroke: ink, "stroke-width": 4 }, s);
+  el("rect", { x: 610, y: base - h2, width: 220, height: h2 - h1, fill: red, "fill-opacity": .9 }, s);
+  el("line", { x1: 150, x2: 930, y1: base, y2: base, stroke: ink, "stroke-width": 4 }, s);
+  // líneas de corte (break)
+  el("text", { x: 340, y: base - h1 - 26, "text-anchor": "middle", "font-family": "Archivo", "font-stretch": "62%", "font-weight": 900, "font-size": 84, fill: ink }, s, "$1.170");
+  el("text", { x: 720, y: base - h2 - 26, "text-anchor": "middle", "font-family": "Archivo", "font-stretch": "62%", "font-weight": 900, "font-size": 84, fill: ink }, s, "$1.542");
+  el("text", { x: 340, y: base + 50, "text-anchor": "middle", "font-family": "IBM Plex Mono", "font-size": 24, fill: ink }, s, "MIÉ 25·03");
+  el("text", { x: 720, y: base + 50, "text-anchor": "middle", "font-family": "IBM Plex Mono", "font-size": 24, fill: ink }, s, "JUE 26·03");
+  // cota
+  const y1 = base - h1, y2 = base - h2, cx = 900;
+  el("line", { x1: 840, x2: 940, y1: y1, y2: y1, stroke: ink, "stroke-width": 2, "stroke-dasharray": "6 6" }, s);
+  el("line", { x1: cx, x2: cx, y1: y2 + 4, y2: y1 - 4, stroke: red, "stroke-width": 4 }, s);
+  el("path", { d: `M${cx-14} ${y2+24} L${cx} ${y2} L${cx+14} ${y2+24}`, fill: "none", stroke: red, "stroke-width": 4 }, s);
+  el("path", { d: `M${cx-14} ${y1-24} L${cx} ${y1} L${cx+14} ${y1-24}`, fill: "none", stroke: red, "stroke-width": 4 }, s);
+  el("rect", { x: cx - 92, y: (y1 + y2) / 2 - 44, width: 184, height: 88, fill: red }, s);
+  el("text", { x: cx, y: (y1 + y2) / 2 + 22, "text-anchor": "middle", "font-family": "Archivo", "font-stretch": "62%", "font-weight": 900, "font-size": 64, fill: "#fff" }, s, "+372");
+  el("text", { x: 150, y: base + 96, "font-family": "IBM Plex Mono", "font-size": 18, fill: ink, "fill-opacity": .7 }, s, "EJE CORTADO EN $800 · PROMEDIO RM");
+})();
+
+/* -------- B2 plano: auto en corte con cotas -------- */
+(function () {
+  const s = document.getElementById("B2s"); const ink = "#eaf2ff", red = "#ff4d3d";
+  el("text", { x: 70, y: 340, "font-family": "IBM Plex Mono", "font-size": 24, fill: ink, "letter-spacing": 3 }, s, "FIG. 2 — CORTE LATERAL");
+  // calle
+  el("path", { d: "M60 1080 L540 1080 Q600 1000 660 1080 L1020 1080", fill: "none", stroke: ink, "stroke-width": 4 }, s);
+  for (let i = 60; i < 1020; i += 30) el("line", { x1: i, x2: i - 20, y1: 1084, y2: 1104, stroke: ink, "stroke-opacity": .5, "stroke-width": 2 }, s);
+  car(s, 140, 720, 1.1, { body: "rgba(234,242,255,.06)", line: ink, glass: "rgba(234,242,255,.12)", spring: red, tire: "none", hub: "none", sw: 4 });
+  // llamada al resorte
+  el("circle", { cx: 140 + 500 * 1.1, cy: 720 + 226 * 1.1, r: 70, fill: "none", stroke: red, "stroke-width": 3, "stroke-dasharray": "10 8" }, s);
+  el("line", { x1: 700, y1: 960, x2: 820, y2: 560, stroke: red, "stroke-width": 3 }, s);
+  el("rect", { x: 640, y: 470, width: 380, height: 92, fill: red }, s);
+  el("text", { x: 830, y: 532, "text-anchor": "middle", "font-family": "Archivo", "font-stretch": "62%", "font-weight": 900, "font-size": 58, fill: "#fff" }, s, "AMORTIGUADOR");
+  // cotas de camino vs carrocería
+  el("text", { x: 70, y: 470, "font-family": "Archivo", "font-stretch": "62%", "font-weight": 900, "font-size": 96, fill: ink }, s, "MEPCO");
+  el("text", { x: 70, y: 520, "font-family": "IBM Plex Mono", "font-size": 22, fill: ink, "fill-opacity": .8 }, s, "MECANISMO DE ESTABILIZACIÓN");
+  el("text", { x: 70, y: 552, "font-family": "IBM Plex Mono", "font-size": 22, fill: ink, "fill-opacity": .8 }, s, "DE PRECIOS DE LOS COMBUSTIBLES");
+  el("text", { x: 560, y: 1150, "font-family": "IBM Plex Mono", "font-size": 22, fill: ink }, s, "↑ BACHE = PETRÓLEO CARO");
+})();
+
+/* -------- C1 prensa: tachado a mano -------- */
+(function () {
+  const s = document.getElementById("C1s");
+  el("ellipse", { cx: 905, cy: 878, rx: 110, ry: 44, fill: "none", stroke: "#c8321e", "stroke-width": 6, transform: "rotate(5 905 990)" }, s);
+})();
+
+/* -------- C2 prensa: auto grabado + gráfico -------- */
+(function () {
+  const s = document.getElementById("C2s"); const ink = "#1b1a18";
+  const g = el("g", { transform: "rotate(.8 540 730)" }, s);
+  el("path", { d: "M110 1060 L560 1060 Q620 990 680 1060 L980 1060", fill: "none", stroke: ink, "stroke-width": 5 }, g);
+  car(g, 150, 700, 1.05, { body: "#d9d1bf", line: ink, glass: "#f7f3ea", spring: "#c8321e", tire: ink, hub: "#d9d1bf", sw: 5 });
+  // nota al margen
+  el("path", { d: "M720 920 Q800 860 860 620", fill: "none", stroke: "#c8321e", "stroke-width": 5, "stroke-linecap": "round" }, g);
+  el("path", { d: "M842 650 L860 618 L876 652", fill: "none", stroke: "#c8321e", "stroke-width": 5, "stroke-linecap": "round" }, g);
+  el("text", { x: 560, y: 590, "font-family": "Courier Prime", "font-weight": 700, "font-size": 34, fill: "#c8321e" }, g, "el golpe se reparte");
+  el("text", { x: 120, y: 1120, "font-family": "Source Serif 4", "font-style": "italic", "font-size": 30, fill: ink }, g, "El camino es el mismo. Cambia cómo se siente.");
+})();
+
+const id = (location.hash || "#A1").slice(1);
+document.getElementById(id).classList.add("on");
+</script>
+</body>
+</html>

@@ -1,0 +1,1472 @@
+{
+"provider": "kokoro",
+"duration": 97.906939,
+"total": 99.04,
+"words": [
+{
+"text": "¿Qué",
+"start": 0.038,
+"end": 0.265
+},
+{
+"text": "es",
+"start": 0.29,
+"end": 0.426
+},
+{
+"text": "el",
+"start": 0.441,
+"end": 0.577
+},
+{
+"text": "MEPCO,",
+"start": 0.593,
+"end": 0.91
+},
+{
+"text": "y",
+"start": 0.946,
+"end": 1.036
+},
+{
+"text": "por",
+"start": 1.047,
+"end": 1.228
+},
+{
+"text": "qué",
+"start": 1.248,
+"end": 1.43
+},
+{
+"text": "te",
+"start": 1.45,
+"end": 1.586
+},
+{
+"text": "afecta",
+"start": 1.601,
+"end": 1.919
+},
+{
+"text": "aunque",
+"start": 1.955,
+"end": 2.272
+},
+{
+"text": "no",
+"start": 2.308,
+"end": 2.444
+},
+{
+"text": "tengas",
+"start": 2.459,
+"end": 2.777
+},
+{
+"text": "auto?",
+"start": 2.812,
+"end": 3.085
+},
+{
+"text": "Un",
+"start": 3.516,
+"end": 3.667
+},
+{
+"text": "jueves",
+"start": 3.684,
+"end": 4.036
+},
+{
+"text": "de",
+"start": 4.075,
+"end": 4.225
+},
+{
+"text": "marzo,",
+"start": 4.242,
+"end": 4.594
+},
+{
+"text": "la",
+"start": 4.633,
+"end": 4.784
+},
+{
+"text": "bencina",
+"start": 4.8,
+"end": 5.202
+},
+{
+"text": "subió",
+"start": 5.247,
+"end": 5.549
+},
+{
+"text": "trescientos",
+"start": 5.582,
+"end": 6.185
+},
+{
+"text": "setenta",
+"start": 6.252,
+"end": 6.654
+},
+{
+"text": "pesos.",
+"start": 6.699,
+"end": 7.05
+},
+{
+"text": "De",
+"start": 7.484,
+"end": 7.633
+},
+{
+"text": "un",
+"start": 7.649,
+"end": 7.798
+},
+{
+"text": "día",
+"start": 7.814,
+"end": 8.013
+},
+{
+"text": "para",
+"start": 8.035,
+"end": 8.282
+},
+{
+"text": "otro.",
+"start": 8.31,
+"end": 8.607
+},
+{
+"text": "Durante",
+"start": 9.066,
+"end": 9.501
+},
+{
+"text": "doce",
+"start": 9.55,
+"end": 9.821
+},
+{
+"text": "años,",
+"start": 9.852,
+"end": 10.178
+},
+{
+"text": "una",
+"start": 10.214,
+"end": 10.432
+},
+{
+"text": "ley",
+"start": 10.456,
+"end": 10.673
+},
+{
+"text": "existía",
+"start": 10.698,
+"end": 11.133
+},
+{
+"text": "justamente",
+"start": 11.181,
+"end": 11.779
+},
+{
+"text": "para",
+"start": 11.846,
+"end": 12.118
+},
+{
+"text": "evitar",
+"start": 12.148,
+"end": 12.528
+},
+{
+"text": "eso.",
+"start": 12.571,
+"end": 12.843
+},
+{
+"text": "Se",
+"start": 13.299,
+"end": 13.442
+},
+{
+"text": "llama",
+"start": 13.458,
+"end": 13.743
+},
+{
+"text": "MEPCO,",
+"start": 13.775,
+"end": 14.108
+},
+{
+"text": "y",
+"start": 14.145,
+"end": 14.24
+},
+{
+"text": "funciona",
+"start": 14.251,
+"end": 14.68
+},
+{
+"text": "como",
+"start": 14.727,
+"end": 14.965
+},
+{
+"text": "el",
+"start": 14.992,
+"end": 15.134
+},
+{
+"text": "amortiguador",
+"start": 15.15,
+"end": 15.769
+},
+{
+"text": "de",
+"start": 15.838,
+"end": 15.981
+},
+{
+"text": "un",
+"start": 15.997,
+"end": 16.139
+},
+{
+"text": "auto.",
+"start": 16.155,
+"end": 16.441
+},
+{
+"text": "Cuando",
+"start": 16.912,
+"end": 17.243
+},
+{
+"text": "el",
+"start": 17.28,
+"end": 17.422
+},
+{
+"text": "precio",
+"start": 17.437,
+"end": 17.768
+},
+{
+"text": "internacional",
+"start": 17.805,
+"end": 18.467
+},
+{
+"text": "del",
+"start": 18.541,
+"end": 18.73
+},
+{
+"text": "petróleo",
+"start": 18.751,
+"end": 19.176
+},
+{
+"text": "se",
+"start": 19.224,
+"end": 19.365
+},
+{
+"text": "dispara,",
+"start": 19.381,
+"end": 19.807
+},
+{
+"text": "el",
+"start": 19.854,
+"end": 19.996
+},
+{
+"text": "Estado",
+"start": 20.012,
+"end": 20.343
+},
+{
+"text": "cobra",
+"start": 20.379,
+"end": 20.663
+},
+{
+"text": "menos",
+"start": 20.695,
+"end": 20.978
+},
+{
+"text": "impuesto",
+"start": 21.01,
+"end": 21.435
+},
+{
+"text": "a",
+"start": 21.483,
+"end": 21.577
+},
+{
+"text": "la",
+"start": 21.588,
+"end": 21.729
+},
+{
+"text": "bencina.",
+"start": 21.745,
+"end": 22.171
+},
+{
+"text": "Así",
+"start": 22.616,
+"end": 22.822
+},
+{
+"text": "el",
+"start": 22.844,
+"end": 22.998
+},
+{
+"text": "precio",
+"start": 23.016,
+"end": 23.375
+},
+{
+"text": "sube",
+"start": 23.415,
+"end": 23.672
+},
+{
+"text": "de",
+"start": 23.7,
+"end": 23.855
+},
+{
+"text": "a",
+"start": 23.872,
+"end": 23.974
+},
+{
+"text": "poco:",
+"start": 23.986,
+"end": 24.294
+},
+{
+"text": "unos",
+"start": 24.328,
+"end": 24.585
+},
+{
+"text": "veinte",
+"start": 24.614,
+"end": 24.973
+},
+{
+"text": "pesos",
+"start": 25.013,
+"end": 25.321
+},
+{
+"text": "cada",
+"start": 25.355,
+"end": 25.612
+},
+{
+"text": "tres",
+"start": 25.641,
+"end": 25.898
+},
+{
+"text": "semanas.",
+"start": 25.926,
+"end": 26.388
+},
+{
+"text": "Y",
+"start": 26.842,
+"end": 26.939
+},
+{
+"text": "cuando",
+"start": 26.95,
+"end": 27.292
+},
+{
+"text": "el",
+"start": 27.33,
+"end": 27.477
+},
+{
+"text": "petróleo",
+"start": 27.493,
+"end": 27.933
+},
+{
+"text": "baja,",
+"start": 27.982,
+"end": 28.275
+},
+{
+"text": "el",
+"start": 28.308,
+"end": 28.454
+},
+{
+"text": "Estado",
+"start": 28.471,
+"end": 28.813
+},
+{
+"text": "cobra",
+"start": 28.851,
+"end": 29.144
+},
+{
+"text": "más",
+"start": 29.177,
+"end": 29.372
+},
+{
+"text": "y",
+"start": 29.394,
+"end": 29.491
+},
+{
+"text": "recupera",
+"start": 29.502,
+"end": 29.942
+},
+{
+"text": "lo",
+"start": 29.991,
+"end": 30.138
+},
+{
+"text": "que",
+"start": 30.154,
+"end": 30.349
+},
+{
+"text": "puso.",
+"start": 30.371,
+"end": 30.664
+},
+{
+"text": "No",
+"start": 31.088,
+"end": 31.241
+},
+{
+"text": "es",
+"start": 31.258,
+"end": 31.411
+},
+{
+"text": "más",
+"start": 31.428,
+"end": 31.631
+},
+{
+"text": "barato.",
+"start": 31.654,
+"end": 32.061
+},
+{
+"text": "Te",
+"start": 32.107,
+"end": 32.26
+},
+{
+"text": "regala",
+"start": 32.277,
+"end": 32.633
+},
+{
+"text": "tiempo",
+"start": 32.673,
+"end": 33.029
+},
+{
+"text": "para",
+"start": 33.069,
+"end": 33.323
+},
+{
+"text": "adaptarte.",
+"start": 33.352,
+"end": 33.912
+},
+{
+"text": "En",
+"start": 34.375,
+"end": 34.516
+},
+{
+"text": "marzo",
+"start": 34.532,
+"end": 34.814
+},
+{
+"text": "de",
+"start": 34.846,
+"end": 34.987
+},
+{
+"text": "dos",
+"start": 35.003,
+"end": 35.191
+},
+{
+"text": "mil",
+"start": 35.212,
+"end": 35.4
+},
+{
+"text": "veintiséis,",
+"start": 35.421,
+"end": 35.986
+},
+{
+"text": "la",
+"start": 36.049,
+"end": 36.19
+},
+{
+"text": "guerra",
+"start": 36.206,
+"end": 36.536
+},
+{
+"text": "en",
+"start": 36.572,
+"end": 36.713
+},
+{
+"text": "Medio",
+"start": 36.729,
+"end": 37.012
+},
+{
+"text": "Oriente",
+"start": 37.043,
+"end": 37.42
+},
+{
+"text": "disparó",
+"start": 37.461,
+"end": 37.838
+},
+{
+"text": "el",
+"start": 37.88,
+"end": 38.021
+},
+{
+"text": "petróleo.",
+"start": 38.037,
+"end": 38.508
+},
+{
+"text": "El",
+"start": 39.006,
+"end": 39.155
+},
+{
+"text": "amortiguador",
+"start": 39.172,
+"end": 39.819
+},
+{
+"text": "hizo",
+"start": 39.891,
+"end": 40.14
+},
+{
+"text": "su",
+"start": 40.168,
+"end": 40.318
+},
+{
+"text": "trabajo,",
+"start": 40.334,
+"end": 40.783
+},
+{
+"text": "pero",
+"start": 40.832,
+"end": 41.081
+},
+{
+"text": "en",
+"start": 41.109,
+"end": 41.259
+},
+{
+"text": "una",
+"start": 41.275,
+"end": 41.474
+},
+{
+"text": "semana",
+"start": 41.497,
+"end": 41.845
+},
+{
+"text": "le",
+"start": 41.884,
+"end": 42.033
+},
+{
+"text": "costó",
+"start": 42.05,
+"end": 42.349
+},
+{
+"text": "al",
+"start": 42.382,
+"end": 42.532
+},
+{
+"text": "Fisco",
+"start": 42.548,
+"end": 42.847
+},
+{
+"text": "ciento",
+"start": 42.88,
+"end": 43.229
+},
+{
+"text": "cuarenta",
+"start": 43.268,
+"end": 43.716
+},
+{
+"text": "millones",
+"start": 43.766,
+"end": 44.214
+},
+{
+"text": "de",
+"start": 44.264,
+"end": 44.414
+},
+{
+"text": "dólares.",
+"start": 44.43,
+"end": 44.879
+},
+{
+"text": "Y",
+"start": 45.322,
+"end": 45.418
+},
+{
+"text": "el",
+"start": 45.428,
+"end": 45.572
+},
+{
+"text": "Gobierno",
+"start": 45.588,
+"end": 46.02
+},
+{
+"text": "decidió",
+"start": 46.068,
+"end": 46.452
+},
+{
+"text": "soltarlo,",
+"start": 46.494,
+"end": 46.974
+},
+{
+"text": "por",
+"start": 47.027,
+"end": 47.219
+},
+{
+"text": "decreto,",
+"start": 47.241,
+"end": 47.672
+},
+{
+"text": "sin",
+"start": 47.72,
+"end": 47.912
+},
+{
+"text": "pasar",
+"start": 47.933,
+"end": 48.221
+},
+{
+"text": "por",
+"start": 48.253,
+"end": 48.445
+},
+{
+"text": "el",
+"start": 48.466,
+"end": 48.61
+},
+{
+"text": "Congreso.",
+"start": 48.626,
+"end": 49.106
+},
+{
+"text": "La",
+"start": 49.568,
+"end": 49.715
+},
+{
+"text": "noventa",
+"start": 49.731,
+"end": 50.123
+},
+{
+"text": "y",
+"start": 50.166,
+"end": 50.264
+},
+{
+"text": "tres",
+"start": 50.275,
+"end": 50.52
+},
+{
+"text": "subió",
+"start": 50.547,
+"end": 50.84
+},
+{
+"text": "trescientos",
+"start": 50.873,
+"end": 51.46
+},
+{
+"text": "setenta",
+"start": 51.525,
+"end": 51.917
+},
+{
+"text": "y",
+"start": 51.96,
+"end": 52.058
+},
+{
+"text": "dos",
+"start": 52.069,
+"end": 52.264
+},
+{
+"text": "pesos.",
+"start": 52.286,
+"end": 52.629
+},
+{
+"text": "El",
+"start": 53.068,
+"end": 53.221
+},
+{
+"text": "diésel,",
+"start": 53.238,
+"end": 53.647
+},
+{
+"text": "quinientos",
+"start": 53.692,
+"end": 54.254
+},
+{
+"text": "ochenta:",
+"start": 54.316,
+"end": 54.776
+},
+{
+"text": "un",
+"start": 54.827,
+"end": 54.98
+},
+{
+"text": "sesenta",
+"start": 54.997,
+"end": 55.405
+},
+{
+"text": "y",
+"start": 55.451,
+"end": 55.553
+},
+{
+"text": "dos",
+"start": 55.564,
+"end": 55.768
+},
+{
+"text": "por",
+"start": 55.791,
+"end": 55.995
+},
+{
+"text": "ciento.",
+"start": 56.018,
+"end": 56.426
+},
+{
+"text": "Con",
+"start": 56.868,
+"end": 57.074
+},
+{
+"text": "la",
+"start": 57.097,
+"end": 57.252
+},
+{
+"text": "regla",
+"start": 57.269,
+"end": 57.579
+},
+{
+"text": "de",
+"start": 57.613,
+"end": 57.768
+},
+{
+"text": "antes,",
+"start": 57.786,
+"end": 58.147
+},
+{
+"text": "esa",
+"start": 58.187,
+"end": 58.394
+},
+{
+"text": "alza",
+"start": 58.416,
+"end": 58.675
+},
+{
+"text": "habría",
+"start": 58.703,
+"end": 59.065
+},
+{
+"text": "tomado",
+"start": 59.105,
+"end": 59.466
+},
+{
+"text": "casi",
+"start": 59.506,
+"end": 59.764
+},
+{
+"text": "un",
+"start": 59.793,
+"end": 59.948
+},
+{
+"text": "año.",
+"start": 59.965,
+"end": 60.223
+},
+{
+"text": "Llegó",
+"start": 60.687,
+"end": 60.965
+},
+{
+"text": "en",
+"start": 60.995,
+"end": 61.134
+},
+{
+"text": "una",
+"start": 61.15,
+"end": 61.335
+},
+{
+"text": "noche,",
+"start": 61.355,
+"end": 61.679
+},
+{
+"text": "sin",
+"start": 61.715,
+"end": 61.9
+},
+{
+"text": "tiempo",
+"start": 61.921,
+"end": 62.245
+},
+{
+"text": "para",
+"start": 62.281,
+"end": 62.512
+},
+{
+"text": "adaptarse.",
+"start": 62.538,
+"end": 63.047
+},
+{
+"text": "Y",
+"start": 63.504,
+"end": 63.6
+},
+{
+"text": "el",
+"start": 63.611,
+"end": 63.755
+},
+{
+"text": "diésel",
+"start": 63.77,
+"end": 64.106
+},
+{
+"text": "mueve",
+"start": 64.143,
+"end": 64.43
+},
+{
+"text": "los",
+"start": 64.462,
+"end": 64.654
+},
+{
+"text": "camiones",
+"start": 64.675,
+"end": 65.106
+},
+{
+"text": "que",
+"start": 65.154,
+"end": 65.346
+},
+{
+"text": "traen",
+"start": 65.367,
+"end": 65.654
+},
+{
+"text": "todo",
+"start": 65.686,
+"end": 65.926
+},
+{
+"text": "lo",
+"start": 65.952,
+"end": 66.096
+},
+{
+"text": "que",
+"start": 66.112,
+"end": 66.304
+},
+{
+"text": "compras.",
+"start": 66.325,
+"end": 66.756
+},
+{
+"text": "En",
+"start": 67.196,
+"end": 67.346
+},
+{
+"text": "abril,",
+"start": 67.362,
+"end": 67.711
+},
+{
+"text": "los",
+"start": 67.75,
+"end": 67.949
+},
+{
+"text": "precios",
+"start": 67.971,
+"end": 68.37
+},
+{
+"text": "subieron",
+"start": 68.414,
+"end": 68.862
+},
+{
+"text": "uno",
+"start": 68.912,
+"end": 69.111
+},
+{
+"text": "coma",
+"start": 69.133,
+"end": 69.382
+},
+{
+"text": "tres",
+"start": 69.41,
+"end": 69.659
+},
+{
+"text": "por",
+"start": 69.687,
+"end": 69.886
+},
+{
+"text": "ciento",
+"start": 69.908,
+"end": 70.257
+},
+{
+"text": "en",
+"start": 70.295,
+"end": 70.445
+},
+{
+"text": "un",
+"start": 70.461,
+"end": 70.611
+},
+{
+"text": "solo",
+"start": 70.627,
+"end": 70.876
+},
+{
+"text": "mes:",
+"start": 70.904,
+"end": 71.153
+},
+{
+"text": "el",
+"start": 71.181,
+"end": 71.33
+},
+{
+"text": "mayor",
+"start": 71.347,
+"end": 71.646
+},
+{
+"text": "salto",
+"start": 71.679,
+"end": 71.978
+},
+{
+"text": "desde",
+"start": 72.011,
+"end": 72.31
+},
+{
+"text": "dos",
+"start": 72.343,
+"end": 72.542
+},
+{
+"text": "mil",
+"start": 72.564,
+"end": 72.763
+},
+{
+"text": "veintidós.",
+"start": 72.785,
+"end": 73.333
+},
+{
+"text": "La",
+"start": 73.79,
+"end": 73.927
+},
+{
+"text": "inflación",
+"start": 73.943,
+"end": 74.401
+},
+{
+"text": "anual",
+"start": 74.452,
+"end": 74.727
+},
+{
+"text": "pasó",
+"start": 74.757,
+"end": 74.987
+},
+{
+"text": "de",
+"start": 75.012,
+"end": 75.15
+},
+{
+"text": "dos",
+"start": 75.165,
+"end": 75.348
+},
+{
+"text": "coma",
+"start": 75.369,
+"end": 75.598
+},
+{
+"text": "ocho",
+"start": 75.623,
+"end": 75.852
+},
+{
+"text": "a",
+"start": 75.878,
+"end": 75.97
+},
+{
+"text": "cuatro",
+"start": 75.98,
+"end": 76.301
+},
+{
+"text": "por",
+"start": 76.336,
+"end": 76.52
+},
+{
+"text": "ciento",
+"start": 76.54,
+"end": 76.861
+},
+{
+"text": "en",
+"start": 76.896,
+"end": 77.034
+},
+{
+"text": "apenas",
+"start": 77.049,
+"end": 77.37
+},
+{
+"text": "un",
+"start": 77.406,
+"end": 77.543
+},
+{
+"text": "mes.",
+"start": 77.559,
+"end": 77.788
+},
+{
+"text": "Lo",
+"start": 78.207,
+"end": 78.352
+},
+{
+"text": "que",
+"start": 78.368,
+"end": 78.561
+},
+{
+"text": "el",
+"start": 78.583,
+"end": 78.728
+},
+{
+"text": "amortiguador",
+"start": 78.744,
+"end": 79.372
+},
+{
+"text": "repartía",
+"start": 79.441,
+"end": 79.876
+},
+{
+"text": "en",
+"start": 79.924,
+"end": 80.069
+},
+{
+"text": "un",
+"start": 80.085,
+"end": 80.23
+},
+{
+"text": "año,",
+"start": 80.246,
+"end": 80.488
+},
+{
+"text": "la",
+"start": 80.515,
+"end": 80.66
+},
+{
+"text": "economía",
+"start": 80.676,
+"end": 81.11
+},
+{
+"text": "lo",
+"start": 81.159,
+"end": 81.304
+},
+{
+"text": "absorbió",
+"start": 81.32,
+"end": 81.754
+},
+{
+"text": "de",
+"start": 81.803,
+"end": 81.948
+},
+{
+"text": "golpe.",
+"start": 81.964,
+"end": 82.302
+},
+{
+"text": "Hoy,",
+"start": 82.752,
+"end": 83.003
+},
+{
+"text": "tras",
+"start": 83.031,
+"end": 83.282
+},
+{
+"text": "seis",
+"start": 83.309,
+"end": 83.56
+},
+{
+"text": "alzas",
+"start": 83.588,
+"end": 83.889
+},
+{
+"text": "seguidas",
+"start": 83.922,
+"end": 84.374
+},
+{
+"text": "desde",
+"start": 84.424,
+"end": 84.725
+},
+{
+"text": "julio,",
+"start": 84.758,
+"end": 85.11
+},
+{
+"text": "la",
+"start": 85.149,
+"end": 85.299
+},
+{
+"text": "noventa",
+"start": 85.316,
+"end": 85.717
+},
+{
+"text": "y",
+"start": 85.762,
+"end": 85.862
+},
+{
+"text": "tres",
+"start": 85.873,
+"end": 86.124
+},
+{
+"text": "vuelve",
+"start": 86.152,
+"end": 86.503
+},
+{
+"text": "a",
+"start": 86.542,
+"end": 86.642
+},
+{
+"text": "niveles",
+"start": 86.653,
+"end": 87.055
+},
+{
+"text": "de",
+"start": 87.099,
+"end": 87.25
+},
+{
+"text": "récord.",
+"start": 87.266,
+"end": 87.668
+},
+{
+"text": "Y",
+"start": 88.151,
+"end": 88.25
+},
+{
+"text": "ahora,",
+"start": 88.261,
+"end": 88.608
+},
+{
+"text": "el",
+"start": 88.647,
+"end": 88.795
+},
+{
+"text": "mismo",
+"start": 88.812,
+"end": 89.109
+},
+{
+"text": "Gobierno",
+"start": 89.142,
+"end": 89.588
+},
+{
+"text": "busca",
+"start": 89.638,
+"end": 89.935
+},
+{
+"text": "volver",
+"start": 89.968,
+"end": 90.315
+},
+{
+"text": "a",
+"start": 90.354,
+"end": 90.453
+},
+{
+"text": "amortiguar",
+"start": 90.464,
+"end": 91.009
+},
+{
+"text": "las",
+"start": 91.069,
+"end": 91.268
+},
+{
+"text": "alzas.",
+"start": 91.29,
+"end": 91.637
+},
+{
+"text": "¿Tú",
+"start": 92.08,
+"end": 92.279
+},
+{
+"text": "alcanzaste",
+"start": 92.301,
+"end": 92.849
+},
+{
+"text": "a",
+"start": 92.91,
+"end": 93.009
+},
+{
+"text": "adaptarte",
+"start": 93.02,
+"end": 93.518
+},
+{
+"text": "a",
+"start": 93.573,
+"end": 93.673
+},
+{
+"text": "un",
+"start": 93.684,
+"end": 93.833
+},
+{
+"text": "año",
+"start": 93.85,
+"end": 94.049
+},
+{
+"text": "de",
+"start": 94.071,
+"end": 94.22
+},
+{
+"text": "alzas",
+"start": 94.237,
+"end": 94.535
+},
+{
+"text": "en",
+"start": 94.569,
+"end": 94.718
+},
+{
+"text": "una",
+"start": 94.735,
+"end": 94.934
+},
+{
+"text": "sola",
+"start": 94.956,
+"end": 95.205
+},
+{
+"text": "noche?",
+"start": 95.232,
+"end": 95.581
+},
+{
+"text": "Te",
+"start": 96.076,
+"end": 96.22
+},
+{
+"text": "leo",
+"start": 96.236,
+"end": 96.428
+},
+{
+"text": "en",
+"start": 96.449,
+"end": 96.593
+},
+{
+"text": "los",
+"start": 96.609,
+"end": 96.8
+},
+{
+"text": "comentarios.",
+"start": 96.822,
+"end": 97.445
+}
+]
+}
