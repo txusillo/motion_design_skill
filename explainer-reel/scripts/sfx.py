@@ -12,7 +12,7 @@ sfx.json:
            {"t": 20.16, "kind": "cartas", "length": 1.1}]
 }
 Cada "kind" rota entre los efectos de la libreria con ese tipo. "soft" baja el volumen al 70%.
-Los tipos "cartas" duran "length" y se comprimen para oirse. Los demas llevan su pico un cuadro
+Los tipos "cartas" y "contador" duran "length" y se comprimen para oirse. Los demas llevan su pico un cuadro
 despues de la imagen (los whooshes, 0,2 s despues del inicio del movimiento).
 """
 import array
@@ -29,8 +29,16 @@ CFG = json.loads((ROOT / "sfx.json").read_text(encoding="utf8"))
 RAW = ROOT / "assets/sfx/crudos"
 OUT = ROOT / "assets/sfx"
 SR = 44100
-LEAD = {"whoosh": 0.2, "whoosh_largo": 0.6}
-LANES = {"pop": [8, 9, 10], "whoosh": [11], "whoosh_largo": [12], "cartas": [13]}
+LEAD = {"whoosh": 0.2, "whoosh_largo": 0.6, "contador": 0}  # contador arranca con los digitos (usa "length", como cartas)
+LANES = {"pop": [8, 9, 10], "whoosh": [11], "whoosh_largo": [12], "cartas": [13], "contador": [14]}
+# Tipos "con largo": el sonido arranca en cue["t"] y dura cue["length"] (recorte con fundido). Fundidos (entrada, salida) en segundos.
+TIMED = {"cartas": (0, 0.12), "contador": (0, 0.05), "lapiz": (0.02, 0.05), "rodar": (0.15, 0.15), "barra": (0.02, 0.06),
+         "papel": (0.02, 0.08), "aguja": (0, 0.05), "camion": (0.03, 0.1), "resorte": (0, 0.06)}
+# Tipos "de golpe" (pico un cuadro despues de la imagen): golpe, bache, tijera, clic, escalon (y pop, whoosh...). Cualquier tipo nuevo con carriles
+# propios se declara aqui; si no tiene carril usa el 14.
+LANES.update({"resorte": [20], "lapiz": [21, 22], "escalon": [23, 24], "rodar": [25], "bache": [26], "camion": [27], "golpe": [28, 29],
+              "tijera": [30], "aguja": [31], "clic": [32, 33], "papel": [34, 35], "barra": [36, 37]})
+# Un cue puede llevar: "name" (variante concreta de la libreria), "pitch" (semitonos; se deriva un wav con asetrate), "vol" (multiplicador).
 
 
 def generate(name, spec):
@@ -74,6 +82,19 @@ def process(name, spec, src):
     return {"len": round(len(clip) / SR, 3), "peak": round(max(range(len(clip)), key=lambda i: abs(clip[i])) / SR, 3)}
 
 
+def pitched(name, semis, info):
+    """Deriva name_p<semis>.wav cambiando la altura con asetrate (el sonido se acorta o alarga igual)."""
+    out_name = f"{name}_p{semis:+d}"
+    if out_name not in info:
+        src = OUT / f"{name}.wav"
+        dst = OUT / f"{out_name}.wav"
+        r = 2 ** (semis / 12)
+        subprocess.check_call(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-af", f"asetrate={SR * r:.1f},aresample={SR}", "-ac", "1", str(dst)])
+        clip = samples(dst)
+        info[out_name] = {"len": round(len(clip) / SR, 3), "peak": round(max(range(len(clip)), key=lambda i: abs(clip[i])) / SR, 3)}
+    return out_name
+
+
 def build(info):
     kinds = {}
     for name, spec in CFG["library"].items():
@@ -84,15 +105,25 @@ def build(info):
         kind = cue["kind"]
         names = kinds[kind]
         # Rota sin repetir el mismo efecto dos veces seguidas
-        name = names[(used[kind] * 3 + 1) % len(names)] if len(names) > 3 else names[used[kind] % len(names)]
+        if cue.get("name"):
+            name = cue["name"]
+        else:
+            name = names[(used[kind] * 3 + 1) % len(names)] if len(names) > 3 else names[used[kind] % len(names)]
         lane = LANES.get(kind, [14])[used[kind] % len(LANES.get(kind, [14]))]
         used[kind] += 1
-        vol = CFG["volume"].get(kind, 0.3) * (0.7 if cue.get("soft") else 1)
-        if kind == "cartas":
-            start, length, extra = cue["t"], min(cue.get("length", 1.0), info[name]["len"]), ' data-fade-out="0.12"'
+        if cue.get("pitch"):
+            name = pitched(name, int(cue["pitch"]), info)
+        vol = CFG["volume"].get(kind, 0.3) * (0.7 if cue.get("soft") else 1) * cue.get("vol", 1)
+        if kind in TIMED:
+            fin, fout = TIMED[kind]
+            start, length = cue["t"], round(min(cue.get("length", 1.0), info[name]["len"]), 3)
+            extra = (f' data-fade-in="{fin}"' if fin else "") + (f' data-fade-out="{min(fout, length / 2):.3f}"' if fout else "")
         else:
             start = max(0, cue["t"] + LEAD.get(kind, 1 / 30) - info[name]["peak"])
             length, extra = info[name]["len"], ""
+            if cue.get("length"):  # tope de largo con fundido corto (p. ej. escalones de 0,08 s)
+                length = round(min(length, cue["length"]), 3)
+                extra = f' data-fade-out="{min(0.03, length / 2):.3f}"'
         rows.append((start, name, length, lane, vol, extra))
     rows.sort()
     return "\n".join(
