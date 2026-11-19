@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script src="assets/santiago.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #eceae4; }
+      #root { position: absolute; inset: 0; }
+      .esc { position: absolute; inset: 0; overflow: hidden; background: var(--paper); color: var(--ink);
+        --paper: #eceae4; --card: #f7f6f2; --ink: #16213e; --acc: #2e5bff; --soft: #a9b8e8; }
+
+      .grid { position: absolute; inset: 0;
+        background-image: linear-gradient(color-mix(in srgb, var(--ink) 9%, transparent) 1.5px, transparent 1.5px),
+                          linear-gradient(90deg, color-mix(in srgb, var(--ink) 9%, transparent) 1.5px, transparent 1.5px);
+        background-size: 180px 180px; background-position: 0 40px; }
+      .crop { position: absolute; width: 34px; height: 34px; border-color: var(--ink); border-style: solid; border-width: 0; }
+      .mono { font-family: "Space Mono", monospace; font-size: 30px; letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap; }
+      .hud { position: absolute; top: 196px; left: 48px; right: 48px; display: flex; justify-content: space-between; }
+      .foot { position: absolute; top: 1420px; left: 48px; right: 48px; }
+      .foot .row { display: flex; justify-content: space-between; }
+      .ruler { position: relative; height: 40px; margin-top: 18px; border-bottom: 3px solid var(--ink); }
+      .ruler i { position: absolute; bottom: -3px; width: 3px; height: 26px; background: var(--ink); }
+      .ruler b { position: absolute; left: 0; bottom: -6px; height: 9px; background: var(--acc); }
+
+      .row-type { position: absolute; left: 0; white-space: nowrap; line-height: 1; }
+      .heavy { font-family: "Archivo Black", sans-serif; letter-spacing: -0.02em; }
+      .serif { font-family: "Playfair Display", serif; font-style: italic; font-weight: 500; }
+      .band { background: var(--ink); color: var(--paper); }
+      .outline { color: transparent; -webkit-text-stroke: 3px var(--ink); }
+
+      .cap { position: absolute; left: 70px; right: 70px; top: 1150px; font-family: "Archivo Black", sans-serif; font-size: 50px; line-height: 64px; text-align: center; text-wrap: balance; }
+      .cap b { font-weight: 400; background: var(--acc); color: var(--paper); box-shadow: 8px 0 0 var(--acc), -8px 0 0 var(--acc); }
+
+      svg.full { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+      .bubble { position: absolute; background: var(--card); border: 4px solid var(--ink); border-radius: 26px; padding: 14px 30px 20px; font-size: 46px; white-space: nowrap; box-shadow: 10px 10px 0 var(--ink); }
+      .bubble::after { content: ""; position: absolute; right: 60px; bottom: -30px; width: 36px; height: 36px; background: var(--card); border-right: 4px solid var(--ink); border-bottom: 4px solid var(--ink); transform: rotate(45deg) skew(10deg, 10deg); }
+
+      .card { position: absolute; border-radius: 30px; }
+      .card .mono { font-size: 26px; }
+      .blank { position: absolute; left: 44px; right: 44px; height: 108px; }
+      .blank .line { position: absolute; left: 0; right: 0; bottom: 34px; height: 12px; background: var(--acc); }
+      .blank .q { position: absolute; right: 6px; bottom: 50px; font-family: "Playfair Display", serif; font-style: italic; font-size: 64px; color: var(--acc); line-height: 1; }
+      .blank .mono { position: absolute; left: 0; bottom: 0; font-size: 24px; }
+
+      .panel { position: absolute; left: 70px; right: 70px; top: 262px; height: 190px; background: var(--card); border: 4px solid var(--ink); border-radius: 26px; box-shadow: 0 24px 40px color-mix(in srgb, var(--ink) 16%, transparent); }
+      .panel .mono { position: absolute; left: 34px; font-size: 24px; }
+      .panel .big { position: absolute; left: 30px; font-family: "Archivo Black", sans-serif; letter-spacing: -0.02em; line-height: 1; }
+      .chip { position: absolute; padding: 8px 16px 10px; border-radius: 999px; font-family: "Space Mono", monospace; font-size: 22px; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; background: var(--card); border: 3px solid var(--ink); }
+      .chip.on { background: var(--acc); color: var(--paper); border-color: var(--acc); }
+      .chip.dim { opacity: 0.35; }
+      .tagname { position: absolute; padding: 12px 22px 14px; border-radius: 18px; background: var(--card); border: 4px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); text-align: left; }
+      .tagname .mono { font-size: 20px; display: block; margin-bottom: 4px; }
+      .tagname .heavy { font-size: 40px; line-height: 1; white-space: nowrap; }
+      .tagname.on { border-color: var(--acc); box-shadow: 8px 8px 0 var(--acc); }
+      .tagname.on .heavy { color: var(--acc); }
+      .note { position: absolute; font-size: 20px; opacity: 0.7; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="20" data-width="1080" data-height="1920">
+      <div id="s01" class="esc clip" data-start="0" data-duration="1"></div>
+      <div id="s02" class="esc clip" data-start="1" data-duration="1"></div>
+      <div id="s03a" class="esc clip" data-start="2" data-duration="1"></div>
+      <div id="s03b" class="esc clip" data-start="3" data-duration="1"></div>
+      <div id="s04a" class="esc clip" data-start="4" data-duration="1"></div>
+      <div id="s04b" class="esc clip" data-start="5" data-duration="1"></div>
+      <div id="s05" class="esc clip" data-start="6" data-duration="1"></div>
+      <div id="s06" class="esc clip" data-start="7" data-duration="1"></div>
+      <div id="s07a" class="esc clip" data-start="8" data-duration="1"></div>
+      <div id="s07b" class="esc clip" data-start="9" data-duration="1"></div>
+      <div id="s08a" class="esc clip" data-start="10" data-duration="1"></div>
+      <div id="s08b" class="esc clip" data-start="11" data-duration="1"></div>
+      <div id="s09a" class="esc clip" data-start="12" data-duration="1"></div>
+      <div id="s09b" class="esc clip" data-start="13" data-duration="1"></div>
+      <div id="s10" class="esc clip" data-start="14" data-duration="1"></div>
+      <div id="s11" class="esc clip" data-start="15" data-duration="1"></div>
+      <div id="s12a" class="esc clip" data-start="16" data-duration="1"></div>
+      <div id="s12b" class="esc clip" data-start="17" data-duration="1"></div>
+      <div id="s13" class="esc clip" data-start="18" data-duration="1"></div>
+      <div id="s14" class="esc clip" data-start="19" data-duration="1"></div>
+    </div>
+
+    <script>
+      const INK = "#16213e", ACC = "#2e5bff", SOFT = "#a9b8e8", PAPER = "#eceae4", CARD = "#f7f6f2";
+      const TOTAL = 82.0;
+      const SECTIONS = ["La pregunta", "El estudio", "Nueve grupos", "Entre ellos", "El nororiente", "El Congreso", "Tu apellido"];
+
+      // ---------- Azar con semilla ----------
+      function rng(seed) { return function () { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+
+      // ---------- Isométrico con vóxeles ----------
+      const U = 30, C = Math.cos(Math.PI / 6) * U, S = Math.sin(Math.PI / 6) * U;
+      const P = (x, y, z) => [(x - y) * C, (x + y) * S - z * U];
+      const pts = (a) => a.map((p) => P(...p).map((v) => v.toFixed(1)).join(",")).join(" ");
+      function shade(hex, k) { const n = parseInt(hex.slice(1), 16); return `rgb(${Math.round(((n >> 16) & 255) * k)},${Math.round(((n >> 8) & 255) * k)},${Math.round((n & 255) * k)})`; }
+      function box(x, y, z, w, d, h, col) {
+        const top = [[x, y, z + h], [x + w, y, z + h], [x + w, y + d, z + h], [x, y + d, z + h]];
+        const right = [[x + w, y, z], [x + w, y + d, z], [x + w, y + d, z + h], [x + w, y, z + h]];
+        const left = [[x, y + d, z], [x + w, y + d, z], [x + w, y + d, z + h], [x, y + d, z + h]];
+        return `<polygon points="${pts(left)}" fill="${shade(col, 0.86)}"/><polygon points="${pts(right)}" fill="${shade(col, 0.7)}"/><polygon points="${pts(top)}" fill="${col}"/>`;
+      }
+      const faceRect = (fx, y, z, d, h, col) => `<polygon points="${pts([[fx, y, z], [fx, y + d, z], [fx, y + d, z + h], [fx, y, z + h]])}" fill="${col}"/>`;
+      function person(o) {
+        let s = "";
+        s += box(0.2, -0.55, 2.3, 0.8, 0.55, 2.0, o.shirt);
+        s += box(0.15, 0.1, 0, 0.9, 0.8, 2.3, o.pants);
+        s += box(0.15, 1.1, 0, 0.9, 0.8, 2.3, o.pants);
+        s += box(0.0, 0.0, 2.3, 1.2, 2.0, 2.4, o.shirt);
+        s += box(0.2, 2.0, 2.3, 0.8, 0.55, 2.0, o.shirt);
+        s += box(0.25, 2.0, 2.0, 0.7, 0.55, 0.35, o.skin);
+        if (o.style === "long") s += box(-0.2, 0.0, 3.8, 0.5, 2.0, 2.6, o.hair);
+        s += box(-0.1, 0.1, 4.7, 1.6, 1.8, 1.7, o.skin);
+        s += box(-0.15, 0.05, 6.1, 1.7, 1.9, o.style === "tall" ? 1.0 : 0.45, o.hair);
+        s += box(-0.15, 0.05, 5.4, 0.45, 1.9, 0.75, o.hair);
+        if (o.style === "bun") s += box(0.3, 0.7, 6.55, 0.7, 0.7, 0.6, o.hair);
+        s += faceRect(1.5, 0.5, 5.35, 0.22, 0.32, "#20180f");
+        s += faceRect(1.5, 1.3, 5.35, 0.22, 0.32, "#20180f");
+        if (o.glasses) { s += faceRect(1.52, 0.38, 5.25, 0.46, 0.08, "#20180f"); s += faceRect(1.52, 1.18, 5.25, 0.46, 0.08, "#20180f"); s += faceRect(1.52, 0.38, 5.68, 1.26, 0.07, "#20180f"); }
+        s += faceRect(1.5, 0.75, 4.95, 0.55, 0.12, shade(o.skin, 0.6));
+        if (o.tie) s += faceRect(1.2, 0.85, 3.4, 0.3, 1.3, o.tie);
+        return s;
+      }
+      const at = (x, y, sc, flip, inner) => `<g transform="translate(${x} ${y}) scale(${flip ? -sc : sc} ${sc})">${inner}</g>`;
+      const SKIN = ["#eac6a2", "#c8936a", "#946043", "#e3b48c"];
+      const HAIR = ["#2a201a", "#5b3b24", "#1a1a1a", "#8a6a3c"];
+      const PEOPLE = [
+        { shirt: INK, pants: shade(INK, 0.6), skin: SKIN[0], hair: HAIR[3], style: "bun" },
+        { shirt: SOFT, pants: INK, skin: SKIN[3], hair: HAIR[0], style: "short", tie: ACC },
+        { shirt: "#f4efe4", pants: INK, skin: SKIN[1], hair: HAIR[1], style: "long" },
+        { shirt: ACC, pants: "#0f1730", skin: SKIN[2], hair: HAIR[2], style: "tall" },
+        { shirt: "#8a93a8", pants: INK, skin: SKIN[1], hair: HAIR[0], style: "short" },
+        { shirt: "#c3c8d4", pants: "#0f1730", skin: SKIN[0], hair: HAIR[1], style: "long" },
+      ];
+
+      // ---------- Marco común ----------
+      function tc(t) { const s = Math.floor(t), f = Math.round((t - s) * 30); return `00:00:${String(s).padStart(2, "0")}:${String(f).padStart(2, "0")}`; }
+      const crops = () => ["left:24px;top:150px;border-left-width:3px;border-top-width:3px", "right:24px;top:150px;border-right-width:3px;border-top-width:3px", "left:24px;top:1500px;border-left-width:3px;border-bottom-width:3px", "right:24px;top:1500px;border-right-width:3px;border-bottom-width:3px"].map((s) => `<div class="crop" style="${s}"></div>`).join("");
+      function frame(t, sec, cap, inner, right = "PADRÓN 2012") {
+        let ticks = "";
+        for (let i = 0; i <= 7; i++) ticks += `<i style="left:${(i / 7) * 100}%"></i>`;
+        return `<div class="grid"></div>${crops()}
+          <div class="hud"><div class="mono">Apellidos · Santiago ’12</div><div class="mono">${tc(t)}</div></div>
+          ${inner}
+          <div class="cap">${cap}</div>
+          <div class="foot"><div class="row"><div class="mono"><b style="font-weight:700">0${sec}/07</b> ${SECTIONS[sec - 1]}</div><div class="mono">● ${right}</div></div>
+          <div class="ruler">${ticks}<b style="width:${(t / TOTAL) * 100}%"></b></div></div>`;
+      }
+
+      // ---------- Red de apellidos (9 grupos) ----------
+      const GROUPS = [
+        { id: "C4", label: "Mapuche", n: 16, cx: 285, cy: 640, r: 150, col: "#5f9e7a", lx: 120, ly: 450 },
+        { id: "C2", label: "Mapuche", n: 7, cx: 225, cy: 905, r: 70, col: "#2f8f8a", lx: 90, ly: 1000 },
+        { id: "C3", label: "Coreana", n: 6, cx: 560, cy: 420, r: 55, col: "#d9a62e", lx: 625, ly: 380 },
+        { id: "C1", label: "Gitana", n: 5, cx: 930, cy: 520, r: 40, col: "#c9577f", lx: 850, ly: 430 },
+        { id: "C6", label: "Mixta", n: 6, cx: 430, cy: 860, r: 60, col: "#9a8f7a", lx: 345, ly: 945 },
+        { id: "C8", label: "Mixta", n: 7, cx: 560, cy: 985, r: 62, col: "#8f6fb8", lx: 610, ly: 1040 },
+        { id: "C7", label: "Aristocracia", n: 13, cx: 650, cy: 690, r: 105, col: ACC, elite: ACC, lx: 330, ly: 610 },
+        { id: "C0", label: "+ familias palestinas", n: 12, cx: 850, cy: 680, r: 100, col: "#18a0e0", elite: "#18a0e0", lx: 560, ly: 500 },
+        { id: "C5", label: "+ familias judías", n: 13, cx: 770, cy: 850, r: 105, col: "#1b2fa8", elite: "#1b2fa8", lx: 690, ly: 965 },
+      ];
+      const NET = (() => {
+        const r = rng(7), nodes = [], edges = [];
+        GROUPS.forEach((g, gi) => {
+          for (let i = 0; i < g.n; i++) { const a = r() * Math.PI * 2, d = Math.sqrt(r()) * g.r; nodes.push({ g: gi, x: g.cx + Math.cos(a) * d, y: g.cy + Math.sin(a) * d * 0.85 }); }
+        });
+        nodes.forEach((p, i) => {
+          const near = nodes.map((q, j) => [j, (q.x - p.x) ** 2 + (q.y - p.y) ** 2]).filter(([j]) => j !== i && nodes[j].g === p.g).sort((a, b) => a[1] - b[1]).slice(0, 2);
+          near.forEach(([j]) => { if (i < j) edges.push([i, j, 0]); });
+        });
+        for (let k = 0; k < 18; k++) { const i = Math.floor(r() * nodes.length), j = Math.floor(r() * nodes.length); const gi = GROUPS[nodes[i].g], gj = GROUPS[nodes[j].g]; if (nodes[i].g !== nodes[j].g && (gi.elite && gj.elite ? true : r() < 0.25)) edges.push([i, j, 1]); }
+        return { nodes, edges };
+      })();
+      // mode: neutral | groups | elite ; focus: escala sobre un punto
+      function network(mode, opts = {}) {
+        const { nodes, edges } = NET;
+        const tf = opts.zoom ? `translate(${opts.zoom.x} ${opts.zoom.y}) scale(${opts.zoom.s}) translate(${-opts.zoom.cx} ${-opts.zoom.cy})` : "";
+        const fill = (g) => mode === "neutral" ? g.col : mode === "groups" ? (g.elite ? "#c3c8d4" : g.col) : g.col;
+        const op = (g) => mode === "elite" && !g.elite ? 0.3 : 1;
+        let s = `<g transform="${tf}">`;
+        edges.forEach(([i, j, x]) => {
+          const a = nodes[i], b = nodes[j], ga = GROUPS[a.g], gb = GROUPS[b.g];
+          const strong = mode === "elite" && ga.elite && gb.elite;
+          s += `<line x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${b.x.toFixed(1)}" y2="${b.y.toFixed(1)}" stroke="${strong ? ACC : INK}" stroke-opacity="${strong ? 0.55 : x ? 0.1 : 0.22}" stroke-width="${strong ? 2.5 : 2}"/>`;
+        });
+        nodes.forEach((p) => { const g = GROUPS[p.g]; s += `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="11" fill="${fill(g)}" fill-opacity="${op(g)}"/>`; });
+        if (mode === "neutral") GROUPS.forEach((g, i) => {
+          s += `<ellipse cx="${g.cx}" cy="${g.cy}" rx="${g.r + 22}" ry="${(g.r + 22) * 0.88}" fill="${g.col}" fill-opacity="0.08" stroke="${g.col}" stroke-width="3" stroke-dasharray="9 10"/>`;
+        });
+        if (mode === "elite") s += `<ellipse cx="760" cy="745" rx="250" ry="215" fill="none" stroke="${ACC}" stroke-width="4" stroke-dasharray="12 10"/>`;
+        return s + "</g>";
+      }
+      function netLabels(mode) {
+        return GROUPS.map((g, i) => {
+          if (mode === "neutral") return `<div class="chip" style="border-color:${g.col};color:${g.col};left:${g.cx - 22}px;top:${g.id === "C5" ? g.cy + g.r + 26 : g.cy - g.r - 62}px">${i + 1}</div>`;
+          if (mode === "groups") return g.elite ? "" : `<div class="chip" style="background:${g.col};border-color:${g.col};color:#fff;left:${g.lx}px;top:${g.ly}px">${g.label}</div>`;
+          return g.elite ? `<div class="chip on" style="background:${g.col};border-color:${g.col};left:${g.lx}px;top:${g.ly}px">${g.label}</div>` : `<div class="chip dim" style="left:${g.lx}px;top:${g.ly}px">${g.label}</div>`;
+        }).join("");
+      }
+
+      // ---------- Mapa de Santiago ----------
+      function mapa(x, y, w, opts = {}) {
+        const M = window.SANTIAGO, s = w / M.w;
+        let p = `<g transform="translate(${x} ${y}) scale(${s})">`;
+        M.comunas.forEach((c) => {
+          const lit = opts.ne && c.ne;
+          p += `<path d="${c.d}" fill="${lit ? ACC : opts.fill || SOFT}" fill-opacity="${lit ? 0.95 : opts.op ?? 0.35}" stroke="${INK}" stroke-width="${2.2 / s}" stroke-linejoin="round"/>`;
+        });
+        return p + "</g>";
+      }
+
+      // ================= ESCENAS =================
+      const SC = {};
+
+      SC.s01 = () => {
+        const cx = 540, cy = 975;
+        let ring = `<ellipse cx="${cx}" cy="${cy}" rx="270" ry="112" fill="${SOFT}" fill-opacity="0.35"/><ellipse cx="${cx}" cy="${cy}" rx="310" ry="132" fill="none" stroke="${INK}" stroke-width="3" stroke-dasharray="10 12"/>`;
+        const pos = [[330, 905, false, 0], [750, 905, true, 1], [345, 1080, false, 2], [735, 1080, true, 3]];
+        const iso = pos.map(([x, y, f, k]) => at(x, y, 0.92, f, person(PEOPLE[k]))).join("");
+        return frame(1.2, 1, "¿Has notado que en Chile, en ciertos <b>círculos,</b> te preguntan mucho por tus apellidos?", `
+          <div class="row-type heavy" style="top:258px;left:-110px;font-size:128px">APELLIDOS · APELLIDOS</div>
+          <div class="row-type serif" style="top:386px;left:-240px;font-size:132px">apellidos · apellidos · ape</div>
+          <div class="row-type heavy band" style="top:534px;left:0;right:0;font-size:128px;padding:4px 0 10px;text-indent:-60px">· APELLIDOS · APE</div>
+          <svg class="full">${ring}${iso}</svg>
+          <div class="bubble serif" style="left:360px;top:745px">¿y tus apellidos?</div>`);
+      };
+
+      SC.s02 = () => {
+        const card = (left, top, rot, bg, fg, name, num, z) => `<div class="card" style="left:${left}px;top:${top}px;width:300px;height:420px;background:${bg};color:${fg};transform:perspective(1600px) rotateY(${rot}deg);z-index:${z};box-shadow:0 30px 40px color-mix(in srgb, var(--ink) 22%, transparent)"><div class="mono" style="position:absolute;right:28px;top:24px">${num}</div><div class="heavy" style="position:absolute;left:30px;bottom:34px;font-size:46px">${name}</div></div>`;
+        return frame(5.2, 1, "¿Qué están preguntando <b>en</b> realidad?", `
+          <div class="row-type heavy outline" style="top:262px;left:50%;transform:translateX(-50%);font-size:168px">APELLIDOS · APELLIDOS · APELLIDOS</div>
+          <div class="mono" style="position:absolute;left:48px;top:448px;font-size:26px;line-height:40px">Nombre<br>Paterno<br>Materno</div>
+          <div class="mono" style="position:absolute;left:300px;top:448px;font-size:26px;line-height:40px">Juan<br>?<br>?</div>
+          ${card(-60, 640, 38, "var(--ink)", "var(--paper)", "MARÍA", "01", 1)}${card(150, 610, 24, "var(--soft)", "var(--ink)", "PEDRO", "02", 2)}
+          ${card(630, 610, -24, "var(--soft)", "var(--ink)", "ANA", "05", 2)}${card(840, 640, -38, "var(--ink)", "var(--paper)", "LUIS", "06", 1)}
+          <div class="card" style="left:300px;top:560px;width:480px;height:560px;background:var(--card);border:4px solid var(--ink);z-index:5;box-shadow:0 34px 50px color-mix(in srgb, var(--ink) 28%, transparent)">
+            <div class="mono" style="position:absolute;left:30px;top:26px">Ficha</div><div class="mono" style="position:absolute;right:30px;top:26px">04</div>
+            <div class="heavy" style="position:absolute;left:44px;top:96px;font-size:92px;line-height:1">JUAN</div>
+            <div class="blank" style="top:250px"><div class="line"></div><div class="q">?</div><div class="mono">Apellido paterno</div></div>
+            <div class="blank" style="top:400px"><div class="line"></div><div class="q">?</div><div class="mono">Apellido materno</div></div>
+          </div>`);
+      };
+
+      SC.s03a = () => {
+        // pila de fichas del padrón al centro
+        let stack = "";
+        for (let i = 0; i < 16; i++) stack += box(0, 0, i * 0.32, 4.2, 3.0, 0.24, i % 2 ? CARD : "#dcdfe8");
+        const iso = at(560, 900, 1.0, false, stack) +
+          at(250, 1010, 1.15, false, person({ shirt: SOFT, pants: INK, skin: SKIN[0], hair: HAIR[0], style: "short", glasses: true })) +
+          at(840, 1010, 1.15, true, person({ shirt: INK, pants: "#0f1730", skin: SKIN[3], hair: HAIR[1], style: "short" }));
+        return frame(7.0, 2, "Dos <b>investigadores</b> analizaron los apellidos", `
+          <div class="panel"><div class="mono" style="top:30px">Fuente</div><div class="big" style="top:72px;font-size:64px">PLOS ONE · 2021</div><div class="mono" style="top:146px;font-size:20px">Surname affinity in Santiago, Chile</div></div>
+          <svg class="full">${iso}</svg>
+          <div class="tagname" style="left:60px;top:1040px;padding:10px 18px"><span class="mono">Instituto Milenio · Datos</span><span class="heavy" style="font-size:34px">NAIM BRO</span></div>
+          <div class="tagname" style="left:600px;top:1040px;padding:10px 18px"><span class="mono">U. Santa María · IMFD</span><span class="heavy" style="font-size:34px">MARCELO MENDOZA</span></div>
+          <div class="mono" style="position:absolute;left:470px;top:700px;font-size:22px">Padrón electoral</div>`);
+      };
+
+      SC.s03b = () => {
+        // multitud de 10 x 10 sobre el mapa
+        const r = rng(3);
+        let crowd = "";
+        for (let i = 0; i < 10; i++) for (let j = 0; j < 10; j++) {
+          const [px, py] = P(i * 2.4, j * 2.4, 0);
+          crowd += `<g transform="translate(${540 + px * 0.36} ${640 + py * 0.36}) scale(0.36)">${person(PEOPLE[Math.floor(r() * PEOPLE.length)])}</g>`;
+        }
+        return frame(10.0, 2, "de más de cuatro millones y medio de <b>santiaguinos.</b>", `
+          <div class="panel"><div class="big" style="top:26px;font-size:96px">4.652.933</div><div class="mono" style="top:134px">Santiaguinos · padrón electoral 2012</div></div>
+          <svg class="full">${mapa(270, 490, 540, { op: 0.28 })}${crowd}</svg>`);
+      };
+
+      SC.s04a = () => {
+        const p = at(540, 1050, 1.45, false, person(PEOPLE[5]));
+        const link = `<path d="M330,560 C330,470 750,470 750,560" fill="none" stroke="${ACC}" stroke-width="6"/><circle cx="330" cy="560" r="14" fill="${ACC}"/><circle cx="750" cy="560" r="14" fill="${ACC}"/>
+          <path d="M540,500 L540,690" stroke="${INK}" stroke-width="3" stroke-dasharray="8 8"/>`;
+        return frame(12.5, 2, "Buscaron qué apellidos <b>paternos</b> y maternos", `
+          <div class="tagname" style="left:340px;top:268px"><span class="mono">Nombre</span><span class="heavy" style="font-size:64px">ELENA</span></div>
+          <svg class="full">${link}${p}</svg>
+          <div class="tagname on" style="left:90px;top:590px"><span class="mono">Paterno · padre</span><span class="heavy">GONZÁLEZ</span></div>
+          <div class="tagname" style="left:640px;top:590px"><span class="mono">Materno · madre</span><span class="heavy">MUÑOZ</span></div>
+          <div class="mono note" style="left:650px;top:300px">Ejemplo del paper</div>`);
+      };
+
+      SC.s04b = () => frame(16.6, 2, "…y aparecieron <b>nueve</b> grupos.", `
+          <svg class="full">${network("neutral")}</svg>${netLabels("neutral")}
+          <div class="mono" style="position:absolute;left:70px;top:262px;font-size:22px;line-height:34px">Pares que se repiten<br>≥ 100 veces más que al azar</div>`);
+
+      SC.s05 = () => frame(20.0, 3, "una <b>gitana</b> y dos mixtas.", `
+          <svg class="full">${network("groups")}</svg>${netLabels("groups")}`);
+
+      SC.s06 = () => frame(25.0, 3, "Y tres grupos de <b>élite:</b>", `
+          <svg class="full">${network("elite")}</svg>${netLabels("elite")}
+          <div class="mono" style="position:absolute;left:70px;top:262px;font-size:22px">3 grupos de élite · nivel socioecon. 80–82 / 100</div>`);
+
+      SC.s07a = () => frame(33.0, 4, "se comporta como una minoría <b>étnica.</b>", `
+          <svg class="full">${network("elite", { zoom: { cx: 740, cy: 740, x: 540, y: 800, s: 1.35 } })}</svg>
+          <div class="panel" style="height:250px;top:262px">
+            <div class="serif" style="position:absolute;left:34px;top:22px;font-size:62px;line-height:1.1">“behave like ethnic<br>minorities”</div>
+            <div class="mono" style="top:186px;font-size:22px">Bro y Mendoza, 2021 · conclusión</div>
+          </div>`);
+
+      SC.s07b = () => {
+        const nodes = network("elite", { zoom: { cx: 700, cy: 720, x: 540, y: 820, s: 1.9 } });
+        const fam = at(330, 1060, 1.3, false, person(PEOPLE[1])) + at(750, 1060, 1.3, true, person(PEOPLE[2])) + at(560, 1110, 0.8, false, person({ shirt: ACC, pants: INK, skin: SKIN[3], hair: HAIR[3], style: "short" }));
+        const lines = `<path d="M260,560 C260,640 470,640 520,700" fill="none" stroke="${ACC}" stroke-width="5"/><path d="M820,560 C820,640 610,640 560,700" fill="none" stroke="${ACC}" stroke-width="5"/>`;
+        return frame(35.5, 4, "Forman pareja y tienen hijos <b>entre</b> ellos.", `
+          <svg class="full"><g opacity="0.25">${nodes}</g>${lines}${fam}</svg>
+          <div class="tagname on" style="left:110px;top:470px"><span class="mono">Padre</span><span class="heavy">EDWARDS</span></div>
+          <div class="tagname on" style="left:680px;top:470px"><span class="mono">Madre</span><span class="heavy">ZAÑARTU</span></div>
+          <div class="tagname on" style="left:300px;top:690px"><span class="mono">Hijo</span><span class="heavy">EDWARDS ZAÑARTU</span></div>
+          <div class="mono" style="position:absolute;left:70px;top:262px;font-size:22px">Ambos apellidos del mismo grupo</div>`);
+      };
+
+      // ---------- Tramo 2 ----------
+      const MAP = { x: 260, y: 490, w: 560 };
+      const eliteDots = (cx, cy, s) => {
+        let o = "";
+        NET.nodes.forEach((p) => { const g = GROUPS[p.g]; if (g.elite) o += `<circle cx="${(cx + (p.x - 760) * s).toFixed(1)}" cy="${(cy + (p.y - 745) * s).toFixed(1)}" r="${11 * Math.max(s, 0.5)}" fill="${g.col}"/>`; });
+        return o;
+      };
+      function bars(showNE) {
+        const rows = [["Periferia", 262], ["Centro", 276], ["Norponiente y sur", 295], ["Nororiente", 509]];
+        return `<div class="panel" style="height:250px">
+          <div class="mono" style="top:24px">Variedad de apellidos · promedio por zona</div>
+          ${rows.map(([n, v], i) => { const ne = i === 3; const w = (v / 509) * 520; return `
+            <div class="mono" style="top:${70 + i * 42}px;font-size:20px;${ne && !showNE ? "opacity:.25" : ""}">${n}</div>
+            <div style="position:absolute;left:330px;top:${72 + i * 42}px;height:24px;width:${ne && !showNE ? 0 : w}px;background:${ne ? ACC : "#8a93a8"}"></div>
+            <div class="mono" style="top:${70 + i * 42}px;left:${340 + (ne && !showNE ? 0 : w)}px;font-size:20px;${ne && !showNE ? "opacity:0" : ""}">${v}</div>`; }).join("")}
+        </div>`;
+      }
+
+      SC.s08a = () => frame(37.5, 5, "Y los tres grupos se <b>concentran</b>", `
+          <svg class="full">${mapa(MAP.x, MAP.y, MAP.w, { op: 0.22 })}
+            <path d="M760,520 C760,580 760,600 760,640" stroke="${ACC}" stroke-width="4" stroke-dasharray="10 10" fill="none"/>
+            ${eliteDots(760, 400, 0.55)}</svg>`);
+
+      SC.s08b = () => frame(40.0, 5, "en el mismo lugar: el <b>nororiente</b> de Santiago.", `
+          <svg class="full">${mapa(MAP.x, MAP.y, MAP.w, { op: 0.22, ne: true })}${eliteDots(740, 700, 0.32)}</svg>
+          <div class="chip on" style="left:700px;top:500px">Nororiente</div>
+          <div class="mono" style="position:absolute;left:70px;top:262px;font-size:22px;line-height:34px">Donde viven los apellidos<br>de los 3 grupos de élite · 2012</div>`);
+
+      SC.s09a = () => frame(44.0, 5, "la variedad de apellidos es <b>parecida.</b>", `
+          ${bars(false)}
+          <svg class="full">${mapa(MAP.x + 30, 560, 500, { fill: "#8a93a8", op: 0.55 })}</svg>`);
+
+      SC.s09b = () => frame(47.2, 5, "En el nororiente, casi se <b>duplica.</b>", `
+          ${bars(true)}
+          <svg class="full">${mapa(MAP.x + 30, 560, 500, { fill: "#8a93a8", op: 0.18, ne: true })}</svg>
+          <div class="chip on" style="left:650px;top:560px">× 2</div>`);
+
+      SC.s10 = () => {
+        const tarjeta = (left, top, rot, name, kind, on) => `<div class="card" style="left:${left}px;top:${top}px;width:420px;height:200px;background:${on ? "var(--card)" : "var(--card)"};border:4px solid ${on ? ACC : INK};transform:rotate(${rot}deg);box-shadow:10px 10px 0 ${on ? ACC : INK}">
+            <div class="mono" style="position:absolute;left:28px;top:24px">${kind}</div>
+            <div class="heavy" style="position:absolute;left:28px;top:84px;font-size:${name.length > 11 ? 40 : name.length > 10 ? 46 : 58}px;color:${on ? ACC : INK}">${name}</div></div>`;
+        return frame(50.5, 5, "por los apellidos <b>compuestos</b>", `
+          <div class="row-type serif" style="top:270px;left:70px;font-size:84px">¿por qué?</div>
+          ${tarjeta(90, 450, -4, "GARCÍA-HUIDOBRO", "Compuesto", true)}
+          ${tarjeta(560, 520, 5, "RUIZ-TAGLE", "Compuesto", true)}
+          ${tarjeta(110, 760, 3, "EDWARDS", "Origen inglés", false)}
+          ${tarjeta(570, 820, -5, "SUBERCASEAUX", "Origen francés", false)}
+          <div class="mono note" style="left:70px;top:1080px">Explicaciones posibles según los autores</div>`);
+      };
+
+      function hemiciclo(parts, mapuche) {
+        // parts: [[color, porcentaje], ...] desde la izquierda
+        const seats = [];
+        const rows = [[170, 14], [215, 18], [260, 22], [305, 26], [350, 30]];
+        rows.forEach(([r, n]) => { for (let i = 0; i < n; i++) { const a = Math.PI - (i / (n - 1)) * Math.PI; seats.push({ a, x: 540 + Math.cos(a) * r, y: 980 - Math.sin(a) * r }); } });
+        seats.sort((p, q) => q.a - p.a);
+        const N = seats.length;
+        const cols = []; parts.forEach(([c, pct]) => { for (let k = 0; k < Math.round((pct / 100) * N); k++) cols.push(c); });
+        let s = seats.map((p, i) => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="13" fill="${cols[i] || "#c3c8d4"}"/>`).join("");
+        if (mapuche) s += `<circle cx="${seats[N - 1].x.toFixed(1)}" cy="${seats[N - 1].y.toFixed(1)}" r="19" fill="none" stroke="#5f9e7a" stroke-width="4" stroke-dasharray="5 5"/>`;
+        // edificio isométrico pequeño debajo
+        return s;
+      }
+      const leyenda = (rows) => rows.map(([c, t], i) => `<div class="chip" style="left:${70 + (i % 2) * 470}px;top:${1035 + Math.floor(i / 2) * 58}px;border-color:${c};color:${c}">● ${t}</div>`).join("");
+
+      SC.s11 = () => frame(57.0, 6, "cerca del <b>40%</b> de los parlamentarios", `
+          <div class="panel"><div class="mono" style="top:30px">Siglo XIX · Congreso</div><div class="big" style="top:72px;font-size:96px">~40%</div></div>
+          <svg class="full">${hemiciclo([[ACC, 21], ["#1b2fa8", 15], ["#18a0e0", 3]])}</svg>
+          ${leyenda([[ACC, "Aristocracia ~21%"], ["#1b2fa8", "+ fam. judías ~15%"], ["#18a0e0", "+ fam. palestinas ~3%"]])}`, "BCN · FIG. 4");
+
+      SC.s12a = () => frame(62.5, 6, "tenían cerca del <b>20%</b> del Congreso.", `
+          <div class="panel"><div class="mono" style="top:30px">2017 · Congreso</div><div class="big" style="top:72px;font-size:96px">~20%</div></div>
+          <svg class="full">${hemiciclo([[ACC, 5], ["#1b2fa8", 9.5], ["#18a0e0", 4.5]])}</svg>
+          ${leyenda([[ACC, "Aristocracia ~5%"], ["#1b2fa8", "+ fam. judías ~9,5%"], ["#18a0e0", "+ fam. palestinas ~4,5%"]])}`, "BCN · FIG. 4");
+
+      SC.s12b = () => frame(65.8, 6, "Los grupos mapuche, casi <b>ninguno.</b>", `
+          <div class="panel"><div class="mono" style="top:30px">2017 · Grupos mapuche</div><div class="big" style="top:72px;font-size:96px;color:#5f9e7a">≈ 0%</div></div>
+          <svg class="full"><g opacity="0.35">${hemiciclo([[ACC, 5], ["#1b2fa8", 9.5], ["#18a0e0", 4.5]])}</g>${at(540, 1000, 0.9, false, person({ shirt: "#5f9e7a", pants: INK, skin: SKIN[2], hair: HAIR[2], style: "long" }))}</svg>
+          <div class="chip" style="left:640px;top:820px;border-color:#5f9e7a;color:#5f9e7a">● Mapuche · ≈ 0%</div>`, "BCN · FIG. 4");
+
+      SC.s13 = () => frame(70.5, 7, "tu clase, tu <b>barrio</b>", `
+          <div class="row-type serif" style="top:270px;left:70px;font-size:96px">quizás por eso…</div>
+          <div class="card" style="left:200px;top:450px;width:680px;height:640px;background:var(--card);border:4px solid var(--ink);box-shadow:0 34px 50px color-mix(in srgb, var(--ink) 28%, transparent)">
+            <div class="mono" style="position:absolute;left:30px;top:26px">Ficha</div><div class="mono" style="position:absolute;right:30px;top:26px">04</div>
+            <div class="heavy" style="position:absolute;left:44px;top:90px;font-size:80px;line-height:1">JUAN ___ ___</div>
+            ${[["Clase", "▮▮▮▮▯"], ["Barrio", "Nororiente?"], ["Congreso", "▮▯▯▯▯"]].map(([k, v], i) => `
+              <div class="mono" style="position:absolute;left:44px;top:${250 + i * 120}px;font-size:26px">${k}</div>
+              <div class="heavy" style="position:absolute;left:300px;top:${236 + i * 120}px;font-size:46px;color:${ACC}">${v}</div>
+              <div style="position:absolute;left:44px;right:44px;top:${300 + i * 120}px;height:3px;background:var(--ink);opacity:.15"></div>`).join("")}
+          </div>
+          <div class="mono note" style="left:70px;top:1100px">Interpretación nuestra, no del paper</div>`, "TU APELLIDO");
+
+      SC.s14 = () => {
+        const cx = 540, cy = 975;
+        let ring = `<ellipse cx="${cx}" cy="${cy}" rx="270" ry="112" fill="${SOFT}" fill-opacity="0.35"/><ellipse cx="${cx}" cy="${cy}" rx="310" ry="132" fill="none" stroke="${INK}" stroke-width="3" stroke-dasharray="10 12"/>`;
+        const pos = [[330, 905, false, 0], [750, 905, true, 1], [345, 1080, false, 2], [735, 1080, true, 3]];
+        const iso = pos.map(([x, y, f, k]) => at(x, y, 0.92, f, person(PEOPLE[k]))).join("");
+        return frame(77.0, 7, "Te leo en los <b>comentarios.</b>", `
+          <div class="row-type heavy" style="top:258px;left:70px;font-size:96px;line-height:1">¿Y A TI?</div>
+          <div class="row-type serif" style="top:370px;left:70px;font-size:64px">¿qué crees que querían saber?</div>
+          <svg class="full">${ring}${iso}</svg>
+          <div class="bubble serif" style="left:360px;top:745px">¿y tus apellidos?</div>
+          <div class="chip on" style="left:330px;top:560px;font-size:26px;padding:12px 26px">💬 Comenta abajo</div>`, "TU APELLIDO");
+      };
+
+      document.querySelectorAll(".esc").forEach((el) => { el.innerHTML = SC[el.id](); });
+
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
